@@ -1,0 +1,42 @@
+@import '../../grass-lab/ui/app.css';
+
+#stage .climate-render-surface,
+#stage .climate-effects-surface {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.ac-boundary-note {
+  margin: 0 var(--space-1) var(--space-3);
+  padding: var(--space-2);
+  border: 1px solid var(--preview-border);
+  border-radius: var(--radius-2);
+  background: var(--preview-subtle);
+  color: var(--text-tertiary);
+  font: var(--type-caption);
+  line-height: 1.45;
+}
+
+.ac-boundary-note strong {
+  color: var(--text-secondary);
+}
+
+.ac-preview-family {
+  padding: 4px 7px;
+  border: 1px solid var(--preview-border);
+  border-radius: var(--radius-2);
+  color: var(--text-secondary);
+  font: var(--type-caption);
+  white-space: nowrap;
+}
+
+[data-testid='atmospheric-preview-mode'] {
+  flex: 0 0 auto;
+}
+
+@media (max-width: 1180px) {
+  .ac-preview-family {
+    display: none;
+  }
+}

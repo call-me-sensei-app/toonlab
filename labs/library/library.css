@@ -1,0 +1,301 @@
+.lib-filter {
+  width: auto;
+  min-width: 150px;
+}
+
+#clearFilters[hidden],
+.lib-pager[hidden],
+.lib-modal[hidden] { display: none; }
+
+.lib-card-link { cursor: pointer; }
+.lib-empty-icon { font-size: 40px; }
+
+.lib-pager {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.lib-pager .tl-btn:disabled {
+  opacity: 0.45;
+  pointer-events: none;
+}
+
+.lib-pager-status {
+  color: var(--tl-ink-2);
+  font-size: 12px;
+}
+
+/* Library detail is the shared /asset page with management extensions. */
+.asset-library .asset-panel {
+  scrollbar-width: thin;
+  scrollbar-color: rgb(255 255 255 / 0.34) transparent;
+}
+
+.asset-library .asset-panel::-webkit-scrollbar {
+  display: block;
+  width: 7px;
+}
+
+.asset-library .asset-panel::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  background: rgb(255 255 255 / 0.3);
+}
+
+.asset-library .asset-panel .cta {
+  margin-top: 18px;
+  padding-top: 0;
+}
+
+.lib-preview-unavailable {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  color: rgb(255 255 255 / 0.72);
+  font-family: var(--tl-font-mono);
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.lib-panel-section,
+.asset-library .lib-history,
+.asset-library .lib-json {
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid rgb(255 255 255 / 0.16);
+}
+
+.lib-panel-heading,
+.lib-history-heading,
+.lib-revision-title,
+.lib-revision-actions,
+.lib-form-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.lib-panel-heading {
+  justify-content: space-between;
+}
+
+.lib-eyebrow {
+  display: block;
+  margin: 0 0 5px;
+  color: var(--tl-accent-hot);
+  font-family: var(--tl-font-mono);
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.asset-library .asset-panel h2 {
+  margin: 0;
+  color: #fff;
+  font-family: var(--tl-font-display);
+  font-size: 16px;
+  line-height: 1.2;
+}
+
+.lib-panel-section p,
+.lib-history-heading p,
+.lib-revision-copy p {
+  margin: 6px 0 0;
+  color: rgb(255 255 255 / 0.58);
+  font-size: 11px;
+  line-height: 1.45;
+}
+
+.lib-panel-section .tl-btn,
+.lib-history .tl-btn {
+  min-height: 32px;
+  padding: 7px 10px;
+  font-size: 10px;
+}
+
+.asset-library .lib-history {
+  border-right: 0;
+  border-bottom: 0;
+  border-left: 0;
+  border-radius: 0;
+  background: transparent;
+}
+
+.lib-history-heading {
+  align-items: stretch;
+  flex-direction: column;
+}
+
+.lib-history-heading > .tl-btn {
+  width: 100%;
+  justify-content: center;
+  margin-top: 8px;
+}
+
+.lib-revision-list {
+  display: grid;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.lib-revision {
+  display: grid;
+  gap: 10px;
+  padding: 11px;
+  border: 1px solid rgb(255 255 255 / 0.14);
+  border-radius: 9px;
+  background: rgb(8 10 16 / 0.48);
+}
+
+.lib-revision--current { border-color: var(--tl-accent); }
+.lib-revision-copy { min-width: 0; }
+.lib-revision-title { flex-wrap: wrap; }
+.lib-revision-title strong { color: #fff; font-size: 12px; }
+
+.lib-revision-badges {
+  color: var(--tl-accent-hot);
+  font-family: var(--tl-font-mono);
+  font-size: 9px;
+  text-transform: uppercase;
+}
+
+.lib-revision-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 7px;
+}
+
+.asset-library .gal-badge {
+  padding: 2px 7px;
+  border: 1px solid rgb(255 255 255 / 0.2);
+  border-radius: 999px;
+  color: rgb(255 255 255 / 0.7);
+  font-size: 9px;
+}
+
+.lib-revision-actions { width: 100%; }
+.lib-revision-actions .tl-btn { flex: 1; justify-content: center; }
+
+.lib-status {
+  display: block;
+  min-height: 1.2em;
+  margin-top: 8px;
+  color: rgb(255 255 255 / 0.62);
+  font-size: 10px;
+}
+
+.asset-library .lib-json { color: rgb(255 255 255 / 0.72); }
+.asset-library .lib-json summary { cursor: pointer; font-size: 12px; }
+
+.asset-library .lib-json pre {
+  max-width: 100%;
+  max-height: 260px;
+  margin-top: 10px;
+  padding: 11px;
+  overflow: auto;
+  border: 1px solid rgb(255 255 255 / 0.14);
+  border-radius: 8px;
+  background: rgb(8 10 16 / 0.58);
+  color: rgb(255 255 255 / 0.78);
+  font-size: 10px;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}
+
+.lib-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: rgb(5 6 10 / 0.78);
+  backdrop-filter: blur(8px);
+}
+
+body.lib-modal-open { overflow: hidden; }
+
+.lib-modal-panel {
+  width: min(620px, 100%);
+  max-height: min(820px, calc(100vh - 48px));
+  overflow-y: auto;
+  padding: clamp(22px, 4vw, 34px);
+  border: 1px solid var(--tl-line-bright);
+  border-radius: var(--tl-radius-l, 8px);
+  background: var(--tl-bg-1);
+  box-shadow: 0 12px 40px rgb(0 0 0 / 0.55);
+}
+
+.lib-modal-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid var(--tl-line);
+}
+
+.lib-modal-header h2 {
+  margin: 0;
+  font-family: var(--tl-font-display);
+  font-size: 25px;
+}
+
+.lib-modal-close {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border: 1px solid var(--tl-line-bright);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--tl-ink-2);
+  font-size: 23px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.lib-card {
+  display: grid;
+  gap: 16px;
+  margin-top: 22px;
+}
+
+.lib-field {
+  display: grid;
+  gap: 7px;
+  color: var(--tl-ink-2);
+  font-size: 13px;
+}
+
+.lib-field small { color: var(--tl-ink-3); font-size: 11px; }
+.lib-field textarea { min-height: 104px; resize: vertical; }
+.lib-form-actions { justify-content: space-between; margin-top: 4px; }
+.lib-danger { color: #ff7771; }
+
+.lib-revision-pin {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  color: var(--tl-ink-2);
+  font-size: 13px;
+}
+
+@media (max-width: 620px) {
+  #libraryFilters,
+  #libraryFilters .gal-search,
+  .lib-filter,
+  #clearFilters { width: 100%; }
+
+  .lib-modal { padding: 10px; }
+  .lib-modal-panel { max-height: calc(100vh - 20px); padding: 20px 16px; }
+  .lib-pager { justify-content: space-between; }
+  .lib-pager .tl-btn { padding-inline: 14px; }
+}

@@ -1,0 +1,236 @@
+/* Grass Lab layout chrome (gr- prefix). Controls come from the shared
+   kit (tk-); only layout and lab-specific widgets live here. */
+
+#app { position: fixed; inset: 0; pointer-events: none; z-index: 10; }
+body[data-hide-hud='true'] #app { display: none; }
+
+.gr-root {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  grid-template-rows: var(--topbar-h) 1fr var(--statusbar-h);
+  grid-template-columns: var(--rail-w) 1fr auto;
+  grid-template-areas:
+    'topbar topbar topbar'
+    'rail viewport inspector'
+    'status status status';
+  color: var(--text-primary);
+  font: var(--type-body);
+  pointer-events: none;
+}
+
+/* --- topbar ------------------------------------------------------------ */
+.gr-topbar {
+  grid-area: topbar;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 0 var(--space-3);
+  background: var(--bg-app);
+  border-bottom: 1px solid var(--border-subtle);
+  pointer-events: auto;
+}
+/* Brand lockup + lab name come from the kit (.tk-brand, LabChrome.jsx). */
+.gr-topbar .tk-brand {
+  padding-right: var(--space-2);
+  margin-right: var(--space-1);
+}
+.gr-title {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: 30px;
+  padding: var(--space-1) var(--space-2);
+  border: none;
+  border-radius: var(--radius-2);
+  background: none;
+  color: var(--text-primary);
+  font: var(--type-title);
+  cursor: pointer;
+  min-width: 0;
+  max-width: min(32vw, 420px);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.gr-title:hover { background: var(--surface-3); }
+.gr-dirty { color: var(--accent-400); font-size: 8px; }
+.gr-topbar-spacer { flex: 1; }
+.gr-topbar .tk-brand,
+.gr-topbar .tk-icon-button,
+.gr-topbar .tk-renderer { flex: none; }
+
+/* --- workflow rail ------------------------------------------------------ */
+.gr-rail {
+  grid-area: rail;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-1);
+  overflow-y: auto;
+  padding: var(--space-2) 0;
+  background: var(--surface-1);
+  border-right: 1px solid var(--border-subtle);
+  pointer-events: auto;
+}
+.gr-rail-stage {
+  position: relative;
+  display: flex;
+  flex: 0 0 auto;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  width: 52px;
+  padding: var(--space-2) 0;
+  border: none;
+  border-radius: var(--radius-2);
+  background: none;
+  color: var(--text-tertiary);
+  font: var(--type-caption);
+  cursor: pointer;
+}
+.gr-rail-stage:hover { background: var(--surface-3); color: var(--text-secondary); }
+.gr-rail-stage[data-active='true'] {
+  background: var(--accent-subtle);
+  color: var(--accent-300);
+}
+.gr-rail-stage[data-active='true']::before {
+  content: '';
+  position: absolute;
+  top: 18%;
+  bottom: 18%;
+  left: -6px;
+  width: 3px;
+  border-radius: var(--radius-full);
+  background: var(--accent-400);
+}
+
+/* --- inspector ----------------------------------------------------------- */
+.gr-inspector {
+  grid-area: inspector;
+  width: var(--inspector-w);
+  overflow-y: auto;
+  padding: var(--space-3) var(--space-3) var(--space-7);
+  background: var(--surface-1);
+  border-left: 1px solid var(--border-subtle);
+  pointer-events: auto;
+}
+.gr-inspector-header { margin: var(--space-1); font: var(--type-title); }
+.gr-inspector-caption { margin: 0 var(--space-1) var(--space-3); color: var(--text-tertiary); font: var(--type-caption); }
+.gr-preset-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin: 0 var(--space-1) var(--space-3);
+}
+.gr-preset-row .tk-select { flex: 1; }
+
+.gr-palette-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-1);
+}
+.gr-palette-grid button {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  gap: var(--space-2);
+  padding: 6px var(--space-2);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-2);
+  background: var(--surface-2);
+  color: var(--text-secondary);
+  font: var(--type-caption);
+  cursor: pointer;
+}
+.gr-palette-grid button:hover { border-color: var(--border-active); color: var(--text-primary); }
+.gr-palette-grid button[data-active='true'] {
+  border-color: var(--accent-strong, var(--border-active));
+  background: var(--surface-3);
+  color: var(--text-primary);
+}
+.gr-palette-swatches { display: flex; flex: none; gap: 2px; }
+.gr-palette-swatches span {
+  width: 13px;
+  height: 13px;
+  border: 1px solid rgba(0, 0, 0, 0.35);
+  border-radius: 3px;
+}
+.gr-palette-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* --- document menu ---------------------------------------------------------- */
+.gr-doc-menu { display: flex; flex-direction: column; gap: var(--space-2); }
+.gr-save-row { display: flex; gap: var(--space-2); }
+.gr-save-row .tk-textfield { flex: 1; }
+.gr-doc-help {
+  margin: var(--space-1) 0;
+  color: var(--text-muted);
+  font: var(--type-caption);
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+
+.gr-camera-mode {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--preview-300);
+  font: var(--type-caption);
+}
+
+.gr-camera-mode .tk-segmented button {
+  padding-inline: 7px;
+}
+
+@media (max-width: 900px) {
+  .gr-title { max-width: 24vw; }
+  .gr-topbar { gap: var(--space-1); }
+  .gr-status-meta { display: none; }
+}
+
+/* --- floating stage bar ---------------------------------------------------- */
+.gr-stagebar {
+  position: fixed;
+  bottom: calc(var(--statusbar-h) + var(--space-3));
+  left: calc((100vw + var(--rail-w) - var(--inspector-w)) / 2);
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-1) var(--space-2);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-3);
+  background: var(--surface-overlay);
+  backdrop-filter: var(--blur-overlay);
+  box-shadow: var(--shadow-2);
+  pointer-events: auto;
+  z-index: var(--z-hud);
+}
+.gr-stagebar-hint { padding: 0 var(--space-2); color: var(--text-tertiary); font: var(--type-caption); white-space: nowrap; }
+
+/* --- status bar ----------------------------------------------------------------- */
+.gr-status {
+  grid-area: status;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 0 var(--space-3);
+  background: var(--bg-app);
+  border-top: 1px solid var(--border-subtle);
+  color: var(--text-secondary);
+  font: var(--type-caption);
+  pointer-events: auto;
+}
+.gr-status-spacer { flex: 1; }
+.gr-status-meta { color: var(--text-tertiary); }
+
+/* --- floating stage bar selects ------------------------------------------ */
+.gr-preset-row { margin-top: var(--space-1); }
+.gr-stagebar-select { width: 200px; }
+.gr-stagebar-select--debug { width: 132px; }
+
+/* --- preview accent: everything amber is never saved ----------------------- */

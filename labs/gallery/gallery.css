@@ -1,0 +1,359 @@
+/* Gallery — mirror of toonlab-pro/app/routes/gallery.css (media-first
+   showcase grid, sticky pager). Keep the two files visually in lock-step:
+   card/toolbar/pager rules below are copied from Pro, plus the tl-* primitive
+   styles (tokens.css / base.css) that home.css doesn't carry. */
+
+:root {
+  /* Tokens the Pro rules below need that home.css doesn't define. */
+  --tl-radius-s: 2px;
+  --tl-radius-m: 4px;
+  --tl-gradient-soft: linear-gradient(120deg, rgb(232 51 46 / 0.12), rgb(232 51 46 / 0.03));
+  --tl-halftone: radial-gradient(rgb(242 240 233 / 0.055) 1px, transparent 1.2px);
+}
+
+/* Full-width page shell — matches Pro's app-main--wide (28px 40px 72px). */
+.gal-main {
+  max-width: none;
+  padding: 28px 40px 72px;
+}
+
+/* ---------- primitives (from Pro base.css) ---------- */
+
+.tl-input {
+  width: 100%;
+  padding: 11px 14px;
+  border-radius: var(--tl-radius-s);
+  border: 1px solid var(--tl-line-bright);
+  background: var(--tl-bg-0);
+  color: var(--tl-ink-1);
+  font: inherit;
+  transition: border-color var(--tl-dur-1) var(--tl-ease);
+}
+input.tl-input,
+select.tl-input {
+  height: 44px;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+.tl-input:focus {
+  outline: none;
+  border-color: var(--tl-accent);
+  box-shadow: 0 0 0 3px rgb(232 51 46 / 0.18);
+}
+
+.tl-btn {
+  --btn-bg: var(--tl-bg-2);
+  --btn-ink: var(--tl-ink-1);
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 22px;
+  border: 1px solid var(--tl-line-bright);
+  border-radius: var(--tl-radius-s);
+  background: var(--btn-bg);
+  color: var(--btn-ink);
+  font-family: var(--tl-font-display);
+  font-weight: 700;
+  font-size: 13.5px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  cursor: pointer;
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%);
+  transition:
+    background var(--tl-dur-1) var(--tl-ease),
+    color var(--tl-dur-1) var(--tl-ease),
+    border-color var(--tl-dur-1) var(--tl-ease),
+    transform var(--tl-dur-1) var(--tl-ease-sharp);
+}
+.tl-btn:hover {
+  border-color: var(--tl-ink-1);
+  color: var(--tl-ink-1);
+  transform: translate(-1px, -1px);
+}
+.tl-btn:active {
+  transform: translate(0, 0);
+}
+
+/* The class display would beat the [hidden] UA rule — keep hidden winning. */
+.tl-empty[hidden] {
+  display: none;
+}
+.tl-empty {
+  display: grid;
+  place-items: center;
+  gap: 12px;
+  padding: 64px 24px;
+  text-align: center;
+  color: var(--tl-ink-2);
+  border: 1px dashed var(--tl-line-bright);
+  border-radius: var(--tl-radius-m);
+  background:
+    var(--tl-halftone) 0 0 / 8px 8px,
+    var(--tl-bg-1);
+}
+.tl-empty a {
+  color: var(--tl-accent-hot);
+}
+
+.mono {
+  font-family: var(--tl-font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- gallery (verbatim from Pro gallery.css) ---------- */
+
+.gal-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-bottom: 22px;
+}
+.gal-toolbar h1 {
+  font-family: var(--tl-font-display);
+  font-weight: 800;
+  letter-spacing: -0.015em;
+  font-size: 30px;
+  margin: 0;
+  margin-right: 8px;
+}
+.gal-toolbar .jp {
+  font-family: var(--tl-font-jp);
+  font-size: 13px;
+  color: var(--tl-ink-3);
+  letter-spacing: 0.3em;
+}
+.gal-filters {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-left: auto;
+}
+.gal-filters .tl-input {
+  width: auto;
+  min-width: 150px;
+}
+.gal-search {
+  width: 240px;
+}
+
+.gal-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+  transition: opacity var(--tl-dur-2) var(--tl-ease);
+}
+/* Search/filter/page navigation in flight: results are stale, say so. */
+.gal-grid--loading {
+  opacity: 0.45;
+  pointer-events: none;
+}
+
+.gal-searching {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--tl-accent-hot);
+}
+.gal-spinner {
+  width: 12px;
+  height: 12px;
+  border-radius: 999px;
+  border: 2px solid rgb(255 255 255 / 0.2);
+  border-top-color: var(--tl-accent-hot);
+  animation: gal-spin 0.7s linear infinite;
+}
+@keyframes gal-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@media (min-width: 1800px) {
+  .gal-grid {
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  }
+}
+
+.gal-card {
+  position: relative;
+  display: block;
+  aspect-ratio: 4 / 3;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid var(--tl-line);
+  background: var(--tl-bg-1);
+  transition:
+    border-color var(--tl-dur-1) var(--tl-ease),
+    transform var(--tl-dur-2) var(--tl-ease),
+    box-shadow var(--tl-dur-2) var(--tl-ease);
+}
+.gal-card:hover {
+  border-color: var(--tl-line-bright);
+  transform: translateY(-3px);
+  box-shadow: 0 16px 36px rgb(0 0 0 / 0.35);
+}
+
+.gal-card-media {
+  position: absolute;
+  inset: 0;
+  background-position: center;
+  background-size: cover;
+  transition: transform 0.45s var(--tl-ease);
+}
+.gal-card:hover .gal-card-media {
+  transform: scale(1.045);
+}
+.gal-card-media--empty {
+  display: grid;
+  place-items: center;
+  font-size: 44px;
+  background: var(--tl-gradient-soft);
+}
+.gal-card-media--plateau {
+  align-content: center;
+  gap: 8px;
+  padding: 28px;
+  color: #fff;
+  background:
+    linear-gradient(155deg, transparent 38%, rgb(255 255 255 / 0.08) 38% 39%, transparent 39%),
+    linear-gradient(25deg, transparent 48%, rgb(255 255 255 / 0.06) 48% 49%, transparent 49%),
+    linear-gradient(135deg, #0084bd, #003a68 62%, #08182c);
+  font-size: inherit;
+}
+.gal-card-media--plateau::before {
+  content: "";
+  width: min(64%, 240px);
+  height: 84px;
+  border: 1px solid rgb(255 255 255 / 0.48);
+  clip-path: polygon(0 100%, 0 52%, 13% 52%, 13% 28%, 28% 28%, 28% 65%, 45% 65%, 45% 8%, 63% 8%, 63% 44%, 76% 44%, 76% 20%, 88% 20%, 88% 58%, 100% 58%, 100% 100%);
+  background: linear-gradient(to top, rgb(255 255 255 / 0.22), rgb(255 255 255 / 0.03));
+}
+.gal-card-media--plateau strong {
+  font-family: var(--tl-font-display);
+  font-size: 24px;
+  letter-spacing: 0.16em;
+}
+.gal-card-media--plateau span {
+  font-family: var(--tl-font-mono);
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  color: rgb(255 255 255 / 0.72);
+}
+.gal-card-media--plateau > strong,
+.gal-card-media--plateau > span {
+  position: relative;
+  z-index: 1;
+  transition: opacity 180ms ease;
+}
+.gal-card-media--plateau.plateau-thumb-ready > strong,
+.gal-card-media--plateau.plateau-thumb-ready > span,
+.gal-card-media--plateau.plateau-thumb-ready::before {
+  opacity: 0;
+}
+.plateau-thumbnail-stage {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+}
+.plateau-thumbnail-stage canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.gal-card-overlay {
+  position: absolute;
+  inset: auto 0 0 0;
+  padding: 40px 14px 12px;
+  background: linear-gradient(to top, rgb(8 10 16 / 0.92), rgb(8 10 16 / 0.55) 55%, transparent);
+  display: grid;
+  gap: 5px;
+}
+.gal-card-title {
+  font-weight: 700;
+  font-size: 14.5px;
+  color: #fff;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.gal-card-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+.gal-card-meta .author {
+  font-size: 12px;
+  color: var(--tl-ink-2);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin-left: auto;
+}
+.gal-badge {
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 2px 8px;
+  border-radius: 999px;
+  border: 1px solid var(--tl-line-bright);
+  color: var(--tl-ink-2);
+  background: rgb(8 10 16 / 0.55);
+  white-space: nowrap;
+}
+/* Open-data source badge — unmistakable through weight/contrast, not a loud color
+   (stays inside the neutral badge system). */
+.gal-badge--src {
+  color: #fff;
+  border-color: var(--tl-line-bright);
+  background: rgb(255 255 255 / 0.1);
+  font-weight: 700;
+}
+
+/* Sticky pager bar — mirrors the header treatment, full-bleed across the
+   page's padding (28px 40px 72px on .gal-main). */
+.gal-pager[hidden] {
+  display: none;
+}
+.gal-pager {
+  position: sticky;
+  bottom: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin: 28px -40px -72px;
+  padding: 12px 40px;
+  background: rgb(16 19 31 / 0.88);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-top: 1px solid var(--tl-line);
+}
+.gal-pager .tl-btn {
+  padding: 8px 18px;
+  font-size: 13px;
+}
+.gal-pager-status {
+  font-size: 13px;
+  color: var(--tl-ink-3);
+}
+
+.gal-section-note {
+  font-size: 13px;
+  color: var(--tl-ink-3);
+}
+
+@media (max-width: 720px) {
+  .gal-main {
+    padding: 24px 16px 60px;
+  }
+  .gal-pager {
+    margin: 24px -16px -60px;
+    padding: 12px 16px;
+  }
+}

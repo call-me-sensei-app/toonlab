@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="A minimal walkable reference scene using public @call-me-sensei/toonlab APIs." />
+  <link rel="icon" href="data:," />
+  <title>ToonLab — Walkable Reference</title>
+  <style>
+    :root { color-scheme: dark; font: 13px/1.35 Inter, ui-sans-serif, system-ui, sans-serif; }
+    * { box-sizing: border-box; }
+    html, body, #scene { width: 100%; height: 100%; margin: 0; overflow: hidden; }
+    body { background: #78c8ed; }
+    canvas { display: block; width: 100%; height: 100%; }
+    #panel { position: fixed; z-index: 10; inset: 14px auto auto 14px; width: min(370px, calc(100% - 28px)); max-height: calc(100% - 28px); overflow: auto; padding: 14px; border: 1px solid rgb(255 255 255 / 22%); border-radius: 12px; background: rgb(20 34 48 / 88%); box-shadow: 0 12px 34px rgb(0 0 0 / 25%); backdrop-filter: blur(12px); }
+    .panel-heading { display: flex; align-items: start; justify-content: space-between; gap: 12px; }
+    h1 { margin: 0 0 3px; font-size: 16px; }
+    p { margin: 0 0 11px; color: #9fb5c5; font-size: 11px; }
+    .grid { display: grid; grid-template-columns: 90px 1fr; gap: 7px 10px; align-items: center; }
+    label { color: #cfe0ec; }
+    select, input, button, .back-link { min-width: 0; padding: 5px 7px; border: 1px solid rgb(255 255 255 / 22%); border-radius: 6px; color: #f5fbff; background: #243c50; font: inherit; }
+    button, .back-link { cursor: pointer; text-decoration: none; }
+    .back-link { white-space: nowrap; color: #bfe6d1; }
+    .character-control { display: grid; grid-template-columns: 1fr auto auto; gap: 5px; }
+    #domains { margin-top: 12px; padding-top: 10px; border-top: 1px solid rgb(255 255 255 / 16%); }
+    .domain { display: flex; justify-content: space-between; gap: 8px; padding: 3px 0; }
+    .domain input { accent-color: #66d49e; }
+    #experiments { margin-top: 12px; padding-top: 10px; border-top: 1px solid rgb(255 255 255 / 16%); }
+    #experiments summary { cursor: pointer; color: #d9edf8; font-weight: 700; }
+    .experiment-intro { margin: 8px 0; }
+    .experiment-list { display: grid; gap: 3px; }
+    .experiment { display: grid; grid-template-columns: 18px 1fr; gap: 7px; align-items: start; padding: 4px 0; }
+    .experiment input { margin: 2px 0 0; accent-color: #66d49e; }
+    .experiment-copy { display: grid; gap: 1px; }
+    .experiment-copy strong { color: #cfe0ec; font-size: 11px; font-weight: 600; }
+    .experiment-copy small { color: #7890a1; font-size: 10px; }
+    #status { margin-top: 10px; color: #9fd6b8; white-space: pre-wrap; }
+    #status[data-error="true"] { color: #ff9a9a; }
+    #controls { margin-top: 8px; color: #a9bdcc; font-size: 11px; }
+    body[data-polish-capture="true"] #panel { display: none; }
+  </style>
+</head>
+<body>
+  <div id="scene"></div>
+  <aside id="panel">
+    <div class="panel-heading">
+      <div><h1>Walkable Reference</h1><p>Scene Three · public npm APIs only</p></div>
+      <a class="back-link" href="/">← Labs</a>
+    </div>
+    <div class="grid">
+      <label for="backend">Backend</label><select id="backend"><option value="webgpu">WebGPU</option><option value="webgl">WebGL2 fallback</option></select>
+      <label for="quality">Quality</label><select id="quality"><option value="balanced">Balanced</option><option value="performance">Performance</option></select>
+      <label for="rock-surface">Rock surface</label><select id="rock-surface"><option value="default">Default</option><option value="stretched">Stretched</option><option value="grass">Grass top</option><option value="sand">Sand top</option></select>
+      <label for="time">Time</label><select id="time"><option value="partly_cloudy">Partly Cloudy</option><option value="golden_hour">Golden Hour</option><option value="moonlit">Moonlit</option><option value="overcast">Overcast</option></select>
+      <label for="style-bundle">Style Bundle</label><select id="style-bundle"><option value="call-me-sensei">Call Me Sensei</option></select>
+      <label for="character-url">Character</label><div class="character-control"><input id="character-url" type="url" placeholder="Model URL (.glb, .vrm, .fbx, .pmx)" aria-label="Custom character model URL"><button id="use-character" type="button">Load</button><button id="use-mannequin" type="button">Default</button></div>
+      <span>Package</span><strong id="package">—</strong>
+    </div>
+    <details id="experiments" aria-label="Polish experiments"></details>
+    <div id="domains" aria-label="Shader domains"></div>
+    <div id="status">Starting…</div>
+    <div id="controls"><strong>WASD</strong> move · <strong>Shift</strong> sprint · <strong>Space</strong> jump/swim · drag to orbit · wheel to zoom</div>
+  </aside>
+  <script type="module">
+    import('/examples/walkable-reference/main.js').catch((error) => {
+      console.error(error);
+      const status = document.querySelector('#status');
+      status.dataset.error = 'true';
+      status.textContent = error.stack || error.message;
+      document.body.dataset.toonlabReady = 'false';
+    });
+  </script>
+</body>
+</html>

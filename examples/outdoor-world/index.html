@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M0 0H100V78L78 100H0Z' fill='%23e8332e'/%3E%3Ctext x='50' y='72' font-size='64' font-weight='900' font-family='Hiragino Sans, Yu Gothic, Noto Sans JP, sans-serif' fill='white' text-anchor='middle'%3E%E3%83%88%3C/text%3E%3C/svg%3E" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ToonLab — Outdoor World Example</title>
+  <style>
+    html, body { margin: 0; height: 100%; overflow: hidden; background: #0e1219; }
+    canvas { display: block; }
+    #hud {
+      position: fixed; top: 14px; left: 14px; z-index: 10;
+      display: flex; gap: 8px; align-items: center;
+      font: 13px/1.4 system-ui, sans-serif;
+    }
+    #hud button {
+      padding: 7px 14px; border-radius: 999px; border: 1px solid rgba(255,255,255,0.25);
+      background: rgba(20,26,36,0.72); color: #e6ebf2; cursor: pointer; font: inherit;
+    }
+    #hud button[data-active="true"] { background: #15837d; border-color: #15837d; }
+    #hint {
+      position: fixed; bottom: 14px; left: 14px; z-index: 10; color: #cfd6df;
+      font: 12px/1.5 system-ui, sans-serif; background: rgba(20,26,36,0.6);
+      padding: 6px 12px; border-radius: 8px;
+    }
+    #minimap {
+      position: fixed; bottom: 14px; right: 14px; z-index: 10;
+      border-radius: 10px; overflow: hidden; line-height: 0;
+      border: 1px solid rgba(255,255,255,0.25); background: rgba(20,26,36,0.72);
+      box-shadow: 0 4px 18px rgba(0,0,0,0.35);
+    }
+    #map-expand {
+      position: absolute; top: 6px; right: 6px; z-index: 11;
+      padding: 3px 9px; border-radius: 999px; border: 1px solid rgba(255,255,255,0.3);
+      background: rgba(20,26,36,0.78); color: #e6ebf2; cursor: pointer;
+      font: 11px/1.4 system-ui, sans-serif;
+    }
+    #bigmap {
+      position: fixed; inset: 0; z-index: 30; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 12px;
+      background: rgba(10, 14, 20, 0.78);
+    }
+    #bigmap[hidden] { display: none; }
+    #bigmap canvas {
+      border-radius: 12px; border: 1px solid rgba(255,255,255,0.3);
+      box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+    }
+    #bigmap p { margin: 0; color: #cfd6df; font: 13px/1.5 system-ui, sans-serif; }
+    #loading {
+      position: fixed; inset: 0; z-index: 20; display: flex; align-items: center;
+      justify-content: center; color: #e6ebf2; background: #0e1219;
+      font: 15px/1.4 system-ui, sans-serif;
+    }
+  </style>
+</head>
+<body>
+  <div id="hud">
+    <button id="view-explore" data-active="true">1 · Explore</button>
+    <button id="view-flyover">2 · Flyover</button>
+    <button id="view-topdown">3 · Top-down</button>
+  </div>
+  <div id="fps" style="position:fixed;top:14px;right:14px;z-index:10;color:#e6ebf2;font:13px/1.4 ui-monospace,monospace;background:rgba(20,26,36,0.72);padding:6px 12px;border-radius:8px;">— fps</div>
+  <div id="hint">WASD/arrows move · drag orbit · wheel zoom · Space jump · swim in deep water · 1/2/3 views · click minimap to travel</div>
+  <div id="minimap"><button id="map-expand" title="Full map (M)">⤢ Map</button></div>
+  <div id="bigmap" hidden><p>Click anywhere to travel · M or Esc to close</p></div>
+  <div id="loading">Building the world…</div>
+  <script type="module" src="./main.js"></script>
+</body>
+</html>

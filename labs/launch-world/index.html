@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="ToonLab Pro launch-world review with Yua, an anime city, coastal park, and shader comparison swipe." />
+  <link rel="icon" href="data:," />
+  <link rel="stylesheet" href="/labs/launch-world/style.css" />
+  <title>ToonLab Pro — Launch World</title>
+</head>
+<body data-ready="false">
+  <main id="stage" aria-label="ToonLab Pro launch environment">
+    <div id="loading"><span></span><strong>Building the launch world</strong><small id="loadingDetail">Preparing scene…</small></div>
+    <div id="divider" aria-hidden="true"><i></i></div>
+    <div id="neutralLabel" class="compare-label">Original PBR</div>
+    <div id="toonLabel" class="compare-label">ToonLab Pro</div>
+    <input id="split" type="range" min="0" max="100" value="35" aria-label="Before and after comparison" />
+    <header id="hud">
+      <a href="/" class="brand"><b>TOONLAB</b><span>PRO</span></a>
+      <nav aria-label="Launch camera shots">
+        <button data-shot="city" class="active">City</button>
+        <button data-shot="coast">Coastal park</button>
+        <button data-shot="alley">Evening alley</button>
+        <button data-shot="face">Character</button>
+      </nav>
+      <button id="compareToggle" class="compare-toggle" aria-pressed="true">A/B swipe</button>
+    </header>
+    <section id="caption">
+      <p>REAL-TIME ANIME RENDERING</p>
+      <h1>One character.<br />A whole world of looks.</h1>
+      <small>Drag to orbit · Scroll to zoom · Swipe to compare</small>
+    </section>
+    <aside id="quality">
+      <span>LAUNCH WORLD 01</span>
+      <b id="shotName">SUNLIT CITY AVENUE</b>
+    </aside>
+  </main>
+  <script type="module" src="/labs/launch-world/main.js"></script>
+</body>
+</html>

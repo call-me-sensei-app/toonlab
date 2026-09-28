@@ -1,0 +1,168 @@
+// Public lighting-authoring surface. Kept as a subpath-ready cluster so hosts
+// can use JSON documents and ToonLab export without constructing a renderer.
+
+export {
+  LIGHT_INTENSITY_UNITS,
+  candelaToLumens,
+  colorTemperatureToRgb,
+  coneSolidAngle,
+  createLightColor,
+  createLightIntensity,
+  getDefaultIntensityUnit,
+  lumensToCandela,
+  lumensToNits,
+  luxAtDistance,
+  resolveLightColor,
+  resolveThreeLightIntensity,
+} from './colorIntensity.js';
+
+export {
+  COOKIE_CAPABLE_LIGHT_TYPES,
+  LIGHT_TYPES,
+  SHADOW_CAPABLE_LIGHT_TYPES,
+  createAmbientLightDescriptor,
+  createDirectionalLightDescriptor,
+  createDiscAreaLightDescriptor,
+  createHemisphereLightDescriptor,
+  createLightArtisticSettings,
+  createLightCookie,
+  createLightDescriptor,
+  createLightIesProfile,
+  createLightLinking,
+  createLightShadow,
+  createPointLightDescriptor,
+  createRectAreaLightDescriptor,
+  createSpotLightDescriptor,
+  createTubeAreaLightDescriptor,
+  mergeLightDescriptor,
+  validateLightDescriptor,
+} from './lightDescriptors.js';
+
+export {
+  LIGHTING_LOOK_DOCUMENT_TYPE,
+  LIGHTING_LOOK_SCHEMA_VERSION,
+  LIGHTING_RECIPE_DOCUMENT_TYPE,
+  LIGHTING_RECIPE_SCHEMA_VERSION,
+  SHADOW_POLICY_MODES,
+  SHADOW_UPDATE_MODES,
+  assertLightingLook,
+  assertLightingRecipe,
+  createLightingLook,
+  createLightingLookPreset,
+  createLightingRecipe,
+  createShadowPolicy,
+  deserializeLightingLook,
+  deserializeLightingLookPreset,
+  deserializeLightingRecipe,
+  serializeLightingLook,
+  serializeLightingLookPreset,
+  serializeLightingRecipe,
+  validateLightingLook,
+  validateLightingLookPreset,
+  validateLightingRecipe,
+} from './lightingDocuments.js';
+
+export {
+  LIGHTING_LOOK_PRESETS,
+  LIGHTING_LUMINAIRE_PRESETS,
+  LIGHTING_QUALITY_PRESETS,
+  LIGHTING_RIG_PRESETS,
+  createLightingQualityProfile,
+  getLightingPresetOptions,
+  resolveLightingLookPreset,
+  resolveLightingPreset,
+  resolveLightingQualityPreset,
+  resolveLightingRigPreset,
+  resolveLuminairePreset,
+} from './lightingPresets.js';
+
+export {
+  createLightingCapabilityReport,
+  getLightingTypeCapability,
+  snapshotLightingCapabilities,
+} from './lightingCapabilities.js';
+
+export {
+  createLightingManager,
+  createLightingRig,
+  ensureAreaLightSupport,
+  getAreaLightSupportState,
+  realizeLightingRecipe,
+} from './lightingRuntime.js';
+
+export {
+  LIGHTING_STYLE_APPLY_METADATA,
+  LIGHTING_STYLE_DOCUMENT_TYPE,
+  LIGHTING_STYLE_SCHEMA_VERSION,
+  createLightingStylePresetDocument,
+  createLightingStyleSettings,
+  getLightingStylePresetOptions,
+  parseLightingStylePresetDocument,
+  registerLightingStylePreset,
+  registerLightingStylePresetDocument,
+  resolveLightingStylePreset,
+  sampleLightingStyle,
+  sanitizeLightingStyleSettings,
+  serializeLightingStylePresetDocument,
+  validateLightingStylePresetDocument,
+} from './lightingStyle.js';
+
+export {
+  FIXTURE_SCHEDULE_MODES,
+  LIGHT_FIXTURE_APPLY_METADATA,
+  LIGHT_FIXTURE_DOCUMENT_TYPE,
+  LIGHT_FIXTURE_SCHEMA_VERSION,
+  createLightFixtureDocument,
+  createLightFixtureSettings,
+  getLightFixtureOptions,
+  parseLightFixtureDocument,
+  registerLightFixture,
+  registerLightFixtureDocument,
+  resolveFixturePlacement,
+  resolveLightFixture,
+  sanitizeLightFixtureSettings,
+  serializeLightFixtureDocument,
+  validateLightFixtureDocument,
+} from './lightingFixtures.js';
+
+export { createLightingSystem } from './lightingSystem.js';
+
+export {
+  CALL_ME_SENSEI_LIGHTING_CONTRACT,
+  configureCallMeSenseiDirectionalLight,
+  createCallMeSenseiSkyLightProbe,
+  updateCallMeSenseiSkyLightProbe,
+} from './callMeSenseiLightingContract.js';
+
+export {
+  DEFAULT_LIGHTING_STYLE_DOMAINS,
+  DEFAULT_LIGHT_FIXTURE_DOMAINS,
+  LIGHTING_STYLE_GENERATOR_DOMAIN,
+  LIGHT_FIXTURE_GENERATOR_DOMAIN,
+  buildLightFixtureFromSample,
+  buildLightingStyleFromSample,
+  createGeneratedLightFixtureDocument,
+  createGeneratedLightingStyleDocument,
+  createLightFixtureGeneratorRecipe,
+  createLightingStyleGeneratorRecipe,
+  getLightFixtureGeneratorFamilyOptions,
+  getLightingStyleGeneratorFamilyOptions,
+  parseLightFixtureGeneratorRecipe,
+  parseLightingStyleGeneratorRecipe,
+  registerLightFixtureGeneratorFamily,
+  registerLightingStyleGeneratorFamily,
+  resolveLightFixtureGeneratorRecipe,
+  resolveLightingStyleGeneratorRecipe,
+  serializeLightFixtureGeneratorRecipe,
+  serializeLightingStyleGeneratorRecipe,
+  validateLightFixtureGeneratorRecipe,
+  validateLightingStyleGeneratorRecipe,
+} from './lightingGenerator.js';
+
+export {
+  TOONLAB_LIGHTING_MANIFEST_SCHEMA_VERSION,
+  TOONLAB_LIGHTING_MANIFEST_TYPE,
+  exportLightingRecipeToToonLab,
+  serializeToonLabLightingManifest,
+  threePositionToToonLab,
+} from './toonLabExport.js';

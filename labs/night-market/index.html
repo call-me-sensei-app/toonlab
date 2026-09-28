@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Night Market street — replica study." />
+  <link rel="icon" href="data:," />
+  <link rel="stylesheet" href="/labs/night-market/style.css" />
+  <title>Night Market — replica study</title>
+</head>
+<body data-market-ready="false">
+  <main id="stage" aria-label="Night market street scene">
+    <div id="loading"><span></span><strong>Building Night Market</strong><small id="loadingDetail">Preparing scene…</small></div>
+    <header id="hud">
+      <span class="brand"><b>NIGHT MARKET</b><span>replica study</span></span>
+      <nav aria-label="Camera shots">
+        <button data-shot="hero" class="active">Hero</button>
+        <button data-shot="wide">Wide</button>
+        <button data-shot="stalls">Stalls</button>
+        <button data-shot="lanterns">Lanterns</button>
+      </nav>
+    </header>
+    <footer id="readout"><b id="shotName">HERO</b><small id="shotStats"></small></footer>
+  </main>
+  <script type="module" src="/labs/night-market/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,285 @@
+#app { position: fixed; inset: 0; }
+
+.sas-root {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  grid-template-rows: var(--topbar-h) minmax(0, 1fr) var(--statusbar-h);
+  grid-template-columns: var(--rail-w) minmax(0, 1fr) var(--inspector-w);
+  grid-template-areas:
+    'topbar topbar topbar'
+    'rail workspace inspector'
+    'status status status';
+  background: #080d14;
+  color: var(--text-primary);
+  font: var(--type-body);
+}
+
+.sas-topbar {
+  grid-area: topbar;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 0 var(--space-3);
+  border-bottom: 1px solid var(--border-subtle);
+  background: var(--bg-app);
+  z-index: var(--z-hud);
+}
+
+.sas-topbar .tk-brand {
+  margin-right: var(--space-1);
+  padding-right: var(--space-2);
+}
+
+.sas-title {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: 30px;
+  padding: var(--space-1) var(--space-2);
+  border: 0;
+  border-radius: var(--radius-2);
+  background: transparent;
+  color: var(--text-primary);
+  font: var(--type-title);
+  cursor: pointer;
+}
+
+.sas-title:hover { background: var(--surface-3); }
+.sas-dirty { color: var(--accent-400); font-size: 8px; }
+.sas-topbar-spacer { flex: 1; }
+
+.sas-rail {
+  grid-area: rail;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  overflow-y: auto;
+  padding: var(--space-2) 0;
+  border-right: 1px solid var(--border-subtle);
+  background: var(--surface-1);
+}
+
+.sas-rail-stage {
+  position: relative;
+  display: flex;
+  flex: 0 0 auto;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  width: 54px;
+  padding: 7px 0;
+  border: 0;
+  border-radius: var(--radius-2);
+  background: transparent;
+  color: var(--text-tertiary);
+  font: var(--type-caption);
+  cursor: pointer;
+}
+
+.sas-rail-stage:hover { background: var(--surface-3); color: var(--text-secondary); }
+.sas-rail-stage[data-active='true'] { background: var(--accent-subtle); color: var(--accent-300); }
+.sas-rail-stage[data-active='true']::before {
+  content: '';
+  position: absolute;
+  top: 18%;
+  bottom: 18%;
+  left: -5px;
+  width: 3px;
+  border-radius: var(--radius-full);
+  background: var(--accent-400);
+}
+
+.sas-workspace {
+  position: relative;
+  grid-area: workspace;
+  display: grid;
+  min-width: 0;
+  min-height: 0;
+  padding: 52px clamp(18px, 4vw, 64px) 96px;
+  background:
+    radial-gradient(circle at 50% 40%, rgba(40, 88, 126, 0.2), transparent 55%),
+    linear-gradient(145deg, #0c131d, #070b11);
+}
+
+.sas-preview-heading {
+  position: absolute;
+  top: var(--space-3);
+  left: var(--space-4);
+  right: var(--space-4);
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  color: var(--text-tertiary);
+  font: var(--type-caption);
+}
+
+.sas-preview-heading div { display: grid; gap: 2px; }
+.sas-preview-heading strong { color: var(--text-primary); font: var(--type-title); }
+
+.sas-canvas-shell {
+  align-self: center;
+  justify-self: center;
+  display: grid;
+  place-items: center;
+  width: min(100%, 900px);
+  height: min(100%, 680px);
+  min-height: 180px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.13);
+  border-radius: var(--radius-3);
+  background: #0d1117;
+  box-shadow: var(--shadow-3);
+}
+
+.sas-canvas-shell[data-checker='true'] {
+  background-color: #19212b;
+  background-image:
+    linear-gradient(45deg, #222d39 25%, transparent 25%),
+    linear-gradient(-45deg, #222d39 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, #222d39 75%),
+    linear-gradient(-45deg, transparent 75%, #222d39 75%);
+  background-position: 0 0, 0 8px, 8px -8px, -8px 0;
+  background-size: 16px 16px;
+}
+
+.sas-canvas-shell canvas {
+  display: block;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  image-rendering: auto;
+  box-shadow: 0 12px 42px rgba(0, 0, 0, 0.5);
+}
+
+.sas-empty {
+  display: grid;
+  place-items: center;
+  gap: var(--space-2);
+  color: var(--text-tertiary);
+}
+
+.sas-empty .tk-icon { width: 28px; height: 28px; }
+
+.sas-baking,
+.sas-error {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-3);
+  background: var(--surface-overlay);
+  box-shadow: var(--shadow-2);
+  transform: translate(-50%, -50%);
+}
+
+.sas-baking span {
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-top-color: var(--accent-300);
+  border-radius: 50%;
+  animation: sas-spin 0.7s linear infinite;
+}
+
+.sas-error { color: var(--danger); }
+@keyframes sas-spin { to { transform: rotate(360deg); } }
+
+.sas-inspector {
+  grid-area: inspector;
+  overflow-y: auto;
+  padding: var(--space-3) var(--space-3) var(--space-7);
+  border-left: 1px solid var(--border-subtle);
+  background: var(--surface-1);
+}
+
+.sas-inspector-header { margin: var(--space-1); font: var(--type-title); }
+.sas-inspector-caption { margin: 0 var(--space-1) var(--space-3); color: var(--text-tertiary); font: var(--type-caption); }
+.sas-inspector .tk-section { margin-bottom: var(--space-3); }
+.sas-inspector .tk-button { width: 100%; }
+
+.sas-select-field {
+  display: grid;
+  grid-template-columns: 92px minmax(0, 1fr);
+  align-items: center;
+  gap: var(--space-2);
+  margin-bottom: var(--space-2);
+  color: var(--text-secondary);
+}
+
+.sas-color-value { color: var(--text-tertiary); font: var(--type-caption); }
+
+.sas-result-details dl { display: grid; gap: 6px; margin: 0; }
+.sas-result-details dl div { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-2); }
+.sas-result-details dt { color: var(--text-tertiary); text-transform: capitalize; }
+.sas-result-details dd { margin: 0; overflow-wrap: anywhere; color: var(--text-secondary); text-align: right; }
+
+.sas-source-note {
+  display: flex;
+  gap: var(--space-2);
+  padding: var(--space-3);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-2);
+  color: var(--text-tertiary);
+  font: var(--type-caption);
+}
+
+.sas-source-note p { margin: 0; }
+.sas-source-note .tk-icon { flex: 0 0 auto; }
+
+.sas-doc-menu { display: flex; flex-direction: column; gap: var(--space-2); }
+.sas-save-row, .sas-library-row { display: flex; gap: var(--space-2); }
+.sas-save-row .tk-text-field, .sas-library-row .tk-select { min-width: 0; flex: 1; }
+
+.sas-status {
+  grid-area: status;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: 0 var(--space-3);
+  border-top: 1px solid var(--border-subtle);
+  background: var(--bg-app);
+  color: var(--text-secondary);
+  font: var(--type-caption);
+}
+
+.sas-status-spacer { flex: 1; }
+.sas-status-dirty { color: var(--warning); }
+
+.sas-root .tk-previewbar {
+  left: calc((100vw + var(--rail-w) - var(--inspector-w)) / 2);
+  bottom: calc(var(--statusbar-h) + var(--space-3));
+}
+
+@media (max-width: 860px) {
+  .sas-root {
+    grid-template-columns: var(--rail-w) minmax(0, 1fr) min(310px, 42vw);
+  }
+  .sas-topbar .tk-badge { display: none; }
+  .sas-workspace { padding-inline: var(--space-3); }
+}
+
+@media (max-width: 680px) {
+  .sas-root {
+    grid-template-columns: var(--rail-w) minmax(0, 1fr);
+    grid-template-areas:
+      'topbar topbar'
+      'rail workspace'
+      'status status';
+  }
+  .sas-inspector {
+    position: fixed;
+    top: var(--topbar-h);
+    right: 0;
+    bottom: var(--statusbar-h);
+    width: min(330px, calc(100vw - var(--rail-w)));
+    z-index: var(--z-drawer);
+  }
+  .sas-topbar .tk-brand-lab,
+  .sas-topbar .sas-title { display: none; }
+}

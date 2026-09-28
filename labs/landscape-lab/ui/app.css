@@ -1,0 +1,619 @@
+/* Landscape Lab layout chrome (ll- prefix). Controls come from the shared
+   kit (tk-); only layout and lab-specific widgets live here. Mirrors the
+   water-lab grid so the lab family stays visually consistent. */
+
+#app { position: fixed; inset: 0; pointer-events: none; z-index: 10; }
+body[data-hide-hud='true'] #app { display: none; }
+
+.ll-root {
+  position: fixed;
+  inset: 0;
+  /* Fixed elements are stacking contexts (Chromium): the root must sit above
+     the floating HUD bars so modals rendered inside it can cover them. The
+     bars stay visible because nothing in the root overlaps the viewport. */
+  z-index: calc(var(--z-hud) + 5);
+  display: grid;
+  grid-template-rows: var(--topbar-h) 1fr var(--statusbar-h);
+  grid-template-columns: var(--rail-w) 1fr auto;
+  grid-template-areas:
+    'topbar topbar topbar'
+    'rail viewport inspector'
+    'status status status';
+  color: var(--text-primary);
+  font: var(--type-body);
+  pointer-events: none;
+}
+
+/* --- topbar ------------------------------------------------------------ */
+.ll-topbar {
+  grid-area: topbar;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 0 var(--space-3);
+  background: var(--bg-app);
+  border-bottom: 1px solid var(--border-subtle);
+  pointer-events: auto;
+}
+.ll-topbar .tk-brand {
+  padding-right: var(--space-2);
+  margin-right: var(--space-1);
+}
+.ll-title {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: 30px;
+  padding: var(--space-1) var(--space-2);
+  border: none;
+  border-radius: var(--radius-2);
+  background: none;
+  color: var(--text-primary);
+  font: var(--type-title);
+  cursor: pointer;
+}
+.ll-title:hover { background: var(--surface-3); }
+.ll-topbar-spacer { flex: 1; }
+
+/* --- mode/tool rail ----------------------------------------------------- */
+.ll-rail {
+  grid-area: rail;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-1);
+  overflow-y: auto;
+  padding: var(--space-2) 0;
+  background: var(--surface-1);
+  border-right: 1px solid var(--border-subtle);
+  pointer-events: auto;
+}
+.ll-rail-stage {
+  position: relative;
+  display: flex;
+  flex: 0 0 auto;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  width: 52px;
+  padding: var(--space-2) 0;
+  border: none;
+  border-radius: var(--radius-2);
+  background: none;
+  color: var(--text-tertiary);
+  font: var(--type-caption);
+  cursor: pointer;
+}
+.ll-rail-stage:hover { background: var(--surface-3); color: var(--text-secondary); }
+.ll-rail-stage[data-active='true'] {
+  background: var(--accent-subtle);
+  color: var(--accent-300);
+}
+.ll-rail-stage[data-active='true']::before {
+  content: '';
+  position: absolute;
+  top: 18%;
+  bottom: 18%;
+  left: -6px;
+  width: 3px;
+  border-radius: var(--radius-full);
+  background: var(--accent-400);
+}
+.ll-rail-divider {
+  flex: 0 0 auto;
+  width: 38px;
+  height: 1px;
+  margin: var(--space-1) 0;
+  background: var(--border-subtle);
+}
+
+/* --- floating camera bar (water-lab convention) ----------------------------- */
+.ll-camerabar {
+  position: fixed;
+  top: calc(var(--topbar-h) + 10px);
+  left: calc((100vw + var(--rail-w) - var(--inspector-w)) / 2);
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  box-sizing: border-box;
+  max-width: calc(100vw - var(--rail-w) - var(--inspector-w) - (2 * var(--space-3)));
+  min-height: 34px;
+  padding: var(--space-1) var(--space-3);
+  border: 1px solid var(--preview-border);
+  border-radius: var(--radius-3);
+  background: var(--surface-overlay);
+  backdrop-filter: var(--blur-overlay);
+  box-shadow: var(--shadow-2);
+  color: var(--text-secondary);
+  font: var(--type-caption);
+  pointer-events: auto;
+  z-index: var(--z-hud);
+  overflow: hidden;
+}
+.ll-camerabar-hint {
+  min-width: 0;
+  overflow: hidden;
+  color: var(--text-tertiary);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* --- floating tool strip (tree-lab convention) ----------------------------- */
+.ll-toolstrip {
+  position: fixed;
+  left: calc(var(--rail-w) + 12px);
+  top: calc(var(--topbar-h) + 48px);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: var(--space-1);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-3);
+  background: var(--surface-overlay);
+  backdrop-filter: var(--blur-overlay);
+  box-shadow: var(--shadow-2);
+  pointer-events: auto;
+  z-index: var(--z-hud);
+}
+.ll-tool {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  width: 52px;
+  padding: var(--space-2) 0 var(--space-1);
+  border: none;
+  border-radius: var(--radius-2);
+  background: none;
+  color: var(--text-secondary);
+  font: var(--type-caption);
+  cursor: pointer;
+}
+.ll-tool:hover { background: var(--surface-3); color: var(--text-primary); }
+.ll-tool[data-active='true'] {
+  background: var(--accent-subtle);
+  color: var(--accent-300);
+}
+
+/* --- inspector ----------------------------------------------------------- */
+.ll-inspector {
+  grid-area: inspector;
+  width: var(--inspector-w);
+  overflow-y: auto;
+  padding: var(--space-3) var(--space-3) var(--space-7);
+  background: var(--surface-1);
+  border-left: 1px solid var(--border-subtle);
+  pointer-events: auto;
+}
+.ll-inspector-header { margin: var(--space-1); font: var(--type-title); }
+
+/* --- paint target layers -------------------------------------------------- */
+.ll-layer-list { display: flex; flex-direction: column; gap: var(--space-1); }
+.ll-layer-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-1) var(--space-2);
+  border: 1px solid transparent;
+  border-radius: var(--radius-2);
+  background: none;
+  color: var(--text-secondary);
+  font: var(--type-body);
+  cursor: pointer;
+  text-align: left;
+}
+.ll-layer-row:hover { background: var(--surface-3); }
+.ll-layer-row[data-active='true'] {
+  background: var(--accent-subtle);
+  border-color: rgba(143, 198, 255, 0.35);
+  color: var(--accent-300);
+}
+.ll-layer-name { flex: 1; }
+
+.ll-layer-texture {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  margin: var(--space-2) var(--space-1) 0;
+}
+.ll-layer-texture .tk-select { flex: 1; }
+
+/* --- foliage palette ------------------------------------------------------ */
+.ll-palette-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-2);
+  margin: var(--space-2) var(--space-1);
+}
+.ll-palette-tile {
+  position: relative;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-2);
+  background: var(--surface-2);
+  overflow: hidden;
+}
+.ll-palette-tile[data-selected='true'] {
+  border-color: var(--accent-400);
+  box-shadow: 0 0 0 1px var(--accent-400);
+}
+.ll-palette-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-1);
+  width: 100%;
+  padding: var(--space-2);
+  border: none;
+  background: none;
+  color: var(--text-secondary);
+  font: var(--type-caption);
+  cursor: pointer;
+}
+.ll-palette-thumb { width: 56px; height: 56px; object-fit: cover; border-radius: var(--radius-1); }
+.ll-palette-glyph {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  border-radius: var(--radius-1);
+  background: var(--surface-3);
+  color: var(--text-tertiary);
+}
+.ll-palette-glyph svg { width: 26px; height: 26px; }
+.ll-palette-name {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.ll-palette-check { position: absolute; top: 4px; right: 4px; }
+
+/* --- palette manager (full-screen modal) ----------------------------------- */
+/* --- generate (full-screen) ------------------------------------------------- */
+.tk-modal[data-testid="terrain-generate"] {
+  width: 100vw !important;
+  max-width: 100vw;
+  height: 100vh;
+  max-height: 100vh;
+  border-radius: 0;
+  box-sizing: border-box;
+}
+.ll-generate {
+  display: grid;
+  grid-template-columns: minmax(320px, 1fr) 380px;
+  gap: var(--space-4);
+  height: calc(100vh - 96px);
+}
+.ll-generate-map { display: flex; flex-direction: column; gap: var(--space-2); min-height: 0; }
+.ll-generate-canvas {
+  width: 100%;
+  height: auto;
+  max-height: calc(100vh - 220px);
+  align-self: start;
+  image-rendering: pixelated;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-2);
+  background: var(--surface-1);
+  cursor: pointer;
+  touch-action: none;
+}
+.ll-generate-mapactions { display: flex; align-items: center; gap: var(--space-2); }
+.ll-generate-options {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  overflow-y: auto;
+  padding-right: var(--space-2);
+}
+.ll-generate-options .tk-section-title { margin-top: var(--space-3); }
+.ll-generate-seed { width: 90px; }
+.ll-generate-options .ll-size-actions { margin-top: var(--space-3); }
+
+/* --- guide (full-screen) ---------------------------------------------------- */
+.tk-modal[data-testid="landscape-guide"] {
+  width: 100vw !important;
+  max-width: 100vw;
+  height: 100vh;
+  max-height: 100vh;
+  border-radius: 0;
+  box-sizing: border-box;
+}
+.ll-guide {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: var(--space-4);
+  height: calc(100vh - 96px);
+}
+.ll-guide-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  overflow-y: auto;
+  padding-right: var(--space-2);
+  border-right: 1px solid var(--border-subtle);
+}
+.ll-guide-nav-item {
+  padding: var(--space-2);
+  border: none;
+  border-radius: var(--radius-2);
+  background: none;
+  color: var(--text-secondary);
+  font: var(--type-body);
+  text-align: left;
+  cursor: pointer;
+}
+.ll-guide-nav-item:hover { background: var(--surface-3); }
+.ll-guide-nav-item[data-active='true'] { background: var(--accent-subtle); color: var(--accent-300); }
+.ll-guide-body {
+  overflow-y: auto;
+  max-width: 760px;
+  padding-right: var(--space-4);
+  color: var(--text-secondary);
+  font: var(--type-body);
+  line-height: 1.55;
+}
+.ll-guide-body h2 { margin: 0 0 var(--space-3); color: var(--text-primary); font: var(--type-title); }
+.ll-guide-body h3 { margin: var(--space-4) 0 var(--space-2); color: var(--text-primary); }
+.ll-guide-body p { margin: 0 0 var(--space-3); }
+.ll-guide-body ul { margin: 0 0 var(--space-3); padding-left: 20px; }
+.ll-guide-body li { margin-bottom: var(--space-1); }
+.ll-guide-figure { margin: var(--space-3) 0; }
+.ll-guide-figure img {
+  width: 100%;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-2);
+}
+.ll-guide-figure figcaption {
+  margin-top: var(--space-1);
+  color: var(--text-tertiary);
+  font: var(--type-caption);
+}
+
+/* The palette manager is genuinely full screen — no margins, no radius. */
+.tk-modal[data-testid="palette-manager"] {
+  width: 100vw !important;
+  max-width: 100vw;
+  height: 100vh;
+  max-height: 100vh;
+  border-radius: 0;
+  box-sizing: border-box;
+}
+.ll-manager {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: var(--space-3);
+  height: calc(100vh - 96px);
+}
+.ll-manager-count { flex: 0 0 auto; color: var(--text-tertiary); font: var(--type-caption); }
+
+/* --- terrain size (canvas-resize placement grid) ---------------------------- */
+.ll-size { display: flex; flex-direction: column; gap: var(--space-3); }
+.ll-size-row { display: flex; gap: var(--space-3); }
+.ll-size-row .ll-rule-row { flex: 1; }
+.ll-size-row .tk-select { flex: 1; }
+.ll-size-caption { margin: 0; color: var(--text-tertiary); font: var(--type-caption); }
+.ll-size-grid {
+  display: grid;
+  gap: 3px;
+  align-self: center;
+  touch-action: none;
+  user-select: none;
+}
+.ll-size-cell {
+  border: 1px solid var(--border-subtle);
+  border-radius: 3px;
+  background: var(--surface-2);
+  cursor: pointer;
+}
+.ll-size-cell:hover { background: var(--surface-3); }
+.ll-size-cell[data-state='kept'] {
+  background: var(--accent-subtle);
+  border-color: var(--accent-400);
+  cursor: grab;
+}
+.ll-size-cell[data-state='cropped'] {
+  background: var(--surface-1);
+  border-color: var(--border-subtle);
+  opacity: 0.45;
+  cursor: grab;
+}
+.ll-size-cell[data-state='empty'] {
+  visibility: hidden;
+  pointer-events: none;
+}
+.ll-size-actions { display: flex; justify-content: flex-end; gap: var(--space-2); }
+.ll-manager-current {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-height: 0;
+  padding-right: var(--space-2);
+  border-right: 1px solid var(--border-subtle);
+}
+.ll-manager-heading { color: var(--text-tertiary); font: var(--type-caption); text-transform: uppercase; letter-spacing: 0.06em; }
+.ll-manager-list { display: flex; flex-direction: column; gap: var(--space-1); overflow-y: auto; min-height: 0; }
+.ll-manager-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-1);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-2);
+  background: var(--surface-2);
+}
+.ll-manager-thumb { width: 36px; height: 36px; object-fit: cover; border-radius: var(--radius-1); }
+.ll-manager-glyph {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-1);
+  background: var(--surface-3);
+  color: var(--text-tertiary);
+  flex: 0 0 auto;
+}
+.ll-manager-name {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--text-secondary);
+  font: var(--type-body);
+}
+.ll-manager-browser { display: flex; flex-direction: column; gap: var(--space-2); min-height: 0; }
+.ll-manager-controls { display: flex; align-items: center; gap: var(--space-2); }
+.ll-manager-search { flex: 1; }
+.ll-manager-results {
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  overflow-y: auto;
+  min-height: 0;
+  max-height: none;
+  flex: 1;
+  align-content: start;
+}
+.ll-manager-owner { color: var(--text-tertiary); font: var(--type-caption); }
+
+/* --- pro library ----------------------------------------------------------- */
+.ll-library-row { margin: var(--space-2) var(--space-1) 0; }
+.ll-library-empty { padding: var(--space-3); color: var(--text-secondary); font: var(--type-body); }
+.ll-library-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-2);
+  max-height: 420px;
+  overflow-y: auto;
+  padding: var(--space-1);
+}
+.ll-library-tile {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-1);
+  padding: var(--space-2);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-2);
+  background: var(--surface-2);
+  color: var(--text-secondary);
+  font: var(--type-caption);
+  cursor: pointer;
+}
+.ll-library-tile:hover { border-color: var(--accent-400); }
+.ll-library-tile:disabled { opacity: 0.55; cursor: default; }
+.ll-library-added {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  padding: 1px 6px;
+  border-radius: var(--radius-full);
+  background: var(--accent-subtle);
+  color: var(--accent-300);
+  font: var(--type-caption);
+}
+
+/* --- per-mesh rules ------------------------------------------------------- */
+.ll-rules {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  margin: var(--space-2) var(--space-1);
+  padding: var(--space-2);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-2);
+  background: var(--surface-2);
+}
+.ll-rules-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font: var(--type-title-sm, var(--type-body));
+  color: var(--text-primary);
+}
+.ll-rule-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font: var(--type-caption);
+  color: var(--text-secondary);
+}
+.ll-rule-label { flex: 0 0 84px; }
+.ll-rule-row .tk-slider { flex: 1; }
+.ll-rule-value { flex: 0 0 34px; text-align: right; color: var(--text-tertiary); }
+
+/* --- document menu -------------------------------------------------------- */
+.ll-doc-menu { display: flex; flex-direction: column; gap: var(--space-2); }
+.ll-save-row { display: flex; gap: var(--space-2); }
+.ll-save-row .tk-textfield { flex: 1; }
+.ll-seed-row { display: flex; gap: var(--space-2); align-items: center; }
+.ll-seed-row .tk-select { flex: 1; }
+
+/* --- preview bar (shared kit positioning) ---------------------------------- */
+.tk-previewbar {
+  position: fixed;
+  bottom: calc(var(--statusbar-h) + var(--space-3));
+  left: calc((100vw + var(--rail-w) - var(--inspector-w)) / 2);
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  box-sizing: border-box;
+  max-width: calc(100vw - var(--rail-w) - var(--inspector-w) - (2 * var(--space-3)));
+  padding: var(--space-2);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-3);
+  background: var(--surface-overlay);
+  backdrop-filter: var(--blur-overlay);
+  box-shadow: var(--shadow-2);
+  pointer-events: auto;
+  z-index: var(--z-hud);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.tk-previewbar::-webkit-scrollbar { display: none; }
+.tk-previewbar > * { flex: 0 0 auto; }
+
+/* --- status bar ------------------------------------------------------------ */
+.ll-status {
+  grid-area: status;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 0 var(--space-3);
+  background: var(--bg-app);
+  border-top: 1px solid var(--border-subtle);
+  color: var(--text-secondary);
+  font: var(--type-caption);
+  pointer-events: auto;
+}
+.ll-status-spacer { flex: 1; }
+.ll-status-meta { color: var(--text-tertiary); }
+
+/* Tunnel planner modal: cross-section doodle on the left, route map right. */
+.ll-tunnel {
+  display: grid;
+  grid-template-columns: 380px minmax(320px, 1fr);
+  gap: var(--space-4);
+  height: calc(100vh - 96px);
+}
+.ll-tunnel-profile {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  overflow-y: auto;
+  padding-right: var(--space-2);
+}
+.ll-tunnel-profile-canvas {
+  width: 100%;
+  aspect-ratio: 340 / 250;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-2);
+  background: var(--surface-1);
+  cursor: crosshair;
+  touch-action: none;
+}
+.ll-tunnel-presets { display: flex; gap: var(--space-2); }
+.ll-tunnel .ll-generate-canvas { max-height: calc(100vh - 300px); }

@@ -1,0 +1,20 @@
+// Source inference fallback: public names retained with permissive signatures.
+export const NATIVE_LOCOMOTION_CLIP_NAMES: any;
+export function bakeSolidBaseColorTextures(...args: any[]): any;
+export function collectBones(...args: any[]): any;
+export function computeModelBounds(...args: any[]): any;
+export function createArmPoseState(...args: any[]): any;
+export function exposePoseDebug(...args: any[]): any;
+export function fitModelForController(...args: any[]): any;
+export function loadAsync(...args: any[]): any;
+export function loadIdleClipForTarget(...args: any[]): any;
+export function loadJumpClipForTarget(...args: any[]): any;
+export function loadPackagedLocomotionClipsForTarget(...args: any[]): any;
+export function loadRetargetedMixamoClipForTarget(...args: any[]): any;
+export function loadRunningClipForTarget(...args: any[]): any;
+export function loadSitClipForTarget(...args: any[]): any;
+export function loadSwimClipForTarget(...args: any[]): any;
+export function loadWalkingClipForTarget(...args: any[]): any;
+export function prepareModelForRealtime(...args: any[]): any;
+export function resolveNativeLocomotionClips(...args: any[]): any;
+export function snapshotSkeletonLocalPose(...args: any[]): any;

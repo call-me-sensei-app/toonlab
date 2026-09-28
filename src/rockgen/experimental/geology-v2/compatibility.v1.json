@@ -1,0 +1,207 @@
+{
+  "schema": "toonlab/rock-geology-compatibility",
+  "version": 1,
+  "status": "repository-only-draft",
+  "statusOrder": ["valid", "valid-but-uncommon", "invalid", "fantastical-explicit-override"],
+  "strictDefault": "invalid",
+  "overrideContract": {
+    "requires": ["allowFantasticalOverride", "overrideReason", "author"],
+    "neverRewritesDeclaredGeology": true,
+    "outputLabel": "non-physical-art-directed"
+  },
+  "selectorSemantics": "selectors are OR; fields inside one selector are AND; tagsAny is OR within the tag field; unmatched pairs are invalid",
+  "matrixAxes": [
+    ["lithology", "fabric"],
+    ["lithology", "process"],
+    ["lithology", "landform"],
+    ["environment", "landform"],
+    ["landform", "scale"]
+  ],
+  "profiles": {
+    "fabric": [
+      { "id": "massive", "members": ["massive"], "validWhen": [{ "any": true }] },
+      { "id": "fine-granular", "members": ["fine-granular"], "validWhen": [{ "classes": ["igneous", "metamorphic"] }], "uncommonWhen": [{ "classes": ["sedimentary"] }] },
+      { "id": "medium-granular", "members": ["medium-granular"], "validWhen": [{ "classes": ["igneous", "metamorphic"] }], "uncommonWhen": [{ "lithologies": ["gypsum", "anhydrite", "halite"] }] },
+      { "id": "coarse-granular", "members": ["coarse-granular"], "validWhen": [{ "lithologies": ["granite", "alkali-granite", "granodiorite", "tonalite", "syenite", "diorite", "gabbro", "pegmatite", "peridotite", "dunite", "anorthosite", "gneiss", "migmatite", "marble", "quartzite", "amphibolite", "granulite", "eclogite"] }] },
+      { "id": "very-coarse-granular", "members": ["very-coarse-granular"], "validWhen": [{ "lithologies": ["pegmatite"] }], "uncommonWhen": [{ "lithologies": ["granite", "alkali-granite", "gabbro"] }] },
+      { "id": "porphyritic", "members": ["porphyritic"], "validWhen": [{ "lithologies": ["andesite", "dacite", "rhyolite"] }], "uncommonWhen": [{ "lithologies": ["basalt", "dolerite", "granite"] }] },
+      { "id": "volcanic-glass", "members": ["glassy"], "validWhen": [{ "lithologies": ["obsidian"] }], "uncommonWhen": [{ "lithologies": ["rhyolite", "dacite", "pumice"] }] },
+      { "id": "vesicular", "members": ["vesicular", "amygdaloidal"], "validWhen": [{ "lithologies": ["basalt", "andesite", "dacite", "rhyolite", "pumice", "scoria", "tuff", "ignimbrite", "volcanic-breccia"] }] },
+      { "id": "pillow", "members": ["pillow"], "validWhen": [{ "lithologies": ["basalt"] }], "uncommonWhen": [{ "lithologies": ["greenstone"] }] },
+      { "id": "pyroclastic", "members": ["agglutinated", "pyroclastic", "welded-pyroclastic"], "validWhen": [{ "lithologies": ["pumice", "scoria", "tuff", "ignimbrite", "volcanic-breccia"] }] },
+      { "id": "flow-banding", "members": ["flow-banding"], "validWhen": [{ "lithologies": ["rhyolite", "dacite", "obsidian"] }], "uncommonWhen": [{ "lithologies": ["andesite", "basalt"] }] },
+      { "id": "bedding", "members": ["laminated", "planar-bedding", "thin-bedding", "medium-bedding", "thick-bedding", "very-thick-bedding", "graded-bedding", "folded-bedding"], "validWhen": [{ "classes": ["sedimentary"] }, { "lithologies": ["tuff", "ignimbrite", "volcanic-breccia"] }], "uncommonWhen": [{ "lithologies": ["slate", "phyllite", "mica-schist", "chlorite-schist", "gneiss", "migmatite", "metaconglomerate"] }] },
+      { "id": "cross-bedding", "members": ["cross-bedding"], "validWhen": [{ "lithologies": ["quartz-arenite", "arkose", "lithic-arenite", "conglomerate", "oolitic-limestone"] }], "uncommonWhen": [{ "lithologies": ["tuff"] }] },
+      { "id": "depositional-structures", "members": ["channel-fill", "rippled-surface"], "validWhen": [{ "classes": ["sedimentary"] }, { "lithologies": ["tuff", "ignimbrite"] }] },
+      { "id": "relict-bedding", "members": ["relict-bedding"], "validWhen": [{ "lithologies": ["slate", "phyllite", "mica-schist", "chlorite-schist", "gneiss", "migmatite", "metaconglomerate"] }] },
+      { "id": "fissile", "members": ["fissile"], "validWhen": [{ "lithologies": ["shale", "slate", "coal"] }], "uncommonWhen": [{ "lithologies": ["mudstone", "claystone", "phyllite"] }] },
+      { "id": "rounded-clasts", "members": ["rounded-clasts"], "validWhen": [{ "lithologies": ["conglomerate", "metaconglomerate"] }] },
+      { "id": "angular-clasts", "members": ["angular-clasts"], "validWhen": [{ "lithologies": ["sedimentary-breccia", "volcanic-breccia"] }] },
+      { "id": "stretched-clasts", "members": ["stretched-clasts"], "validWhen": [{ "lithologies": ["metaconglomerate", "mylonite"] }] },
+      { "id": "imbricated-clasts", "members": ["imbricated-clasts"], "validWhen": [{ "lithologies": ["conglomerate", "sedimentary-breccia", "metaconglomerate"] }] },
+      { "id": "clast-support", "members": ["clast-supported", "matrix-supported"], "validWhen": [{ "lithologies": ["conglomerate", "sedimentary-breccia", "volcanic-breccia", "metaconglomerate"] }] },
+      { "id": "carbonate-grains", "members": ["coated-grains", "bioclastic"], "validWhen": [{ "lithologies": ["oolitic-limestone", "fossiliferous-limestone", "reef-limestone", "tufa"] }] },
+      { "id": "nodular", "members": ["nodular", "concretionary"], "validWhen": [{ "lithologies": ["chert", "ironstone", "chalk", "micritic-limestone", "mudstone", "claystone", "shale"] }] },
+      { "id": "porous", "members": ["porous"], "validWhen": [{ "tagsAny": ["porous", "vesicular-capable"] }], "uncommonWhen": [{ "lithologies": ["quartz-arenite", "arkose", "dolostone", "micritic-limestone"] }] },
+      { "id": "vuggy", "members": ["vuggy"], "validWhen": [{ "lithologies": ["dolostone", "micritic-limestone", "reef-limestone", "travertine", "tufa", "marble"] }] },
+      { "id": "chemical-lamination", "members": ["chemical-lamination"], "validWhen": [{ "lithologies": ["travertine", "tufa", "gypsum", "anhydrite", "halite", "banded-iron-formation"] }] },
+      { "id": "crystalline", "members": ["crystalline"], "validWhen": [{ "tagsAny": ["crystalline"] }, { "classes": ["metamorphic"] }] },
+      { "id": "slaty-cleavage", "members": ["slaty-cleavage"], "validWhen": [{ "lithologies": ["slate"] }], "uncommonWhen": [{ "lithologies": ["phyllite"] }] },
+      { "id": "phyllitic-foliation", "members": ["phyllitic-foliation"], "validWhen": [{ "lithologies": ["phyllite"] }], "uncommonWhen": [{ "lithologies": ["slate", "mica-schist"] }] },
+      { "id": "schistose", "members": ["schistosity", "crenulation"], "validWhen": [{ "lithologies": ["mica-schist", "chlorite-schist", "blueschist", "metaconglomerate"] }], "uncommonWhen": [{ "lithologies": ["phyllite", "amphibolite", "serpentinite"] }] },
+      { "id": "gneissic", "members": ["gneissic-banding", "folded-foliation", "boudinage"], "validWhen": [{ "lithologies": ["gneiss", "migmatite", "granulite", "amphibolite"] }] },
+      { "id": "migmatitic", "members": ["migmatitic-banding"], "validWhen": [{ "lithologies": ["migmatite"] }] },
+      { "id": "compositional-banding", "members": ["compositional-banding"], "validWhen": [{ "lithologies": ["gneiss", "migmatite", "granulite", "banded-iron-formation"] }] },
+      { "id": "lineation", "members": ["lineation"], "validWhen": [{ "lithologies": ["mica-schist", "chlorite-schist", "gneiss", "migmatite", "amphibolite", "serpentinite", "blueschist", "metaconglomerate", "mylonite"] }] },
+      { "id": "shear", "members": ["shear-foliation", "mylonitic-foliation", "slickensides"], "validWhen": [{ "lithologies": ["mylonite", "serpentinite"] }], "uncommonWhen": [{ "classes": ["metamorphic"] }] },
+      { "id": "veined", "members": ["veined"], "validWhen": [{ "any": true }] },
+      { "id": "unconformity", "members": ["unconformity"], "validWhen": [{ "classes": ["sedimentary"] }, { "lithologies": ["tuff", "ignimbrite", "volcanic-breccia"] }] },
+      { "id": "fault-deformation", "members": ["fault-brecciation", "drag-fold"], "validWhen": [{ "any": true }] },
+      { "id": "contact", "members": ["lithologic-contact"], "validWhen": [{ "any": true }] },
+      { "id": "igneous-sheet-contact", "members": ["dyke-contact", "sill-contact"], "validWhen": [{ "classes": ["igneous"] }], "uncommonWhen": [{ "any": true }] },
+      { "id": "joints", "members": ["orthogonal-joints", "rhombohedral-joints", "polyhedral-joints", "tabular-joints", "sheet-joints", "irregular-joints", "fault-joints"], "validWhen": [{ "tagsAny": ["jointed"] }, { "classes": ["metamorphic", "sedimentary"] }], "uncommonWhen": [{ "any": true }] },
+      { "id": "cooling-joints", "members": ["cooling-columns", "entablature"], "validWhen": [{ "tagsAny": ["cooling-joint-capable"] }] },
+      { "id": "conchoidal", "members": ["conchoidal-fracture"], "validWhen": [{ "tagsAny": ["conchoidal-capable"] }] },
+      { "id": "splintery", "members": ["splintery-fracture"], "validWhen": [{ "tagsAny": ["splintery"] }] },
+      { "id": "relict-pillow", "members": ["relict-pillow"], "validWhen": [{ "lithologies": ["greenstone"] }], "uncommonWhen": [{ "lithologies": ["basalt"] }] }
+    ],
+    "process": [
+      { "id": "fracture", "members": ["jointing", "faulting", "crack-propagation"], "validWhen": [{ "any": true }] },
+      { "id": "spheroidal", "members": ["spheroidal-weathering"], "validWhen": [{ "tagsAny": ["corestone-forming"] }], "uncommonWhen": [{ "tagsAny": ["massive"] }] },
+      { "id": "exfoliation", "members": ["exfoliation", "pressure-release"], "validWhen": [{ "lithologies": ["granite", "alkali-granite", "granodiorite", "syenite"] }], "uncommonWhen": [{ "tagsAny": ["massive"] }] },
+      { "id": "granular", "members": ["granular-disintegration"], "validWhen": [{ "tagsAny": ["crystalline"] }, { "lithologies": ["arkose"] }], "uncommonWhen": [{ "classes": ["igneous", "metamorphic"] }] },
+      { "id": "freeze-thaw", "members": ["freeze-thaw"], "validWhen": [{ "any": true }] },
+      { "id": "thermal-salt", "members": ["thermal-weathering", "salt-weathering", "case-hardening", "tafoni-weathering"], "validWhen": [{ "any": true }] },
+      { "id": "slaking", "members": ["wet-dry-slaking", "hydration-expansion"], "validWhen": [{ "lithologies": ["mudstone", "claystone", "shale", "marl", "tuff", "gypsum", "anhydrite"] }] },
+      { "id": "alteration", "members": ["chemical-alteration", "oxidation", "differential-erosion"], "validWhen": [{ "any": true }] },
+      { "id": "karst", "members": ["karst-dissolution"], "validWhen": [{ "tagsAny": ["soluble-carbonate"] }] },
+      { "id": "evaporite", "members": ["evaporite-dissolution"], "validWhen": [{ "tagsAny": ["evaporite-soluble"] }] },
+      { "id": "carbonate-precipitation", "members": ["carbonate-precipitation"], "validWhen": [{ "lithologies": ["travertine", "tufa"] }] },
+      { "id": "abrasion", "members": ["marine-abrasion", "marine-undercut", "fluvial-abrasion", "pothole-erosion", "aeolian-abrasion", "wind-deflation", "glacial-abrasion", "glacial-plucking"], "validWhen": [{ "any": true }] },
+      { "id": "transport", "members": ["rockfall", "collapse", "transport-rounding", "sorting", "imbrication", "burial", "talus-deposition"], "validWhen": [{ "any": true }] },
+      { "id": "surface-history", "members": ["desert-varnish", "glacial-striation"], "validWhen": [{ "any": true }] }
+    ],
+    "landform": [
+      { "id": "detached", "members": ["pebble", "cobble", "boulder", "slab", "block", "shard", "erratic", "boulder-field", "talus-fan", "scree", "rockfall-deposit", "moraine", "river-bar", "beach-ridge"], "validWhen": [{ "any": true }] },
+      { "id": "generic-attached", "members": ["outcrop", "ledge", "bench", "wall", "cliff", "overhang", "escarpment", "fault-scarp", "slope", "ridge", "shattered-alpine-ridge", "modular-bedrock-mountain", "folded-ridge"], "validWhen": [{ "any": true }] },
+      { "id": "crystalline-residual", "members": ["monolith", "corestone", "tor", "dome", "exfoliation-massif"], "validWhen": [{ "tagsAny": ["corestone-forming", "massive"] }], "uncommonWhen": [{ "any": true }] },
+      { "id": "volcanic", "members": ["volcanic-spine", "dyke", "sill", "volcanic-neck", "lava-dome", "column-field", "volcanic-massif"], "validWhen": [{ "classes": ["igneous"] }] },
+      { "id": "vein", "members": ["vein"], "validWhen": [{ "any": true }] },
+      { "id": "karst", "members": ["pinnacle", "pillar", "karst-spire", "pavement", "cave-mouth", "arch", "natural-bridge", "karst-tower-field"], "validWhen": [{ "tagsAny": ["karst-capable", "soluble-carbonate"] }, { "lithologies": ["halite"] }], "uncommonWhen": [{ "lithologies": ["quartz-arenite", "tuff"] }] },
+      { "id": "erosional", "members": ["fin", "blade", "spire", "hoodoo", "canyon-wall", "gorge", "mesa", "butte", "badlands", "stratified-ridge"], "validWhen": [{ "classes": ["sedimentary"] }, { "lithologies": ["tuff", "ignimbrite"] }], "uncommonWhen": [{ "any": true }] },
+      { "id": "chemical-deposit", "members": ["mound", "terrace"], "validWhen": [{ "lithologies": ["travertine", "tufa"] }], "uncommonWhen": [{ "any": true }] },
+      { "id": "coastal", "members": ["sea-cliff", "sea-cave", "sea-stack", "sea-stump"], "validWhen": [{ "any": true }] }
+    ]
+  },
+  "environmentLandformProfiles": [
+    { "id": "coastal-required", "members": ["sea-cliff", "sea-cave", "sea-stack", "sea-stump", "beach-ridge"], "validEnvironments": ["coastal", "shallow-marine"] },
+    { "id": "glacial-required", "members": ["erratic", "moraine"], "validEnvironments": ["glacial", "periglacial", "alpine"] },
+    { "id": "fluvial-required", "members": ["river-bar"], "validEnvironments": ["fluvial"] },
+    { "id": "hydrothermal-favored", "members": ["terrace", "mound"], "validEnvironments": ["hydrothermal", "fluvial"], "uncommonEnvironments": ["humid", "temperate"] },
+    { "id": "generic", "members": ["pebble", "cobble", "boulder", "slab", "block", "shard", "monolith", "corestone", "outcrop", "tor", "dome", "fin", "blade", "spire", "volcanic-spine", "pinnacle", "pillar", "karst-spire", "hoodoo", "pavement", "ledge", "bench", "wall", "cliff", "overhang", "cave-mouth", "arch", "natural-bridge", "canyon-wall", "gorge", "escarpment", "fault-scarp", "mesa", "butte", "badlands", "dyke", "sill", "vein", "volcanic-neck", "lava-dome", "column-field", "slope", "ridge", "stratified-ridge", "folded-ridge", "shattered-alpine-ridge", "exfoliation-massif", "volcanic-massif", "karst-tower-field", "modular-bedrock-mountain", "boulder-field", "talus-fan", "scree", "rockfall-deposit"], "validEnvironments": ["temperate", "humid", "arid", "semi-arid", "alpine", "glacial", "periglacial", "coastal", "fluvial", "lacustrine", "shallow-marine", "deep-marine", "submarine-volcanic", "hydrothermal"] }
+  ],
+  "landformScaleProfiles": [
+    { "id": "prop", "scale": "prop", "members": ["pebble", "cobble", "boulder", "slab", "block", "shard", "corestone", "erratic"] },
+    { "id": "outcrop", "scale": "outcrop", "members": ["boulder", "slab", "block", "shard", "monolith", "corestone", "outcrop", "tor", "dome", "fin", "blade", "spire", "pinnacle", "pillar", "karst-spire", "hoodoo", "pavement", "mound", "terrace", "ledge", "bench", "wall", "cliff", "overhang", "cave-mouth", "sea-cave", "arch", "natural-bridge", "sea-stack", "sea-stump", "gorge", "fault-scarp", "dyke", "sill", "vein", "column-field", "slope", "ridge", "boulder-field", "talus-fan", "scree", "rockfall-deposit", "moraine", "river-bar", "beach-ridge"] },
+    { "id": "module", "scale": "module", "members": ["outcrop", "tor", "dome", "fin", "blade", "spire", "volcanic-spine", "pinnacle", "pillar", "karst-spire", "hoodoo", "pavement", "mound", "terrace", "ledge", "bench", "wall", "cliff", "sea-cliff", "overhang", "cave-mouth", "sea-cave", "arch", "natural-bridge", "sea-stack", "sea-stump", "canyon-wall", "gorge", "escarpment", "fault-scarp", "mesa", "butte", "badlands", "dyke", "sill", "vein", "volcanic-neck", "lava-dome", "column-field", "slope", "ridge", "stratified-ridge", "folded-ridge", "shattered-alpine-ridge", "exfoliation-massif", "volcanic-massif", "karst-tower-field", "modular-bedrock-mountain", "boulder-field", "talus-fan", "scree", "rockfall-deposit", "moraine", "river-bar", "beach-ridge"] },
+    { "id": "formation", "scale": "formation", "members": ["dome", "fin", "blade", "spire", "volcanic-spine", "pinnacle", "pillar", "karst-spire", "hoodoo", "pavement", "mound", "terrace", "ledge", "bench", "wall", "cliff", "sea-cliff", "overhang", "cave-mouth", "sea-cave", "arch", "natural-bridge", "sea-stack", "sea-stump", "canyon-wall", "gorge", "escarpment", "fault-scarp", "mesa", "butte", "badlands", "dyke", "sill", "volcanic-neck", "lava-dome", "column-field", "slope", "ridge", "stratified-ridge", "folded-ridge", "shattered-alpine-ridge", "exfoliation-massif", "volcanic-massif", "karst-tower-field", "modular-bedrock-mountain", "boulder-field", "talus-fan", "scree", "rockfall-deposit", "moraine", "river-bar", "beach-ridge"] }
+  ],
+  "contextualRules": [
+    {
+      "id": "bedding-requires-deposition",
+      "claimStrength": "empirical-constraint",
+      "sources": ["bgs-rock-classification"],
+      "evaluator": "beddingRequiresDepositedUnit",
+      "accept": [{ "name": "cross-bedded sandstone", "recipe": { "lithology": "quartz-arenite", "fabrics": ["cross-bedding"] } }],
+      "reject": [{ "name": "bedded granite", "recipe": { "lithology": "granite", "fabrics": ["thin-bedding"] } }]
+    },
+    {
+      "id": "cooling-columns-require-cooling-body",
+      "claimStrength": "empirical-constraint",
+      "sources": ["nps-columnar-jointing"],
+      "evaluator": "coolingColumnsRequireCoolingBody",
+      "accept": [{ "name": "basalt colonnade", "recipe": { "lithology": "basalt", "fabrics": ["cooling-columns"], "coolingBoundary": "flow-top" } }],
+      "reject": [{ "name": "granite columns", "recipe": { "lithology": "granite", "fabrics": ["cooling-columns"] } }]
+    },
+    {
+      "id": "metamorphic-fabric-requires-metamorphism",
+      "claimStrength": "empirical-constraint",
+      "sources": ["bgs-rock-classification"],
+      "evaluator": "metamorphicFabricRequiresMetamorphism",
+      "accept": [{ "name": "gneissic gneiss", "recipe": { "lithology": "gneiss", "fabrics": ["gneissic-banding"] } }],
+      "reject": [{ "name": "gneissic sandstone", "recipe": { "lithology": "quartz-arenite", "fabrics": ["gneissic-banding"] } }]
+    },
+    {
+      "id": "cross-cutting-needs-chronology",
+      "claimStrength": "empirical-constraint",
+      "sources": ["bgs-discontinuities"],
+      "evaluator": "crossCuttingNeedsChronology",
+      "accept": [{ "name": "joints cut beds", "recipe": { "lithology": "quartz-arenite", "fabrics": ["thin-bedding", "orthogonal-joints"], "chronology": ["deposition", "lithification", "jointing"] } }],
+      "reject": [{ "name": "ambiguous beds and joints", "recipe": { "lithology": "quartz-arenite", "fabrics": ["thin-bedding", "orthogonal-joints"] } }]
+    },
+    {
+      "id": "karst-requires-solubility-water-exposure-time",
+      "claimStrength": "empirical-constraint",
+      "sources": ["bgs-rock-classification"],
+      "evaluator": "karstRequiresSolubilityWaterExposureTime",
+      "accept": [{ "name": "humid limestone spire", "recipe": { "lithology": "micritic-limestone", "processes": ["karst-dissolution"], "environment": "humid", "landform": "karst-spire", "waterRouting": true, "exposureYears": 250000 } }],
+      "reject": [{ "name": "noise-carved granite karst", "recipe": { "lithology": "granite", "processes": ["karst-dissolution"], "environment": "humid", "landform": "karst-spire" } }]
+    },
+    {
+      "id": "tafoni-needs-material-climate-exposure",
+      "claimStrength": "approximated-process",
+      "sources": ["bgs-discontinuities"],
+      "evaluator": "tafoniNeedsMaterialClimateExposure",
+      "accept": [{ "name": "salt-weathered porous sandstone", "recipe": { "lithology": "quartz-arenite", "processes": ["salt-weathering"], "environment": "semi-arid", "porosity": 0.18, "saltExposure": 0.7, "exposureYears": 40000 } }],
+      "reject": [{ "name": "instant dense quartzite tafoni", "recipe": { "lithology": "quartzite", "processes": ["salt-weathering"], "environment": "glacial", "porosity": 0.01, "saltExposure": 0, "exposureYears": 1 } }]
+    },
+    {
+      "id": "transport-rounding-requires-detachment",
+      "claimStrength": "empirical-constraint",
+      "sources": ["bgs-rock-classification"],
+      "evaluator": "transportRoundingRequiresDetachment",
+      "accept": [{ "name": "river boulder", "recipe": { "lithology": "granite", "processes": ["transport-rounding"], "landform": "boulder", "detached": true, "transportDistanceMetres": 12000 } }],
+      "reject": [{ "name": "river-rounded attached cliff", "recipe": { "lithology": "granite", "processes": ["transport-rounding"], "landform": "cliff", "detached": false } }]
+    },
+    {
+      "id": "talus-inherits-source",
+      "claimStrength": "empirical-constraint",
+      "sources": ["paris-implicit-blocks-2020", "mateos-mechanical-weathering-2023"],
+      "evaluator": "talusInheritsSource",
+      "accept": [{ "name": "gneiss source and talus", "recipe": { "lithology": "gneiss", "landform": "talus-fan", "sourceLithology": "gneiss", "sourceFormationId": "ridge-a" } }],
+      "reject": [{ "name": "unrelated talus", "recipe": { "lithology": "basalt", "landform": "talus-fan", "sourceLithology": "granite" } }]
+    },
+    {
+      "id": "sea-stack-requires-coastal-history",
+      "claimStrength": "empirical-constraint",
+      "sources": ["paris-implicit-terrain-2019"],
+      "evaluator": "seaStackRequiresCoastalHistory",
+      "accept": [{ "name": "joint-controlled stack", "recipe": { "lithology": "quartz-arenite", "landform": "sea-stack", "environment": "coastal", "processes": ["marine-abrasion"], "parentCoastId": "headland-a", "collapseStage": "stack" } }],
+      "reject": [{ "name": "isolated desert stack", "recipe": { "lithology": "quartz-arenite", "landform": "sea-stack", "environment": "arid" } }]
+    },
+    {
+      "id": "overhang-requires-stability",
+      "claimStrength": "approximated-process",
+      "sources": ["mateos-mechanical-weathering-2023"],
+      "evaluator": "overhangRequiresStability",
+      "accept": [{ "name": "checked sandstone arch", "recipe": { "lithology": "quartz-arenite", "landform": "arch", "stability": { "mode": "support-graph", "passed": true } } }],
+      "reject": [{ "name": "unsupported arch", "recipe": { "lithology": "quartz-arenite", "landform": "arch" } }]
+    },
+    {
+      "id": "runtime-scale-outside-envelope-rebuilds",
+      "claimStrength": "technical-contract",
+      "sources": ["vibe3d-terrain-2026-08-14", "epic-fab-megascans-2026"],
+      "evaluator": "runtimeScaleOutsideEnvelopeRebuilds",
+      "accept": [{ "name": "qualified transform", "recipe": { "targetDimensionsMetres": [2, 1.4, 1.2], "runtimeScale": [1.25, 1.25, 1.25], "scaleAction": "transform" } }],
+      "reject": [{ "name": "stretched fixed bake", "recipe": { "targetDimensionsMetres": [2, 1.4, 1.2], "runtimeScale": [4, 1, 1], "scaleAction": "transform" } }]
+    },
+    {
+      "id": "out-of-envelope-dimension-request-rebakes",
+      "claimStrength": "technical-contract",
+      "sources": ["vibe3d-terrain-2026-08-14", "epic-fab-megascans-2026"],
+      "evaluator": "outOfEnvelopeDimensionRequestRebakes",
+      "accept": [{ "name": "rebuild at requested size", "recipe": { "targetDimensionsMetres": [8, 5, 4], "runtimeScale": [1, 1, 1], "scaleAction": "recompile-and-rebake" } }],
+      "reject": [{ "name": "enlarge without rebake", "recipe": { "targetDimensionsMetres": [2, 1.25, 1], "runtimeScale": [4, 4, 4], "scaleAction": "transform" } }]
+    }
+  ]
+}

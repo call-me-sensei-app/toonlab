@@ -1,0 +1,56 @@
+fail
+location
+retry = 2
+url = "https://assets.toonlab.io/mirrors/polyhaven/v1/models/painted_wooden_bench/6784218e3b57df8750c5aa76ece84edfdd53b797/painted_wooden_bench_1k.gltf"
+output = "quality/mcp-material-labeling/assets/painted_wooden_bench/painted_wooden_bench_1k.gltf"
+next
+url = "https://assets.toonlab.io/mirrors/polyhaven/v1/models/painted_wooden_bench/6784218e3b57df8750c5aa76ece84edfdd53b797/painted_wooden_bench.bin"
+output = "quality/mcp-material-labeling/assets/painted_wooden_bench/painted_wooden_bench.bin"
+next
+url = "https://assets.toonlab.io/mirrors/polyhaven/v1/models/painted_wooden_bench/6784218e3b57df8750c5aa76ece84edfdd53b797/textures/painted_wooden_bench_arm_1k.jpg"
+output = "quality/mcp-material-labeling/assets/painted_wooden_bench/textures/painted_wooden_bench_arm_1k.jpg"
+next
+url = "https://assets.toonlab.io/mirrors/polyhaven/v1/models/painted_wooden_bench/6784218e3b57df8750c5aa76ece84edfdd53b797/textures/painted_wooden_bench_diff_1k.jpg"
+output = "quality/mcp-material-labeling/assets/painted_wooden_bench/textures/painted_wooden_bench_diff_1k.jpg"
+next
+url = "https://assets.toonlab.io/mirrors/polyhaven/v1/models/painted_wooden_bench/6784218e3b57df8750c5aa76ece84edfdd53b797/textures/painted_wooden_bench_nor_gl_1k.jpg"
+output = "quality/mcp-material-labeling/assets/painted_wooden_bench/textures/painted_wooden_bench_nor_gl_1k.jpg"
+next
+url = "https://assets.toonlab.io/mirrors/polyhaven/v1/models/wooden_picnic_table/56962f92a441625ad0afd4cc2e1ae405035a86ea/wooden_picnic_table_1k.gltf"
+output = "quality/mcp-material-labeling/assets/wooden_picnic_table/wooden_picnic_table_1k.gltf"
+next
+url = "https://assets.toonlab.io/mirrors/polyhaven/v1/models/wooden_picnic_table/56962f92a441625ad0afd4cc2e1ae405035a86ea/wooden_picnic_table.bin"
+output = "quality/mcp-material-labeling/assets/wooden_picnic_table/wooden_picnic_table.bin"
+next
+url = "https://assets.toonlab.io/mirrors/polyhaven/v1/models/wooden_picnic_table/56962f92a441625ad0afd4cc2e1ae405035a86ea/textures/wooden_picnic_table_top_arm_1k.jpg"
+output = "quality/mcp-material-labeling/assets/wooden_picnic_table/textures/wooden_picnic_table_top_arm_1k.jpg"
+next
+url = "https://assets.toonlab.io/mirrors/polyhaven/v1/models/wooden_picnic_table/56962f92a441625ad0afd4cc2e1ae405035a86ea/textures/wooden_picnic_table_top_diff_1k.jpg"
+output = "quality/mcp-material-labeling/assets/wooden_picnic_table/textures/wooden_picnic_table_top_diff_1k.jpg"
+next
+url = "https://assets.toonlab.io/mirrors/polyhaven/v1/models/wooden_picnic_table/56962f92a441625ad0afd4cc2e1ae405035a86ea/textures/wooden_picnic_table_bottom_arm_1k.jpg"
+output = "quality/mcp-material-labeling/assets/wooden_picnic_table/textures/wooden_picnic_table_bottom_arm_1k.jpg"
+next
+url = "https://assets.toonlab.io/mirrors/polyhaven/v1/models/wooden_picnic_table/56962f92a441625ad0afd4cc2e1ae405035a86ea/textures/wooden_picnic_table_top_nor_gl_1k.jpg"
+output = "quality/mcp-material-labeling/assets/wooden_picnic_table/textures/wooden_picnic_table_top_nor_gl_1k.jpg"
+next
+url = "https://assets.toonlab.io/mirrors/polyhaven/v1/models/wooden_picnic_table/56962f92a441625ad0afd4cc2e1ae405035a86ea/textures/wooden_picnic_table_bottom_diff_1k.jpg"
+output = "quality/mcp-material-labeling/assets/wooden_picnic_table/textures/wooden_picnic_table_bottom_diff_1k.jpg"
+next
+url = "https://assets.toonlab.io/mirrors/polyhaven/v1/models/wooden_picnic_table/56962f92a441625ad0afd4cc2e1ae405035a86ea/textures/wooden_picnic_table_bottom_nor_gl_1k.jpg"
+output = "quality/mcp-material-labeling/assets/wooden_picnic_table/textures/wooden_picnic_table_bottom_nor_gl_1k.jpg"
+next
+url = "https://assets.toonlab.io/mirrors/polyhaven/v1/models/street_lamp_01/002d697fa195d73f627e82804612208853212519/street_lamp_01_1k.gltf"
+output = "quality/mcp-material-labeling/assets/street_lamp_01/street_lamp_01_1k.gltf"
+next
+url = "https://assets.toonlab.io/mirrors/polyhaven/v1/models/street_lamp_01/002d697fa195d73f627e82804612208853212519/street_lamp_01.bin"
+output = "quality/mcp-material-labeling/assets/street_lamp_01/street_lamp_01.bin"
+next
+url = "https://assets.toonlab.io/mirrors/polyhaven/v1/models/street_lamp_01/002d697fa195d73f627e82804612208853212519/textures/street_lamp_01_arm_1k.jpg"
+output = "quality/mcp-material-labeling/assets/street_lamp_01/textures/street_lamp_01_arm_1k.jpg"
+next
+url = "https://assets.toonlab.io/mirrors/polyhaven/v1/models/street_lamp_01/002d697fa195d73f627e82804612208853212519/textures/street_lamp_01_diff_1k.jpg"
+output = "quality/mcp-material-labeling/assets/street_lamp_01/textures/street_lamp_01_diff_1k.jpg"
+next
+url = "https://assets.toonlab.io/mirrors/polyhaven/v1/models/street_lamp_01/002d697fa195d73f627e82804612208853212519/textures/street_lamp_01_nor_gl_1k.jpg"
+output = "quality/mcp-material-labeling/assets/street_lamp_01/textures/street_lamp_01_nor_gl_1k.jpg"

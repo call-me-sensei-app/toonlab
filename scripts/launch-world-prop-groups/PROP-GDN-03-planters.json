@@ -1,0 +1,68 @@
+{
+  "partitionBy": "material",
+  "regroup": true,
+  "rowAxis": "y",
+  "note": "Every part carries its own `metres`. The D-018a group recipe's coherent-size claim does not survive measurement: an illustrator drawing a product row gives each object similar VISUAL weight, which is the opposite of drawing to one scale. Sizes below are real-world dimensions, each solved from the axis the scene has to fit (D19-146).",
+  "lodNote": "LOD0 is not decimated. Section 8's 20k-180k band is a HERO prop band; supporting street and garden furniture lands under it once a group's triangles divide across its objects. Reported plainly rather than dressed as a band pass.",
+  "id": "PROP-GDN-03-planters",
+  "title": "Garden planters",
+  "spec": "launch-plan/20-stillwater-garden-scene-brief.md \u00a73 (planters)",
+  "expect": 5,
+  "anchor": {
+    "index": 0,
+    "axis": "x",
+    "metres": 0.55
+  },
+  "parts": [
+    {
+      "id": "planter-bowl",
+      "label": "Wide low glazed ceramic bowl",
+      "slot": "gardenCeramic",
+      "axis": "x",
+      "metres": 0.55,
+      "lod0": 0,
+      "lod1": 4000,
+      "lod2": 1100
+    },
+    {
+      "id": "planter-cylinder",
+      "label": "Tall glazed cylinder",
+      "slot": "gardenCeramic",
+      "axis": "z",
+      "metres": 0.75,
+      "lod0": 0,
+      "lod1": 4000,
+      "lod2": 1100
+    },
+    {
+      "id": "planter-pot",
+      "label": "Unglazed earthenware pot, rolled rim",
+      "slot": "gardenCeramic",
+      "axis": "z",
+      "metres": 0.45,
+      "lod0": 0,
+      "lod1": 3500,
+      "lod2": 1000
+    },
+    {
+      "id": "planter-box",
+      "label": "Weathered timber planter box",
+      "slot": "timber",
+      "axis": "z",
+      "metres": 0.5,
+      "lod0": 0,
+      "lod1": 3500,
+      "lod2": 1000
+    },
+    {
+      "id": "planter-trough",
+      "label": "Hollowed granite trough",
+      "slot": "granite",
+      "axis": "longest",
+      "metres": 0.9,
+      "lod0": 0,
+      "lod1": 4500,
+      "lod2": 1200
+    }
+  ]
+}

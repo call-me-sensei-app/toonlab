@@ -1,0 +1,16 @@
+export {
+  TOONLAB_RENDERER_BACKENDS,
+  TOONLAB_RENDERER_CONFIGURATION_VERSION,
+  configureToonLabRenderer,
+  createToonLabRendererOptions,
+  createToonLabRendererProfile,
+  detectToonLabRendererBackend,
+  stabilizeToonLabWebGPUResourceLifetime,
+} from './rendererConfiguration.js';
+export {
+  STYLE_COMPARISON_AXES,
+  STYLE_COMPARISON_GENERATED_NODE_FLAGS,
+  captureComparisonFrameState,
+  createStyleComparison,
+  verifyStyleComparisonIdentity,
+} from './styleComparison.js';

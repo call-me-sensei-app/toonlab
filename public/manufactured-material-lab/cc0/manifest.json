@@ -1,0 +1,45 @@
+{
+  "assets": [
+    {
+      "assetId": "polyhaven/wooden_crate_01",
+      "author": "James Ray Cock",
+      "callMeSenseiSupport": "mixed-atlas compatibility",
+      "dimensionsMeters": [
+        0.8252729177,
+        0.4089537412,
+        0.3496182831
+      ],
+      "files": {
+        "model": "polyhaven/wooden_crate_01/wooden_crate_01_1k.gltf",
+        "resources": [
+          "polyhaven/wooden_crate_01/wooden_crate_01.bin",
+          "polyhaven/wooden_crate_01/textures/wooden_crate_01_diff_1k.jpg",
+          "polyhaven/wooden_crate_01/textures/wooden_crate_01_nor_gl_1k.jpg",
+          "polyhaven/wooden_crate_01/textures/wooden_crate_01_arm_1k.jpg"
+        ]
+      },
+      "license": "CC0-1.0",
+      "licenseReviewedAt": "2026-07-27",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "materialAudit": {
+        "issue": "The source uses one atlas for wooden boards and metal hardware.",
+        "materialRolesReviewed": false,
+        "remediation": "Split wood and metal into separate materials or author a stable material-ID mask."
+      },
+      "polycountTriangles": 6576,
+      "renderingDomain": "manufacturedEnvironment",
+      "resolution": "1k",
+      "source": "Poly Haven",
+      "sourceFileHashesMd5": {
+        "polyhaven/wooden_crate_01/textures/wooden_crate_01_arm_1k.jpg": "67c4aeb1154af98f95516b21ef62291c",
+        "polyhaven/wooden_crate_01/textures/wooden_crate_01_diff_1k.jpg": "266e0462d06e77c5745f66e89820544f",
+        "polyhaven/wooden_crate_01/textures/wooden_crate_01_nor_gl_1k.jpg": "e31626a1fcf6f7062c2ffd9fc982b942",
+        "polyhaven/wooden_crate_01/wooden_crate_01.bin": "8318f76b0c24b5538ce23051dbcb79a0",
+        "polyhaven/wooden_crate_01/wooden_crate_01_1k.gltf": "33df4d2ae00186d4b64e878466c9e22e"
+      },
+      "sourceUrl": "https://polyhaven.com/a/wooden_crate_01"
+    }
+  ],
+  "type": "toonlab/manufactured-material-samples",
+  "version": 1
+}

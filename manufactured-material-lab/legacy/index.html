@@ -1,0 +1,483 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ToonLab · Manufactured Material Lab</title>
+  <style>
+    :root {
+      color: #edf6ff;
+      font: 13px/1.45 Inter, ui-sans-serif, system-ui, -apple-system, sans-serif;
+      background: #090b17;
+    }
+    * { box-sizing: border-box; }
+    html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; }
+    canvas { display: block; }
+    button, input, select { font: inherit; }
+    .panel {
+      position: fixed;
+      z-index: 10;
+      top: 18px;
+      left: 18px;
+      width: min(410px, calc(100vw - 36px));
+      max-height: calc(100vh - 36px);
+      overflow: auto;
+      padding: 16px;
+      border: 1px solid rgba(255,255,255,.28);
+      border-radius: 18px;
+      background: rgba(18, 29, 42, .82);
+      box-shadow: 0 18px 50px rgba(14, 29, 45, .22);
+      backdrop-filter: blur(18px);
+    }
+    h1 { margin: 0; font-size: 16px; letter-spacing: -.02em; }
+    .kicker { margin: 2px 0 14px; color: #a9c4dc; font-size: 11px; }
+    .segmented { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; }
+    .segmented.two { grid-template-columns: repeat(2, 1fr); margin-top: 7px; }
+    .segmented.four { grid-template-columns: repeat(4, 1fr); margin-top: 7px; }
+    .segmented.assets { grid-template-columns: repeat(2, 1fr); }
+    .segmented.assets button:last-child:nth-child(odd) { grid-column: 1 / -1; }
+    .panel-view-tabs {
+      position: sticky;
+      z-index: 2;
+      top: -16px;
+      margin: 8px -4px 0;
+      padding: 8px 4px;
+      background: linear-gradient(
+        to bottom,
+        rgba(18, 29, 42, .98) 72%,
+        rgba(18, 29, 42, 0)
+      );
+    }
+    [data-panel-view][hidden] { display: none !important; }
+    button {
+      padding: 8px 9px;
+      color: #cfdfec;
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 10px;
+      background: rgba(255,255,255,.06);
+      cursor: pointer;
+    }
+    button[data-active="true"] {
+      color: #102f35;
+      border-color: #66dfbd;
+      background: #66dfbd;
+      font-weight: 700;
+    }
+    .doctrine {
+      margin: 12px 0 0;
+      padding: 9px 10px;
+      border-left: 2px solid #66dfbd;
+      color: #a9c4dc;
+      background: rgba(8, 17, 27, .28);
+      font-size: 11px;
+    }
+    .contract {
+      margin: 7px 0 0;
+      color: #89a9c1;
+      font-size: 10px;
+    }
+    .contract strong { color: #c4dae9; }
+    .material-inspector {
+      display: grid;
+      gap: 8px;
+      margin-top: 8px;
+    }
+    .material-card {
+      min-width: 0;
+      padding: 9px;
+      border: 1px solid rgba(255,255,255,.1);
+      border-radius: 11px;
+      background: rgba(6, 15, 25, .24);
+    }
+    .material-card-head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 7px;
+    }
+    .material-card strong {
+      min-width: 0;
+      overflow: hidden;
+      color: #e8f3fb;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .material-card small { color: #89a9c1; white-space: nowrap; }
+    .material-object {
+      margin: -4px 0 7px;
+      overflow: hidden;
+      color: #7695ad;
+      font-size: 9px;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .material-fields {
+      display: grid;
+      min-width: 0;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 5px;
+      margin-top: 8px;
+    }
+    .material-fields[hidden] { display: none !important; }
+    .material-fields label {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 3px;
+      color: #89a9c1;
+      font-size: 9px;
+      text-transform: uppercase;
+    }
+    .material-fields select {
+      width: 100%;
+      min-width: 0;
+      padding: 6px 7px;
+      color: #d9e8f3;
+      border: 1px solid rgba(255,255,255,.13);
+      border-radius: 7px;
+      background: #223548;
+      text-transform: none;
+    }
+    .material-flags { margin-top: 6px; color: #91b3ca; font-size: 9px; }
+    .material-card-summary {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 7px;
+    }
+    .material-card-summary span {
+      min-width: 0;
+      overflow: hidden;
+      color: #9db9ce;
+      font-size: 9px;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .material-card-summary button {
+      flex: 0 0 auto;
+      margin-left: auto;
+      padding: 4px 8px;
+      border-radius: 7px;
+      font-size: 9px;
+    }
+    .material-provider-status {
+      flex: 0 0 auto;
+      color: #66dfbd;
+      font-size: 9px;
+      font-style: normal;
+      white-space: nowrap;
+    }
+    .material-provider-status[data-state="capturing"] { color: #d9c879; }
+    .material-provider-status[data-state="error"],
+    .material-provider-status[data-state="not-required"] { color: #f2b27c; }
+    .material-card[data-expanded="true"] {
+      border-color: rgba(102, 223, 189, .42);
+    }
+    .inspector-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5px;
+      margin-top: 8px;
+    }
+    .inspector-empty { color: #89a9c1; font-size: 10px; }
+    .layer-label {
+      margin: 11px 0 6px;
+      color: #89a9c1;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    .section-divider {
+      margin-top: 14px;
+      padding-top: 11px;
+      border-top: 1px solid rgba(255,255,255,.14);
+      color: #b4cada;
+    }
+    .layers {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 5px;
+    }
+    .layers button {
+      padding: 6px 5px;
+      font-size: 10px;
+    }
+    .controls { display: grid; gap: 9px; margin-top: 12px; }
+    label { display: grid; grid-template-columns: 92px 1fr 40px; align-items: center; gap: 8px; }
+    label span:first-child { color: #c1d4e4; }
+    label output { color: #fff; text-align: right; font-variant-numeric: tabular-nums; }
+    input[type="range"] { width: 100%; accent-color: #66dfbd; }
+    .labels {
+      position: fixed;
+      inset: auto 0 18px 0;
+      z-index: 10;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      pointer-events: none;
+      font-weight: 750;
+      letter-spacing: .04em;
+      text-align: center;
+      text-transform: uppercase;
+      text-shadow: 0 2px 12px rgba(13,27,39,.65);
+    }
+    .hint {
+      position: fixed;
+      z-index: 10;
+      right: 18px;
+      top: 18px;
+      padding: 9px 12px;
+      border-radius: 999px;
+      color: #d7e6f2;
+      background: rgba(18, 29, 42, .65);
+      backdrop-filter: blur(12px);
+    }
+    #loading, #render-failure {
+      position: fixed;
+      inset: 0;
+      z-index: 20;
+      display: grid;
+      place-items: center;
+      padding: 32px;
+      color: #dcecff;
+      background: #090b17;
+      font-weight: 700;
+      text-align: center;
+    }
+    #loading[hidden] { display: none; }
+    body[data-mode="original"] .labels,
+    body[data-mode="styled"] .labels { grid-template-columns: 1fr; }
+    body[data-mode="original"] #label-styled,
+    body[data-mode="styled"] #label-original { display: none; }
+    @media (max-width: 720px) {
+      .hint { display: none; }
+      .labels { display: none; }
+    }
+    @media (max-width: 430px) {
+      .panel {
+        top: 10px;
+        left: 10px;
+        width: calc(100vw - 20px);
+        max-height: calc(100vh - 20px);
+        padding: 13px;
+        border-radius: 15px;
+      }
+      .panel-view-tabs { top: -13px; }
+      .material-fields { grid-template-columns: 1fr; }
+      .controls label { grid-template-columns: 84px 1fr 38px; gap: 6px; }
+      .layers { grid-template-columns: repeat(2, 1fr); }
+      .layers button:last-child:nth-child(odd) { grid-column: 1 / -1; }
+    }
+  </style>
+</head>
+<body data-mode="split">
+  <section class="panel">
+    <h1>Manufactured Material Lab</h1>
+    <p class="kicker">Configure the IP-wide look for props, vehicles, buildings, interiors, and other manufactured assets.</p>
+    <p class="layer-label">Test asset</p>
+    <div class="segmented assets" aria-label="Test asset">
+      <button data-model-button="dumpster" data-active="true">Dumpster</button>
+      <button data-model-button="streetcar">Streetcar</button>
+      <button data-model-button="burned-out-cars">Burned-out cars</button>
+      <button data-model-button="beach">Beach props</button>
+      <button data-model-button="bus-station">Bus station</button>
+      <button data-model-button="apartment">Apartment building</button>
+      <button data-model-button="ground-floor-kit">Ground-floor kit</button>
+      <button data-model-button="living-room">Living room</button>
+      <button data-model-button="bicycle-collection">Bicycle collection</button>
+    </div>
+    <p class="contract" id="classification-summary">Resolved materials: loading…</p>
+    <h2 class="layer-label section-divider">Workspace</h2>
+    <div class="segmented two panel-view-tabs" aria-label="Lab workspace">
+      <button
+        data-panel-view-button="look"
+        data-active="true"
+        aria-controls="look-settings-panel"
+        aria-selected="true"
+      >Look settings</button>
+      <button
+        data-panel-view-button="materials"
+        aria-controls="material-tags-panel"
+        aria-selected="false"
+      >Material tags (…)</button>
+    </div>
+    <section id="look-settings-panel" data-panel-view="look">
+    <h2 class="layer-label">Benchmark settings</h2>
+    <div class="segmented" aria-label="Comparison mode">
+      <button data-mode-button="original">Original</button>
+      <button data-mode-button="split" data-active="true">Split</button>
+      <button data-mode-button="styled">Locked</button>
+    </div>
+    <div class="segmented two" aria-label="Palette">
+      <button data-palette-button="source" data-active="true">Source identity</button>
+      <button data-palette-button="mint">Mint override</button>
+    </div>
+    <p class="layer-label">Blue treatment checkpoint</p>
+    <div class="segmented two" aria-label="Blue treatment checkpoint">
+      <button data-look-button="royal">Royal snapshot</button>
+      <button data-look-button="pastel" data-active="true">Pastel target</button>
+    </div>
+    <div class="segmented four" aria-label="Time of day">
+      <button data-lighting-button="dawn">Dawn</button>
+      <button data-lighting-button="day" data-active="true">Noon</button>
+      <button data-lighting-button="sunset">Sunset</button>
+      <button data-lighting-button="night">Night</button>
+    </div>
+    <p class="doctrine">
+      Source color class first · paint reconstructed second · sparse wear +
+      graphics restored afterward · lighting and ink remain independent
+    </p>
+    <p class="contract">
+      <strong>Per asset:</strong> base material + finish + render mode + structural role + optional masks.
+    </p>
+    <p class="layer-label">Material reconstruction</p>
+    <div class="layers" aria-label="Material reconstruction layers">
+      <button data-layer-button="sourceAuthorityEnabled" data-active="true">Source authority</button>
+      <button data-layer-button="paintExtractionEnabled" data-active="true">Paint extract</button>
+      <button data-layer-button="paintBandsEnabled" data-active="true">Paint bands</button>
+      <button data-layer-button="colorLiftEnabled" data-active="true">Paint lift</button>
+      <button data-layer-button="pastelPaletteEnabled" data-active="true">Pastel gate</button>
+      <button data-layer-button="wearEnabled" data-active="true">Sparse wear</button>
+      <button data-layer-button="graphicsEnabled" data-active="true">Graphics</button>
+      <button data-layer-button="normalDetailEnabled" data-active="true">Normal detail</button>
+      <button data-layer-button="roughnessBreakupEnabled" data-active="true">Roughness breakup</button>
+    </div>
+    <p class="layer-label">Lighting + line work</p>
+    <div class="layers" aria-label="Lighting and line-work layers">
+      <button data-layer-button="celLightingEnabled" data-active="true">Cel light</button>
+      <button data-layer-button="coolShadowsEnabled" data-active="true">Cool shadows</button>
+      <button data-layer-button="shadowPastelEnabled" data-active="true">Shadow pastel</button>
+      <button data-layer-button="highlightBandEnabled" data-active="true">Highlight band</button>
+      <button data-layer-button="materialResponseEnabled" data-active="true">Material response</button>
+      <button data-layer-button="planarSheenEnabled" data-active="true">Top sheen</button>
+      <button data-layer-button="viewReflectionEnabled" data-active="true">View reflection</button>
+      <button data-layer-button="reflectionSelectivityEnabled" data-active="true">Reflection selectivity</button>
+      <button data-layer-button="reflectionNormalEnabled" data-active="true">Reflection normals</button>
+      <button data-layer-button="reflectionProbeLayerEnabled" data-active="true">Scene probe</button>
+      <button data-layer-button="fresnelEnabled" data-active="true">Fresnel edge</button>
+      <button data-layer-button="silhouetteInkEnabled" data-active="true">Silhouette</button>
+      <button data-layer-button="edgeInkEnabled" data-active="true">Crease ink</button>
+      <button data-layer-button="rimEnabled">Neon rim</button>
+    </div>
+    <div class="controls">
+      <label>
+        <span>Source authority</span>
+        <input data-control="sourceAuthorityStrength" type="range" min="0" max="1" step=".01" value="1" />
+        <output>1.00</output>
+      </label>
+      <label>
+        <span>Paint extract</span>
+        <input data-control="paintExtractionStrength" type="range" min="0" max="1" step=".01" value="1" />
+        <output>1.00</output>
+      </label>
+      <label>
+        <span>Paint lift</span>
+        <input data-control="colorLiftStrength" type="range" min="0" max="1" step=".01" value=".58" />
+        <output>.58</output>
+      </label>
+      <label>
+        <span>Pastel push</span>
+        <input data-control="pastelStrength" type="range" min="0" max="1" step=".01" value=".10" />
+        <output>0.10</output>
+      </label>
+      <label>
+        <span>Wear amount</span>
+        <input data-control="wearAmount" type="range" min="0" max="1" step=".01" value=".28" />
+        <output>.28</output>
+      </label>
+      <label>
+        <span>Normals</span>
+        <input data-control="normalStrength" type="range" min="0" max=".6" step=".01" value=".10" />
+        <output>.10</output>
+      </label>
+      <label>
+        <span>Roughness</span>
+        <input data-control="roughnessBreakupStrength" type="range" min="0" max="1.5" step=".01" value="1.15" />
+        <output>1.15</output>
+      </label>
+      <label>
+        <span>Graphics</span>
+        <input data-control="decalStrength" type="range" min="0" max="1" step=".01" value=".95" />
+        <output>.95</output>
+      </label>
+      <label>
+        <span>Cool shadows</span>
+        <input data-control="coolShadowStrength" type="range" min="0" max="1" step=".01" value=".72" />
+        <output>.72</output>
+      </label>
+      <label>
+        <span>Shadow pastel</span>
+        <input data-control="shadowPastelStrength" type="range" min="0" max="1" step=".01" value=".80" />
+        <output>0.80</output>
+      </label>
+      <label>
+        <span>Highlights</span>
+        <input data-control="highlightBandStrength" type="range" min="0" max="1" step=".01" value=".42" />
+        <output>.42</output>
+      </label>
+      <label>
+        <span>Material response</span>
+        <input data-control="materialResponseStrength" type="range" min="0" max="1.5" step=".01" value=".82" />
+        <output>.82</output>
+      </label>
+      <label>
+        <span>Top sheen</span>
+        <input data-control="planarSheenStrength" type="range" min="0" max="1.5" step=".01" value=".25" />
+        <output>.25</output>
+      </label>
+      <label>
+        <span>View reflection</span>
+        <input data-control="viewReflectionStrength" type="range" min="0" max="1.5" step=".01" value=".62" />
+        <output>.62</output>
+      </label>
+      <label>
+        <span>Reflection select.</span>
+        <input data-control="reflectionSelectivityStrength" type="range" min="0" max="1" step=".01" value=".82" />
+        <output>.82</output>
+      </label>
+      <label>
+        <span>Reflection normals</span>
+        <input data-control="reflectionNormalStrength" type="range" min="0" max="1" step=".01" value=".80" />
+        <output>.80</output>
+      </label>
+      <label>
+        <span>Probe reflection</span>
+        <input data-control="reflectionProbeStrength" type="range" min="0" max="1" step=".01" value=".82" />
+        <output>.82</output>
+      </label>
+      <label>
+        <span>Fresnel edge</span>
+        <input data-control="fresnelStrength" type="range" min="0" max="1" step=".01" value=".22" />
+        <output>.22</output>
+      </label>
+      <label>
+        <span>Neon rim</span>
+        <input data-control="highlightStrength" type="range" min="0" max=".8" step=".01" value=".16" />
+        <output>.16</output>
+      </label>
+    </div>
+    </section>
+    <section id="material-tags-panel" data-panel-view="materials" hidden>
+      <h2 class="layer-label">Material classification</h2>
+      <p class="contract">
+        Runtime overlay only: these switches do not rewrite geometry or source textures.
+        Export an approved sidecar, or embed the same data in glTF extras.
+      </p>
+      <div id="material-inspector" class="material-inspector" aria-live="polite">
+        <p class="inspector-empty">Loading material tags…</p>
+      </div>
+      <div class="inspector-actions">
+        <button id="reset-material-tags">Reset detected tags</button>
+        <button id="export-material-manifest">Export sidecar JSON</button>
+      </div>
+    </section>
+  </section>
+  <div class="hint">Drag to orbit · wheel to zoom · C resets camera</div>
+  <div class="labels">
+    <span id="label-original">Source PBR</span>
+    <span id="label-styled">Manufactured material look</span>
+  </div>
+  <div id="loading">Loading the dumpster benchmark…</div>
+    <script type="module" src="/examples/urban-prop-shader/main.js?v=manufactured-material-lab-v1"></script>
+</body>
+</html>

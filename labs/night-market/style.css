@@ -1,0 +1,26 @@
+:root { color-scheme: dark; }
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; background: #05070d; overflow: hidden;
+  font: 13px/1.4 ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif; color: #e8ecf5; }
+#stage { position: relative; height: 100%; }
+#stage canvas { display: block; }
+#loading { position: absolute; inset: 0; display: grid; place-content: center; justify-items: center;
+  gap: 10px; background: #05070d; z-index: 20; }
+#loading span { width: 26px; height: 26px; border-radius: 50%; border: 2px solid #2a3550;
+  border-top-color: #ffb46b; animation: spin .8s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+#loading strong { font-size: 15px; letter-spacing: .01em; }
+#loading small { color: #8d99b5; }
+#hud { position: absolute; top: 0; left: 0; right: 0; display: flex; align-items: center; gap: 18px;
+  padding: 12px 16px; z-index: 10; pointer-events: none; }
+#hud .brand { display: flex; gap: 6px; align-items: baseline; letter-spacing: .16em; font-size: 12px; }
+#hud .brand b { font-weight: 700; }
+#hud .brand span { color: #7d89a6; }
+#hud nav { display: flex; gap: 6px; pointer-events: auto; }
+#hud nav button { border: 0; border-radius: 999px; padding: 6px 13px; font: inherit; font-size: 12px;
+  cursor: pointer; background: rgba(18,24,40,.72); color: #c3cbdd; backdrop-filter: blur(6px); }
+#hud nav button.active { background: #ffb46b; color: #1a1206; font-weight: 600; }
+#readout { position: absolute; left: 16px; bottom: 16px; z-index: 10; padding: 9px 13px;
+  border-radius: 9px; background: rgba(8,11,20,.74); backdrop-filter: blur(6px); }
+#readout b { display: block; letter-spacing: .1em; font-size: 13px; }
+#readout small { color: #8d99b5; font-size: 11px; }

@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Your local ToonLab creations, generated assets, style profiles, and style bundles." />
+    <title>Library — ToonLab</title>
+    <link rel="stylesheet" href="/labs/home/home.css" />
+    <link rel="stylesheet" href="/labs/gallery/gallery.css" />
+    <link rel="stylesheet" href="/labs/library/library.css" />
+  </head>
+  <body>
+    <toonlab-site-header active="library"></toonlab-site-header>
+    <main class="home-main gal-main">
+      <section id="libraryIndex">
+        <div class="gal-toolbar">
+          <h1>Library</h1>
+          <span class="jp">ライブラリ</span>
+          <span id="libraryStatus" class="gal-section-note mono"></span>
+          <form id="libraryFilters" class="gal-filters tl-control-row">
+            <input id="librarySearch" class="tl-input gal-search" type="search" placeholder="Search your library…" />
+            <select id="libraryType" class="tl-input lib-filter" aria-label="Filter by creation type">
+              <option value="">All types</option>
+            </select>
+            <select id="libraryTag" class="tl-input lib-filter" aria-label="Filter by tag">
+              <option value="">All tags</option>
+            </select>
+            <button id="clearFilters" class="tl-btn" type="button" hidden>Clear</button>
+          </form>
+        </div>
+        <div id="libraryGrid" class="gal-grid"></div>
+        <div id="libraryEmpty" class="tl-empty" hidden>
+          <span class="lib-empty-icon" aria-hidden="true">🌸</span>
+          <strong id="libraryEmptyTitle">Nothing saved yet</strong>
+          <span id="libraryEmptyHint">Make something in a lab, then save it with a name.</span>
+        </div>
+        <nav id="libraryPager" class="lib-pager" aria-label="Library pages" hidden>
+          <button id="libraryPrev" class="tl-btn" type="button">Previous</button>
+          <span id="libraryPagerStatus" class="lib-pager-status mono"></span>
+          <button id="libraryNext" class="tl-btn" type="button">Next</button>
+        </nav>
+      </section>
+    </main>
+    <script type="module" src="/labs/library/main.js"></script>
+  </body>
+</html>

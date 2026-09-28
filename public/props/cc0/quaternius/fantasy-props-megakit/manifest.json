@@ -1,0 +1,19 @@
+{
+  "assets": {
+    "bench": {
+      "assetId": "quaternius:fantasy-props-megakit-bench",
+      "author": "Quaternius",
+      "catalogUrl": "https://toonlab.io/asset/quaternius:fantasy-props-megakit-bench",
+      "files": {
+        "model": "bench.glb"
+      },
+      "kind": "model",
+      "label": "Bench — Fantasy Props MegaKit",
+      "license": "CC0-1.0",
+      "source": "Quaternius",
+      "sourceUrl": "https://quaternius.itch.io/fantasy-props-megakit"
+    }
+  },
+  "note": "CC0 reference-scene bench selected from ToonLab's gallery catalog.",
+  "version": 1
+}

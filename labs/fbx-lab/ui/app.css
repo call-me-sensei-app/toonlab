@@ -1,0 +1,275 @@
+/* FBX Editor HUD — floating panels over the full-viewport stage. */
+
+.fx-topbar {
+  align-items: center;
+  background: var(--surface-overlay);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--border-subtle);
+  display: flex;
+  gap: var(--space-3);
+  left: 0;
+  padding: var(--space-2) var(--space-3);
+  position: fixed;
+  right: 0;
+  top: 0;
+  z-index: 20;
+}
+
+.fx-title {
+  color: var(--text-primary);
+  font: 600 14px/1.2 var(--font-ui);
+  margin-right: var(--space-2);
+  white-space: nowrap;
+}
+
+.fx-file {
+  color: var(--text-tertiary);
+  font: 400 12px/1.2 var(--font-ui);
+  max-width: 220px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fx-topbar-spacer { flex: 1; }
+
+.fx-export-name { width: 190px; }
+
+.fx-panel {
+  background: var(--surface-overlay);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-4);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  position: fixed;
+  z-index: 10;
+}
+
+.fx-outliner {
+  bottom: 96px;
+  left: var(--space-3);
+  top: 92px;
+  width: 250px;
+}
+
+.fx-inspector {
+  max-height: calc(100vh - 160px);
+  right: var(--space-3);
+  top: 92px;
+  width: 268px;
+}
+
+.fx-panel-header {
+  border-bottom: 1px solid var(--border-subtle);
+  color: var(--text-secondary);
+  font: 600 11px/1 var(--font-ui);
+  letter-spacing: 0.08em;
+  padding: var(--space-3);
+  text-transform: uppercase;
+}
+
+.fx-panel-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--space-2);
+}
+
+/* Outliner rows */
+.fx-node {
+  align-items: center;
+  border-radius: var(--radius-2);
+  color: var(--text-secondary);
+  cursor: pointer;
+  display: flex;
+  font: 400 12.5px/1.2 var(--font-ui);
+  gap: var(--space-1);
+  min-height: 26px;
+  padding: 2px var(--space-1);
+  user-select: none;
+}
+
+.fx-node:hover { background: var(--surface-3); }
+.fx-node[data-selected='true'] {
+  background: var(--accent-subtle);
+  color: var(--accent-300);
+}
+.fx-node[data-hidden='true'] .fx-node-name { opacity: 0.4; }
+
+.fx-node-glyph {
+  color: var(--text-tertiary);
+  flex: none;
+  font: 400 11px/1 var(--font-mono);
+  text-align: center;
+  width: 14px;
+}
+.fx-node[data-kind='mesh'] .fx-node-glyph,
+.fx-node[data-kind='skinned'] .fx-node-glyph { color: var(--accent-400); }
+
+.fx-node-name {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fx-node-meta {
+  color: var(--text-tertiary);
+  flex: none;
+  font: 400 10px/1 var(--font-mono);
+}
+
+.fx-node-eye {
+  background: none;
+  border: none;
+  border-radius: var(--radius-1);
+  color: var(--text-tertiary);
+  cursor: pointer;
+  flex: none;
+  font: 400 10px/1 var(--font-ui);
+  height: 20px;
+  opacity: 0;
+  padding: 0;
+  width: 20px;
+}
+.fx-node:hover .fx-node-eye, .fx-node-eye[data-off='true'] { opacity: 1; }
+.fx-node-eye:hover { background: var(--surface-3); color: var(--text-primary); }
+
+.fx-rename-input {
+  background: var(--surface-1);
+  border: 1px solid var(--border-active);
+  border-radius: var(--radius-1);
+  color: var(--text-primary);
+  flex: 1;
+  font: 400 12.5px/1.2 var(--font-ui);
+  min-width: 0;
+  outline: none;
+  padding: 1px 4px;
+}
+
+/* Inspector */
+.fx-section {
+  border-bottom: 1px solid var(--border-subtle);
+  padding: var(--space-3);
+}
+.fx-section:last-child { border-bottom: none; }
+
+.fx-section-title {
+  color: var(--text-tertiary);
+  font: 600 10.5px/1 var(--font-ui);
+  letter-spacing: 0.08em;
+  margin-bottom: var(--space-2);
+  text-transform: uppercase;
+}
+
+.fx-vector-row {
+  align-items: center;
+  display: grid;
+  gap: var(--space-1);
+  grid-template-columns: 52px 1fr 1fr 1fr;
+  margin-bottom: var(--space-1);
+}
+
+.fx-vector-label {
+  color: var(--text-secondary);
+  font: 400 12px/1.2 var(--font-ui);
+}
+
+.fx-actions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+.fx-actions .tk-button { justify-content: flex-start; }
+
+.fx-selection-counts {
+  color: var(--text-tertiary);
+  font: 400 11px/1.4 var(--font-mono);
+  margin-bottom: var(--space-2);
+}
+
+/* Empty / error states */
+.fx-empty {
+  align-items: center;
+  color: var(--text-secondary);
+  display: flex;
+  flex-direction: column;
+  font: 400 14px/1.6 var(--font-ui);
+  gap: var(--space-4);
+  inset: 0;
+  justify-content: center;
+  pointer-events: none;
+  position: fixed;
+  text-align: center;
+  z-index: 5;
+}
+.fx-empty strong { color: var(--text-primary); font-weight: 600; }
+.fx-empty .tk-button { pointer-events: auto; }
+
+.fx-drop-hint {
+  border: 1.5px dashed var(--border-strong);
+  border-radius: var(--radius-4);
+  padding: var(--space-6) var(--space-8);
+}
+
+body[data-fx-dragging='true'] .fx-drop-hint {
+  background: var(--accent-subtle);
+  border-color: var(--border-active);
+}
+
+/* Footer strips */
+.fx-stats {
+  background: var(--surface-overlay);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-full);
+  bottom: var(--space-3);
+  color: var(--text-tertiary);
+  font: 400 11px/1 var(--font-mono);
+  left: 50%;
+  padding: 6px 14px;
+  position: fixed;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  z-index: 10;
+}
+
+.fx-warnings {
+  bottom: var(--space-3);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  left: var(--space-3);
+  max-width: 380px;
+  position: fixed;
+  z-index: 10;
+}
+
+.fx-warning {
+  background: var(--warning-subtle);
+  border: 1px solid rgba(240, 192, 90, 0.3);
+  border-radius: var(--radius-2);
+  color: var(--warning);
+  font: 400 11.5px/1.45 var(--font-ui);
+  padding: var(--space-2) var(--space-3);
+}
+
+.fx-error {
+  background: var(--danger-subtle);
+  border: 1px solid rgba(240, 122, 106, 0.35);
+  border-radius: var(--radius-2);
+  color: var(--danger);
+  font: 400 12px/1.5 var(--font-ui);
+  left: 50%;
+  max-width: 460px;
+  padding: var(--space-3) var(--space-4);
+  position: fixed;
+  top: 92px;
+  transform: translateX(-50%);
+  z-index: 30;
+}
+
+.fx-hint {
+  color: var(--text-tertiary);
+  font: 400 11px/1.5 var(--font-ui);
+}

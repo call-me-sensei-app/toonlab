@@ -1,0 +1,37 @@
+:root { color-scheme: dark; }
+* { box-sizing: border-box; }
+html, body { height: 100%; margin: 0; background: #0b0e13; color: #e7edf6;
+  font: 13px/1.45 ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif; }
+body { display: grid; grid-template-columns: 1fr 300px; }
+body[data-hud="false"] { grid-template-columns: 1fr; }
+body[data-hud="false"] #hud, body[data-hud="false"] #labels, body[data-hud="false"] #divider { display: none; }
+
+#stage { position: relative; overflow: hidden; }
+#stage canvas { display: block; width: 100%; height: 100%; }
+
+#loading { position: absolute; inset: 0; display: grid; place-items: center;
+  background: #0b0e13; font-size: 14px; letter-spacing: .02em; z-index: 5; }
+body[data-ready="true"] #loading { display: none; }
+
+#divider { position: absolute; top: 0; bottom: 0; left: 50%; width: 1px;
+  background: rgba(255,255,255,.85); pointer-events: none; z-index: 3; }
+body[data-compare="false"] #divider { display: none; }
+
+#labels { position: absolute; inset: 12px 12px auto 12px; display: flex;
+  justify-content: space-between; pointer-events: none; z-index: 3; }
+body[data-compare="false"] #labels { display: none; }
+.tag { background: rgba(14,18,26,.78); border: 1px solid rgba(255,255,255,.14);
+  border-radius: 999px; padding: 5px 12px; font-size: 11px; letter-spacing: .12em; }
+
+#hud { padding: 16px; overflow-y: auto; border-left: 1px solid rgba(255,255,255,.08);
+  background: #0e131b; }
+#hud h1 { margin: 0 0 14px; font-size: 13px; letter-spacing: .1em; text-transform: uppercase;
+  color: #9fb4d0; font-weight: 600; }
+.row { display: grid; grid-template-columns: 58px 1fr; gap: 8px; align-items: center;
+  margin-bottom: 9px; }
+.row label { color: #8ba0bb; font-size: 11px; letter-spacing: .06em; text-transform: uppercase; }
+select, input[type="range"] { width: 100%; background: #161d29; color: inherit;
+  border: 1px solid rgba(255,255,255,.12); border-radius: 6px; padding: 4px 6px; font: inherit; }
+#report { margin: 14px 0 0; padding: 10px; background: #0a0e15; border-radius: 8px;
+  border: 1px solid rgba(255,255,255,.07); font: 11px/1.5 ui-monospace, SFMono-Regular, Menlo, monospace;
+  white-space: pre-wrap; color: #b6c7dd; }

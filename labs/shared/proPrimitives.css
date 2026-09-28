@@ -1,0 +1,170 @@
+/*
+ * Shared ToonLab page primitives carried over from ToonLab Pro.
+ * Route styles such as Generate and Gallery use the same tl-* vocabulary so
+ * OSS pages retain the same controls and surface language.
+ */
+
+:root {
+  --tl-ao: #3d7eff;
+  --tl-success: #3ecf6e;
+  --tl-danger: #ff5a52;
+  --tl-warn: #e0a63c;
+  --tl-radius-s: 2px;
+  --tl-radius-m: 4px;
+  --tl-cut: 12px;
+  --tl-shadow-glow: 0 4px 24px rgb(232 51 46 / 0.35);
+  --tl-halftone: radial-gradient(rgb(242 240 233 / 0.055) 1px, transparent 1.2px);
+}
+
+button {
+  font: inherit;
+}
+
+.mono {
+  font-family: var(--tl-font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+.tl-btn {
+  --btn-bg: var(--tl-bg-2);
+  --btn-ink: var(--tl-ink-1);
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 11px 22px;
+  border: 1px solid var(--tl-line-bright);
+  border-radius: var(--tl-radius-s);
+  background: var(--btn-bg);
+  color: var(--btn-ink);
+  font-family: var(--tl-font-display);
+  font-weight: 700;
+  font-size: 13.5px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  cursor: pointer;
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%);
+  transition:
+    background var(--tl-dur-1) var(--tl-ease),
+    color var(--tl-dur-1) var(--tl-ease),
+    border-color var(--tl-dur-1) var(--tl-ease),
+    transform var(--tl-dur-1) var(--tl-ease-sharp);
+}
+
+.tl-btn:hover {
+  border-color: var(--tl-ink-1);
+  color: var(--tl-ink-1);
+  transform: translate(-1px, -1px);
+}
+
+.tl-btn:active {
+  transform: translate(0, 0);
+}
+
+.tl-btn--primary {
+  --btn-bg: var(--tl-accent);
+  --btn-ink: #fff;
+  border-color: var(--tl-accent);
+}
+
+.tl-btn--primary:hover {
+  --btn-bg: var(--tl-accent-hot);
+  border-color: var(--tl-accent-hot);
+  color: #fff;
+  box-shadow: var(--tl-shadow-glow);
+}
+
+.tl-btn--ghost {
+  background: transparent;
+  border-color: transparent;
+  color: var(--tl-ink-2);
+}
+
+.tl-btn--ghost:hover {
+  color: var(--tl-ink-1);
+  border-color: var(--tl-line-bright);
+}
+
+.tl-btn[disabled] {
+  opacity: 0.45;
+  pointer-events: none;
+}
+
+.tl-card {
+  background: var(--tl-bg-1);
+  border: 1px solid var(--tl-line);
+  border-radius: var(--tl-radius-m);
+  padding: 20px;
+  clip-path: polygon(
+    0 0,
+    100% 0,
+    100% calc(100% - var(--tl-cut)),
+    calc(100% - var(--tl-cut)) 100%,
+    0 100%
+  );
+}
+
+.tl-input {
+  width: 100%;
+  padding: 11px 14px;
+  border-radius: var(--tl-radius-s);
+  border: 1px solid var(--tl-line-bright);
+  background: var(--tl-bg-0);
+  color: var(--tl-ink-1);
+  font: inherit;
+  transition: border-color var(--tl-dur-1) var(--tl-ease);
+}
+
+input.tl-input,
+select.tl-input {
+  height: 44px;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.tl-input:focus {
+  outline: none;
+  border-color: var(--tl-accent);
+  box-shadow: 0 0 0 3px rgb(232 51 46 / 0.18);
+}
+
+.tl-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 10px;
+  font-family: var(--tl-font-mono);
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  border: 1px solid var(--tl-line-bright);
+  color: var(--tl-ink-2);
+  border-radius: var(--tl-radius-s);
+}
+
+.tl-badge--accent {
+  border-color: var(--tl-accent);
+  color: var(--tl-accent-hot);
+  background: rgb(232 51 46 / 0.08);
+}
+
+.tl-badge--cyan {
+  border-color: rgb(61 126 255 / 0.5);
+  color: var(--tl-ao);
+}
+
+.tl-empty {
+  display: grid;
+  place-items: center;
+  gap: 12px;
+  padding: 64px 24px;
+  text-align: center;
+  color: var(--tl-ink-2);
+  border: 1px dashed var(--tl-line-bright);
+  border-radius: var(--tl-radius-m);
+  background:
+    var(--tl-halftone) 0 0 / 8px 8px,
+    var(--tl-bg-1);
+}

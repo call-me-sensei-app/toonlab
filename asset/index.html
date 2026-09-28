@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M0 0H100V78L78 100H0Z' fill='%23e8332e'/%3E%3Ctext x='50' y='72' font-size='64' font-weight='900' font-family='Hiragino Sans, Yu Gothic, Noto Sans JP, sans-serif' fill='white' text-anchor='middle'%3E%E3%83%88%3C/text%3E%3C/svg%3E" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="ToonLab asset showcase — live source-vs-styled preview on your GPU, straight from the source's public API." />
+    <title>Asset — ToonLab</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=M+PLUS+1:wght@400;500;700;800;900&family=Zen+Kaku+Gothic+New:wght@500;700;900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap"
+    />
+    <link rel="stylesheet" href="/labs/home/home.css" />
+    <link rel="stylesheet" href="/labs/asset-page/asset-page.css" />
+  </head>
+  <body class="asset-body">
+    <toonlab-site-header active="gallery"></toonlab-site-header>
+
+    <main id="assetScreen" class="asset-screen">
+      <div id="assetStage" class="asset-stage"></div>
+      <div id="assetWipe" class="asset-wipe" role="slider" aria-label="Source vs Call Me Sensei wipe"
+           aria-valuemin="0" aria-valuemax="100" aria-valuenow="20" tabindex="0" hidden>
+        <span class="grip" aria-hidden="true">◈</span>
+      </div>
+      <div class="asset-scrim"></div>
+
+      <div class="asset-crumb">
+        <span class="jp">素材</span>
+        <a id="assetCrumbLink" href="/gallery/">Gallery</a>
+        <span class="sep">/</span>
+        <span id="crumbSource">…</span>
+      </div>
+
+      <div id="assetControls" class="asset-controls" hidden></div>
+      <div id="stageLabel" class="asset-stage-label" hidden>
+        Live on your GPU — left <b>source</b> · right <b>Call Me Sensei</b> · drag to orbit
+      </div>
+
+      <aside class="asset-panel">
+        <h1 id="assetName">Loading…</h1>
+        <div class="underline"></div>
+        <div id="assetStats"></div>
+        <div id="assetActions"></div>
+        <p id="assetDesc" class="desc"></p>
+        <div id="assetTags" class="tags"></div>
+        <div class="cta">
+          <a id="assetDownload" class="tl-btn tl-btn--primary" href="#" hidden>Download ↓</a>
+        </div>
+      </aside>
+    </main>
+
+    <script type="module" src="/labs/asset-page/main.js"></script>
+  </body>
+</html>

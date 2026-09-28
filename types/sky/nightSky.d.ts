@@ -1,0 +1,22 @@
+// Source inference fallback: public names retained with permissive signatures.
+export const DEFAULT_NIGHT_SKY_PARAMS: any;
+export const LOMMEL_SEELIGER_AT_FULL: any;
+export const MOON_ALBEDO_DISC_MEAN: any;
+export const MOON_ALBEDO_PLAN: any;
+export const MOON_ALBEDO_SCHEMA_VERSION: any;
+export const MOON_ALBEDO_SEED_NAMESPACE: any;
+export const MOON_DISC_FULL_MEAN_RADIANCE: any;
+export const MOON_DISC_NORMALISATION: any;
+export const NIGHT_SKY_DEFAULT_RADIUS: any;
+export const NIGHT_SKY_PARAM_KEYS: any;
+export const NIGHT_SKY_PARAM_SCHEMA: any;
+export function createMoonAlbedoData(...args: any[]): any;
+export function createMoonAlbedoTexture(...args: any[]): any;
+export function createNightSky(...args: any[]): any;
+export function disposeMoonAlbedoTextures(...args: any[]): any;
+export function getMoonAlbedoTexture(...args: any[]): any;
+export function moonAmbientRadianceNode(...args: any[]): any;
+export function moonDiscRadianceNode(...args: any[]): any;
+export function moonSurfaceUVNode(...args: any[]): any;
+export function starPanoramaUVNode(...args: any[]): any;
+export function starRadianceNode(...args: any[]): any;

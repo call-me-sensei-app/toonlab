@@ -1,0 +1,237 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://toonlab.dev/schemas/experimental/rock-geology-recipe.v1.json",
+  "title": "ToonLab repository-only RockRecipe v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema", "version", "id", "label", "description", "formationId", "hostLithology",
+    "lithology", "fabrics", "processes", "environment", "landform", "scale",
+    "targetDimensionsMetres", "geologyTransform", "materialProperties", "chronology",
+    "depositionalHistory", "metamorphicFabric", "fractureHistory", "weathering",
+    "processContext", "qualityTier", "seed", "seedNamespaces", "overrides"
+  ],
+  "properties": {
+    "schema": { "const": "toonlab/rock-geology-recipe" },
+    "version": { "const": 1 },
+    "id": { "$ref": "#/$defs/identifier" },
+    "label": { "type": "string", "minLength": 1, "maxLength": 120 },
+    "description": { "type": "string", "minLength": 1, "maxLength": 1000 },
+    "formationId": { "$ref": "#/$defs/identifier" },
+    "hostLithology": { "oneOf": [{ "type": "null" }, { "$ref": "#/$defs/identifier" }] },
+    "lithology": { "$ref": "#/$defs/identifier" },
+    "fabrics": { "$ref": "#/$defs/identifierArray" },
+    "processes": { "$ref": "#/$defs/identifierArray" },
+    "environment": { "$ref": "#/$defs/identifier" },
+    "landform": { "$ref": "#/$defs/identifier" },
+    "scale": { "enum": ["prop", "outcrop", "module", "formation"] },
+    "targetDimensionsMetres": { "$ref": "#/$defs/positiveVectorMetres" },
+    "geologyTransform": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["originMetres", "strikeDegrees", "dipDegrees", "dipDirectionDegrees"],
+      "properties": {
+        "originMetres": {
+          "type": "array", "minItems": 3, "maxItems": 3,
+          "items": { "type": "number", "minimum": -10000000, "maximum": 10000000 }
+        },
+        "strikeDegrees": { "$ref": "#/$defs/azimuthDegrees" },
+        "dipDegrees": { "$ref": "#/$defs/dipDegrees" },
+        "dipDirectionDegrees": { "$ref": "#/$defs/azimuthDegrees" }
+      }
+    },
+    "materialProperties": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["hardnessNormalized", "porosityFraction", "permeabilitySquareMetres", "cementationNormalized", "densityKilogramsPerCubicMetre"],
+      "properties": {
+        "hardnessNormalized": { "$ref": "#/$defs/normalized" },
+        "porosityFraction": { "type": "number", "minimum": 0, "exclusiveMaximum": 1 },
+        "permeabilitySquareMetres": { "type": "number", "exclusiveMinimum": 0, "maximum": 1 },
+        "cementationNormalized": { "$ref": "#/$defs/normalized" },
+        "densityKilogramsPerCubicMetre": { "type": "number", "minimum": 100, "maximum": 8000 }
+      }
+    },
+    "chronology": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["nodes", "edges"],
+      "properties": {
+        "nodes": {
+          "type": "array", "minItems": 1,
+          "items": {
+            "type": "object", "additionalProperties": false,
+            "required": ["id", "kind", "order"],
+            "properties": {
+              "id": { "$ref": "#/$defs/identifier" },
+              "kind": { "enum": ["deposition", "intrusion", "cooling", "metamorphism", "deformation", "fracture", "weathering", "erosion", "transport"] },
+              "order": { "type": "integer", "minimum": 0, "maximum": 1000000 }
+            }
+          }
+        },
+        "edges": {
+          "type": "array",
+          "items": {
+            "type": "object", "additionalProperties": false,
+            "required": ["before", "after", "relationship"],
+            "properties": {
+              "before": { "$ref": "#/$defs/identifier" },
+              "after": { "$ref": "#/$defs/identifier" },
+              "relationship": { "enum": ["precedes", "cuts", "terminates-at", "deflects-along", "offsets"] }
+            }
+          }
+        }
+      }
+    },
+    "depositionalHistory": {
+      "oneOf": [
+        { "type": "null" },
+        {
+          "type": "object", "additionalProperties": false,
+          "required": ["environment", "bedding", "sortingNormalized", "clastRoundnessNormalized", "depositionDurationYears"],
+          "properties": {
+            "environment": { "$ref": "#/$defs/identifier" },
+            "bedding": { "$ref": "#/$defs/bedding" },
+            "sortingNormalized": { "$ref": "#/$defs/normalized" },
+            "clastRoundnessNormalized": { "$ref": "#/$defs/normalized" },
+            "depositionDurationYears": { "type": "number", "exclusiveMinimum": 0, "maximum": 10000000000 }
+          }
+        }
+      ]
+    },
+    "metamorphicFabric": {
+      "oneOf": [
+        { "type": "null" },
+        {
+          "type": "object", "additionalProperties": false,
+          "required": ["fabricId", "grade", "strikeDegrees", "dipDegrees", "spacingMetres"],
+          "properties": {
+            "fabricId": { "$ref": "#/$defs/identifier" },
+            "grade": { "enum": ["low", "medium", "high"] },
+            "strikeDegrees": { "$ref": "#/$defs/azimuthDegrees" },
+            "dipDegrees": { "$ref": "#/$defs/dipDegrees" },
+            "spacingMetres": { "type": "number", "exclusiveMinimum": 0, "maximum": 5000 }
+          }
+        }
+      ]
+    },
+    "fractureHistory": {
+      "type": "object", "additionalProperties": false, "required": ["sets"],
+      "properties": {
+        "sets": {
+          "type": "array", "minItems": 1,
+          "items": {
+            "type": "object", "additionalProperties": false,
+            "required": ["id", "kind", "meanStrikeDegrees", "meanDipDegrees", "orientationConcentration", "spacingMetres", "persistenceMetres", "apertureMetres", "roughnessMetres", "chronologyNodeId", "sizeDistribution"],
+            "properties": {
+              "id": { "$ref": "#/$defs/identifier" },
+              "kind": { "enum": ["joint", "fault", "cooling", "sheet", "cleavage"] },
+              "meanStrikeDegrees": { "$ref": "#/$defs/azimuthDegrees" },
+              "meanDipDegrees": { "$ref": "#/$defs/dipDegrees" },
+              "orientationConcentration": { "type": "number", "minimum": 0, "maximum": 1000000 },
+              "spacingMetres": { "type": "number", "exclusiveMinimum": 0, "maximum": 5000 },
+              "persistenceMetres": { "type": "number", "exclusiveMinimum": 0, "maximum": 5000 },
+              "apertureMetres": { "type": "number", "minimum": 0, "maximum": 5000 },
+              "roughnessMetres": { "type": "number", "minimum": 0, "maximum": 5000 },
+              "chronologyNodeId": { "$ref": "#/$defs/identifier" },
+              "sizeDistribution": { "$ref": "#/$defs/sizeDistribution" }
+            }
+          }
+        }
+      }
+    },
+    "weathering": {
+      "type": "object", "additionalProperties": false,
+      "required": ["processes", "exposureYears", "moistureNormalized", "thermalCyclesPerYear", "freezeThawCyclesPerYear"],
+      "properties": {
+        "processes": { "$ref": "#/$defs/identifierArray" },
+        "exposureYears": { "type": "number", "minimum": 0, "maximum": 10000000000 },
+        "moistureNormalized": { "$ref": "#/$defs/normalized" },
+        "thermalCyclesPerYear": { "type": "number", "minimum": 0, "maximum": 1000000 },
+        "freezeThawCyclesPerYear": { "type": "number", "minimum": 0, "maximum": 1000000 }
+      }
+    },
+    "processContext": {
+      "type": "object", "additionalProperties": false,
+      "required": ["coolingBoundary", "waterRoutingNormalized", "saltExposureNormalized", "transportDistanceMetres", "detached", "sourceFormationId", "sourceLithology", "parentCoastId", "collapseStage", "stability"],
+      "properties": {
+        "coolingBoundary": { "enum": [null, "flow-top", "flow-base", "intrusion-contact"] },
+        "waterRoutingNormalized": { "$ref": "#/$defs/normalized" },
+        "saltExposureNormalized": { "$ref": "#/$defs/normalized" },
+        "transportDistanceMetres": { "type": "number", "minimum": 0, "maximum": 100000000 },
+        "detached": { "type": "boolean" },
+        "sourceFormationId": { "oneOf": [{ "type": "null" }, { "$ref": "#/$defs/identifier" }] },
+        "sourceLithology": { "oneOf": [{ "type": "null" }, { "$ref": "#/$defs/identifier" }] },
+        "parentCoastId": { "oneOf": [{ "type": "null" }, { "$ref": "#/$defs/identifier" }] },
+        "collapseStage": { "enum": [null, "cave", "arch", "stack", "stump"] },
+        "stability": {
+          "type": "object", "additionalProperties": false, "required": ["mode", "passed"],
+          "properties": {
+            "mode": { "enum": ["not-required", "support-graph", "physical-simulation", "art-override"] },
+            "passed": { "type": "boolean" }
+          }
+        }
+      }
+    },
+    "qualityTier": { "enum": ["draft", "production", "hero"] },
+    "seed": { "type": "integer", "minimum": 1, "maximum": 4294967295 },
+    "seedNamespaces": {
+      "type": "object", "additionalProperties": false,
+      "required": ["structure", "fractures", "weathering", "transport", "denseSource", "renderMesh", "fallbackMesh", "collision", "surfaceBake", "style"],
+      "properties": {
+        "structure": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "fractures": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "weathering": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "transport": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "denseSource": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "renderMesh": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "fallbackMesh": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "collision": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "surfaceBake": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "style": { "type": "string", "minLength": 1, "maxLength": 120 }
+      }
+    },
+    "overrides": {
+      "type": "object", "additionalProperties": false,
+      "required": ["allowFantasticalOverride", "overrideReason", "author"],
+      "properties": {
+        "allowFantasticalOverride": { "type": "boolean" },
+        "overrideReason": { "type": "string", "maxLength": 500 },
+        "author": { "type": "string", "maxLength": 120 }
+      }
+    }
+  },
+  "$defs": {
+    "identifier": { "type": "string", "pattern": "^[a-z0-9]+(?:[a-z0-9-]*[a-z0-9])?$", "maxLength": 120 },
+    "identifierArray": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "$ref": "#/$defs/identifier" } },
+    "normalized": { "type": "number", "minimum": 0, "maximum": 1 },
+    "azimuthDegrees": { "type": "number", "minimum": 0, "exclusiveMaximum": 360 },
+    "dipDegrees": { "type": "number", "minimum": 0, "maximum": 90 },
+    "positiveVectorMetres": {
+      "type": "array", "minItems": 3, "maxItems": 3,
+      "items": { "type": "number", "exclusiveMinimum": 0, "maximum": 5000 }
+    },
+    "bedding": {
+      "type": "object", "additionalProperties": false,
+      "required": ["strikeDegrees", "dipDegrees", "minimumThicknessMetres", "meanThicknessMetres", "maximumThicknessMetres"],
+      "properties": {
+        "strikeDegrees": { "$ref": "#/$defs/azimuthDegrees" },
+        "dipDegrees": { "$ref": "#/$defs/dipDegrees" },
+        "minimumThicknessMetres": { "type": "number", "exclusiveMinimum": 0, "maximum": 5000 },
+        "meanThicknessMetres": { "type": "number", "exclusiveMinimum": 0, "maximum": 5000 },
+        "maximumThicknessMetres": { "type": "number", "exclusiveMinimum": 0, "maximum": 5000 }
+      }
+    },
+    "sizeDistribution": {
+      "type": "object", "additionalProperties": false,
+      "required": ["type", "minimumMetres", "meanMetres", "maximumMetres", "standardDeviationNormalized"],
+      "properties": {
+        "type": { "enum": ["uniform", "lognormal", "power-law"] },
+        "minimumMetres": { "type": "number", "exclusiveMinimum": 0, "maximum": 5000 },
+        "meanMetres": { "type": "number", "exclusiveMinimum": 0, "maximum": 5000 },
+        "maximumMetres": { "type": "number", "exclusiveMinimum": 0, "maximum": 5000 },
+        "standardDeviationNormalized": { "type": "number", "minimum": 0, "maximum": 10 }
+      }
+    }
+  }
+}

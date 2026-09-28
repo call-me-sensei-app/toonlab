@@ -1,0 +1,55 @@
+{
+  "schema": "toonlab.oss-catalog-release.v2",
+  "release": "2026-08-example",
+  "publicBaseUrl": "https://assets.toonlab.io",
+  "assets": [
+    {
+      "id": "example-skybox-pack",
+      "source": "Example Creator",
+      "sourceId": "example-upstream-id",
+      "kind": "skybox",
+      "name": "Example Skybox Pack",
+      "description": "Example only. Do not publish this placeholder.",
+      "license": "CC-BY-4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+      "attribution": "Example Skybox Pack by Example Creator, CC BY 4.0.",
+      "attributionRequired": true,
+      "redistributionScope": "archive-and-files",
+      "reviewedAt": "2026-08-03",
+      "sourceUrl": "https://example.invalid/skybox",
+      "downloadUrl": "https://assets.toonlab.io/official/2026-08-example/example-skybox-pack/original/example.zip",
+      "thumbnailUrl": "https://assets.toonlab.io/official/2026-08-example/example-skybox-pack/thumbnails/catalog.webp",
+      "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "byteSize": 1,
+      "contentType": "application/zip",
+      "tags": ["anime", "painted", "skybox", "cloudscape"],
+      "metadata": {
+        "quality": "example",
+        "upstreamDeprecated": false
+      },
+      "licenseReview": {
+        "reviewer": "Example reviewer",
+        "reviewedAt": "2026-08-03",
+        "evidenceSha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "allowedScope": "archive-and-files",
+        "requiredCredit": "Example Skybox Pack by Example Creator, CC BY 4.0.",
+        "permissionEvidence": "SPDX license and retained upstream README"
+      },
+      "files": [
+        {
+          "path": "clouds/day.webp",
+          "kind": "image",
+          "downloadUrl": "https://assets.toonlab.io/official/2026-08-example/example-skybox-pack/files/clouds/day.webp",
+          "sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+          "byteSize": 1,
+          "contentType": "image/webp",
+          "notice": "See notices/README.txt",
+          "compatibility": {
+            "skyCloudLab": true
+          }
+        }
+      ]
+    }
+  ],
+  "withdrawals": []
+}

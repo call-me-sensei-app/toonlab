@@ -1,0 +1,24 @@
+// Source inference fallback: public names retained with permissive signatures.
+export const DEFAULT_TOONLAB_ROCK_LIBRARY_BASE_URL: any;
+export const TOONLAB_MOUNTAIN_PROFILE_DEFAULTS: any;
+export const TOONLAB_MOUNTAIN_SHADER_GUID: any;
+export const TOONLAB_ROCK_FAMILY_VERTEX_MOTION_CONTRACT: any;
+export const TOONLAB_ROCK_MANIFEST_SCHEMA: any;
+export const TOONLAB_ROCK_MANIFEST_VERSION: any;
+export const TOONLAB_ROCK_PROFILE_DEFAULTS: any;
+export const TOONLAB_ROCK_SHADER_GUID: any;
+export function createToonLabMountainMaterial(...args: any[]): any;
+export function createToonRockMaterial(...args: any[]): any;
+export function describeToonLabDirectionalBeddingProjection(...args: any[]): any;
+export function loadToonLabMountainMaterial(...args: any[]): any;
+export function loadToonRockMaterial(...args: any[]): any;
+export function loadToonRockMaterialInputs(...args: any[]): any;
+export function normalizeToonLabMountainProfile(...args: any[]): any;
+export function normalizeToonLabRockProfile(...args: any[]): any;
+export function tangentNormalToView(...args: any[]): any;
+export function toonLabDirectionalBeddingColor(...args: any[]): any;
+export function toonLabDirectionalBeddingNormal(...args: any[]): any;
+export function toonLabMountainProfileFromResolvedMaterial(...args: any[]): any;
+export function toonLabRockProfileFromResolvedMaterial(...args: any[]): any;
+export function toonLabTriplanarColor(...args: any[]): any;
+export function toonLabTriplanarNormal(...args: any[]): any;

@@ -1,0 +1,93 @@
+# Pre-beta systems remain available to repository labs but are not published.
+biome/
+buildinggen/
+camera/
+game-feel/
+landscape/
+motion/
+pathgen/
+propgen/
+soundscape/
+vfxgen/
+villagegen/
+
+# Repository-only compositions and adapters that depend on pre-beta systems.
+stylizedWorld.js
+catalog/builtinEntries.js
+catalog/catalog.js
+catalog/index.js
+landscape/landscapeFoliage.js
+landscape/landscapePalette.js
+
+# Reference-scene reconstruction and comparison support.
+environment/parityEnvironmentSurfaceBinding.js
+environment/sourceEnvironmentTestContent.js
+environment/toonLabAmbientOcclusion.js
+environment/toonLabBloom.js
+environment/toonLabFrameOccupancy.js
+environment/toonLabLightingReference.js
+environment/toonLabRendering.js
+environment/toonLabSceneBasicMaterials.js
+environment/toonLabSceneFoliageMaterials.js
+environment/toonLabSceneRecords.js
+environment/toonLabSceneSkyMaterials.js
+environment/toonLabSceneTreeMaterials.js
+environment/toonLabSceneWaterMaterials.js
+environment/toonLabShadows.js
+environment/toonLabSourceAmbientOcclusion.js
+environment/toonLabSourceBloom.js
+environment/toonLabSourceCloudShadow.js
+environment/toonLabSourceCsmShadowNode.js
+environment/toonLabSourceDepthOfField.js
+environment/toonLabSourceFog.js
+environment/toonLabSourceLighting.js
+environment/toonLabSourcePointLightNode.js
+environment/toonLabSourceShadowFilter.js
+environment/toonLabSourceSkyLight.js
+environment/toonLabSourceTonemapping.js
+environment/toonLabSourceVignette.js
+environment/toonLabStage.js
+environment/toonLabTemporal.js
+environment/toonLabTerrainNativeAuthority.js
+
+# Unpublished experiments or superseded implementations.
+core/shaderBackend.js
+debrisgen/debrisPalettes.js
+ground-shader/p18GroundShaderMaterial.js
+ground-shader/p18GroundShaderSettings.js
+rockgen/reference/
+rockgen/experimental/
+rockgen/node.js
+rockgen/rockRegionGlbCompiler.node.js
+rockgen/surface/c8First12Surface.js
+shaders-tsl/chunks/landscape-splat.js
+vegetation/p18VegetationShaderMaterial.js
+vegetation/p18VegetationStyleOverlay.js
+vegetation/retainedGrassShaderV2.js
+
+# Experimental taxonomy/species engines are repository-only in 0.4.14. The
+# supported package tree includes BranchTree plus the species-neutral,
+# registered generated-bark profiles used by StylizedTree.
+vegetation/plantGraph.js
+vegetation/experimental.js
+vegetation/proceduralSpeciesTree.js
+vegetation/recursiveWoodyGrowth.js
+vegetation/recursiveWoodyMesh.js
+vegetation/legacyTreePresets.js
+vegetation/stylizedTreeExamples.js
+vegetation/treeArchitectureProfiles.js
+vegetation/treeLodCompiler.js
+vegetation/treeRecipe.js
+vegetation/treeRecipePresets.js
+vegetation/treeSpeciesProfiles.js
+vegetation/treeSpeciesResearch.generated.js
+vegetation/treeSpeciesRoster.js
+vegetation/treeSpeciesTaxonomy.generated.js
+vegetation/woodyBaselineControls.js
+
+# Host-only analytics is not part of the runtime package.
+analytics/
+
+# Binary reference and lab assets never ship through npm. Runtime helpers use
+# first-party procedural data or immutable public-R2 delivery instead.
+character/assets/

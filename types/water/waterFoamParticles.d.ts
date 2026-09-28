@@ -1,0 +1,32 @@
+export class WaterFoamParticles {
+    constructor(dynamics: any, count?: number);
+    dynamics: any;
+    count: number;
+    seed: number;
+    points: Float32Array<ArrayBuffer>;
+    thickness: Float32Array<ArrayBuffer>;
+    alpha: Float32Array<ArrayBuffer>;
+    color: import("three/webgpu").UniformNode<"color", THREE.Color>;
+    sun: import("three/webgpu").UniformNode<"vec3", THREE.Vector3>;
+    mesh: THREE.InstancedMesh<THREE.PlaneGeometry, MeshBasicNodeMaterial, THREE.InstancedMeshEventMap>;
+    focus: THREE.Vector3;
+    sample: {};
+    alive: number;
+    frontState: Float32Array<ArrayBuffer>;
+    previousEdges: Float32Array<any>;
+    frontReady: boolean;
+    frontTexture: THREE.DataTexture;
+    random(): number;
+    concentration(x: any, z: any): any;
+    edgeAt(x: any): any;
+    sampleFront(x: any, component: any, previous?: boolean): number;
+    updateFront(dt: any): void;
+    retreatAt(x: any): number;
+    patchAt(x: any, edge: any): number;
+    networkAt(x: any, z: any): number;
+    availableFoam(x: any, z: any): any;
+    update(dt: any): void;
+    dispose(): void;
+}
+import * as THREE from 'three';
+import { MeshBasicNodeMaterial } from 'three/webgpu';

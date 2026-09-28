@@ -1,0 +1,118 @@
+{
+  "schema": "toonlab/rock-reference-macro-profile",
+  "version": 1,
+  "id": "cliff-bedded-grand-canyon-visual-hull-r1",
+  "profileType": "orthogonal-visual-hull",
+  "extentScale": 0.45,
+  "evidence": {
+    "sourcePageUrl": "https://commons.wikimedia.org/wiki/File%3AGrand_Canyon_February_2012_9.JPG",
+    "sourceImageSha256": "13c27560fdea43e20e283865b777b3e29e9603f933eb8883f3e828d5f2b3955a",
+    "sourceJsonSha256": "f4bfda66a97729d489fd188b47e3c896836fcc323b66f4030094f2f190487dc1",
+    "credit": "Simeon87, via Wikimedia Commons",
+    "license": "CC BY-SA 3.0",
+    "rights": "Attribution and share-alike required under the license terms on the stable Commons file page.",
+    "sixViewSha256": "362ddae0a4b08bda7a35b99b764b6542e8eb48c99fc049b06e4ced255a5119ac",
+    "promptSha256": "3036b7c91085e2e3f2235792cd0bc16d3661995ad40cbca3e9180722d28b954e",
+    "auditSha256": "f987e0013947460c4062cc7525cdbe16b253341129ade6432d56f0bddd326bad",
+    "generatedViewsAreGeologyEvidence": false,
+    "viewOrder": ["front", "rear", "left", "right", "top", "bottom-support"]
+  },
+  "authorityContract": {
+    "calibrationMode": "per-view-shape-normalized-authored-hypothesis",
+    "commonMetricCalibrationAvailable": false,
+    "claimsExactSourceReconstruction": false,
+    "safeClaim": "Nature-informed isolated cliff-module hypothesis preserving bedding, bench, joint-face, and talus/support logic.",
+    "productionOwnership": "canonical editable-source package; do not grow a catalog switch in the C8 basis field",
+    "selectedPhysicalDimensionsMetres": [10.5, 9.4, 6.2],
+    "seededVariationCreatesNewBaseline": false
+  },
+  "panelEvidence": {
+    "sheetDimensionsPixels": [1536, 1024],
+    "maskDerivation": {
+      "encoding": "crop-local row-major uint8, foreground=1",
+      "lumaIntegerFormula": "floor((54*r + 183*g + 19*b) / 256)",
+      "foregroundCondition": "border>=4px and luma<=235",
+      "borderIgnorePixels": 4,
+      "lumaThreshold8Bit": 235
+    },
+    "panels": {
+      "front": {"cropPixels": [0, 0, 512, 512], "foregroundMaskSha256": "39acf904c9d1403a8c9ab32a74699006bd76bdd9ac442e8d1fc6626463543990", "foregroundBboxPixels": [43, 112, 480, 367], "foregroundPixels": 91708},
+      "rear": {"cropPixels": [512, 0, 512, 512], "foregroundMaskSha256": "f45f8c01c25a14dec2d05d4ea5dca4564022099a042bb4aef8658f0d54c41985", "foregroundBboxPixels": [14, 96, 471, 355], "foregroundPixels": 93694},
+      "left": {"cropPixels": [1024, 0, 512, 512], "foregroundMaskSha256": "6d4848c8d08d2116fa961640e5e2aa2bb5ae7420acec8e264054fe178e52c5bd", "foregroundBboxPixels": [35, 112, 464, 369], "foregroundPixels": 68782},
+      "right": {"cropPixels": [0, 512, 512, 512], "foregroundMaskSha256": "629d6a60d1597876a03fe7a527dfd6dba87e0c744ec08b4cf8a7dd42dbfc86bf", "foregroundBboxPixels": [34, 109, 465, 376], "foregroundPixels": 70871},
+      "top": {"cropPixels": [512, 512, 512, 512], "foregroundMaskSha256": "a984b3efebe4544666d88a8577c451ed362c7981175ce4cdffd9be86c2350a8e", "foregroundBboxPixels": [40, 68, 481, 409], "foregroundPixels": 118627},
+      "bottom-support": {"cropPixels": [1024, 512, 512, 512], "foregroundMaskSha256": "a27ab2a7c69f1edcd51d0035cad06d8f27f24e635d7dc20898880ae54fd7f1bb", "foregroundBboxPixels": [22, 101, 489, 387], "foregroundPixels": 93368}
+    }
+  },
+  "viewBindings": {
+    "frontXY": {
+      "panelId": "front",
+      "screenRightWorldAxis": "+x",
+      "screenDownWorldAxis": "-y",
+      "cameraScaleMode": "foreground-bbox-normalized",
+      "pixelLandmarks": [[43,367],[53.9,326.3],[73.6,290],[86.7,252.3],[99.8,219.1],[102,136.1],[128.2,118],[217.8,112],[305.2,115],[353.3,127.1],[366.4,145.2],[403.5,152.7],[412.3,176.9],[436.3,187.4],[434.1,216.1],[460.3,228.2],[456,261.4],[473.4,282.5],[480,367]]
+    },
+    "sideZY": {
+      "panelId": "right",
+      "screenRightWorldAxis": "+z",
+      "screenDownWorldAxis": "-y",
+      "axisMappingIsHiddenViewHypothesis": true,
+      "cameraScaleMode": "foreground-bbox-normalized",
+      "pixelLandmarks": [[34,376],[38.4,145.6],[68.8,118.5],[136.3,109],[179.8,121.7],[260.4,198],[312.6,236.1],[417.1,328.3],[465,376]]
+    },
+    "topXZ": {
+      "panelId": "top",
+      "screenRightWorldAxis": "+x",
+      "screenDownWorldAxis": "-z",
+      "axisMappingIsHiddenViewHypothesis": true,
+      "cameraScaleMode": "foreground-bbox-normalized",
+      "pixelLandmarks": [[44.5,337.6],[96.2,391.1],[197.5,409],[305.5,403.6],[386.5,369.7],[463,323.3],[481,262.6],[454,194.8],[478.8,132.3],[418,80.5],[312.2,68],[204.2,91.2],[103,121.6],[40,193]]
+    },
+    "bottomSupportXZ": {
+      "panelId": "bottom-support",
+      "screenRightWorldAxis": "+x",
+      "screenDownWorldAxis": "-z",
+      "axisMappingIsHiddenViewHypothesis": true,
+      "cameraScaleMode": "foreground-bbox-normalized",
+      "pixelLandmarks": [[22,279.3],[51.2,338.7],[138.8,375.9],[226.3,387],[326,368.4],[411.2,353.6],[474.4,309],[489,219.9],[462.2,147.4],[372.2,112.1],[262.8,101],[163.1,119.6],[73.1,156.7]]
+    }
+  },
+  "variation": {
+    "mode": "correlated-landmark-displacement",
+    "horizontalBiasWeight": 0.58,
+    "verticalBiasWeight": 0.58,
+    "minimumFrequency": 0.42,
+    "maximumFrequency": 0.68,
+    "verticalFrequencyRatio": 0.79
+  },
+  "profiles": {
+    "frontXY": [
+      [-1, -0.9, 0, 0], [-0.95, -0.63, 0.018, 0.012], [-0.86, -0.39, 0.018, 0.018],
+      [-0.8, -0.14, 0.016, 0.018], [-0.74, 0.08, 0.014, 0.016], [-0.73, 0.63, 0.012, 0.018],
+      [-0.61, 0.75, 0.018, 0.014], [-0.2, 0.79, 0.025, 0.012], [0.2, 0.77, 0.022, 0.012],
+      [0.42, 0.69, 0.018, 0.016], [0.48, 0.57, 0.012, 0.014], [0.65, 0.52, 0.018, 0.014],
+      [0.69, 0.36, 0.012, 0.016], [0.8, 0.29, 0.016, 0.014], [0.79, 0.1, 0.014, 0.018],
+      [0.91, 0.02, 0.016, 0.014], [0.89, -0.2, 0.014, 0.018], [0.97, -0.34, 0.012, 0.016],
+      [1, -0.9, 0, 0]
+    ],
+    "sideZY": [
+      [-0.98, -0.9, 0, 0], [-0.96, 0.55, 0.012, 0.018], [-0.82, 0.72, 0.018, 0.014],
+      [-0.51, 0.78, 0.022, 0.012], [-0.31, 0.7, 0.018, 0.014], [0.06, 0.22, 0.014, 0.018],
+      [0.3, -0.02, 0.014, 0.018], [0.78, -0.6, 0.014, 0.014], [1, -0.9, 0, 0]
+    ],
+    "topXZ": [
+      [-0.96, -0.58, 0.012, 0.014], [-0.73, -0.88, 0.018, 0.014], [-0.28, -0.98, 0.022, 0.01],
+      [0.2, -0.95, 0.022, 0.012], [0.56, -0.76, 0.018, 0.016], [0.9, -0.5, 0.014, 0.018],
+      [0.98, -0.16, 0.01, 0.018], [0.86, 0.22, 0.014, 0.018], [0.97, 0.57, 0.01, 0.016],
+      [0.7, 0.86, 0.018, 0.014], [0.23, 0.93, 0.022, 0.012], [-0.25, 0.8, 0.022, 0.014],
+      [-0.7, 0.63, 0.018, 0.016], [-0.98, 0.23, 0.01, 0.018]
+    ],
+    "bottomSupportXZ": [
+      [-0.94, -0.24, 0, 0], [-0.82, -0.56, 0, 0], [-0.46, -0.76, 0, 0],
+      [-0.1, -0.82, 0, 0], [0.31, -0.72, 0, 0], [0.66, -0.64, 0, 0],
+      [0.92, -0.4, 0, 0], [0.98, 0.08, 0, 0], [0.87, 0.47, 0, 0],
+      [0.5, 0.66, 0, 0], [0.05, 0.72, 0, 0], [-0.36, 0.62, 0, 0],
+      [-0.73, 0.42, 0, 0]
+    ]
+  }
+}

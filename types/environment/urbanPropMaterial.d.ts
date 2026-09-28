@@ -1,0 +1,25 @@
+// Source inference fallback: public names retained with permissive signatures.
+export const URBAN_CONTENT_FLAGS: any;
+export const URBAN_MATERIAL_BASES: any;
+export const URBAN_MATERIAL_FINISHES: any;
+export const URBAN_PROP_PALETTES: any;
+export const URBAN_PROP_SHADER_PROFILE_DOCUMENT_TYPE: any;
+export const URBAN_PROP_SHADER_PROFILE_SCHEMA_VERSION: any;
+export const URBAN_PROP_SURFACE_PROFILES: any;
+export const URBAN_PROP_SURFACE_ROLES: any;
+export const URBAN_RENDER_MODES: any;
+export const URBAN_STRUCTURAL_ROLES: any;
+export function applyUrbanPropPalette(...args: any[]): any;
+export function applyUrbanPropShaderProfile(...args: any[]): any;
+export function classifyUrbanMaterial(...args: any[]): any;
+export function classifyUrbanPropSurface(...args: any[]): any;
+export function createUrbanAnimePropMaterial(...args: any[]): any;
+export function createUrbanAnimePropNodeMaterial(...args: any[]): any;
+export function createUrbanMaterialClassification(...args: any[]): any;
+export function createUrbanPropShaderControls(...args: any[]): any;
+export function createUrbanPropShaderProfileDocument(...args: any[]): any;
+export function createUrbanPropShaderProfileSettings(...args: any[]): any;
+export function parseUrbanPropShaderProfileDocument(...args: any[]): any;
+export function resolveUrbanMaterialProfile(...args: any[]): any;
+export function serializeUrbanPropShaderProfile(...args: any[]): any;
+export function snapshotUrbanPropShaderControls(...args: any[]): any;

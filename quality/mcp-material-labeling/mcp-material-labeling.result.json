@@ -1,0 +1,312 @@
+{
+  "type": "toonlab/mcp-material-labeling-qualification",
+  "version": 1,
+  "assets": [
+    {
+      "assetId": "polyhaven:painted_wooden_bench",
+      "attribution": "Painted Wooden Bench by Kirill Sannikov — Poly Haven (CC0)",
+      "automatic": {
+        "issues": [],
+        "materials": [
+          {
+            "classification": {
+              "version": 1,
+              "baseMaterial": "wood",
+              "finish": "painted",
+              "renderMode": "opaque",
+              "structuralRole": "primaryMass",
+              "contentFlags": [],
+              "classificationSource": "inferred",
+              "confidence": 0.94
+            },
+            "fieldsCorrect": true,
+            "materialId": "painted_wooden_bench",
+            "unresolved": false,
+            "useCount": 1
+          }
+        ],
+        "ready": true,
+        "summary": {
+          "autoResolvedMaterials": 1,
+          "materialCount": 1,
+          "overrideCount": 0,
+          "unresolvedCount": 0
+        }
+      },
+      "repaired": {
+        "issues": [],
+        "materials": [
+          {
+            "classification": {
+              "version": 1,
+              "baseMaterial": "wood",
+              "finish": "painted",
+              "renderMode": "opaque",
+              "structuralRole": "primaryMass",
+              "contentFlags": [],
+              "classificationSource": "inferred",
+              "confidence": 0.94
+            },
+            "fieldsCorrect": true,
+            "materialId": "painted_wooden_bench",
+            "unresolved": false,
+            "useCount": 1
+          }
+        ],
+        "ready": true,
+        "summary": {
+          "autoResolvedMaterials": 1,
+          "materialCount": 1,
+          "overrideCount": 0,
+          "unresolvedCount": 0
+        }
+      }
+    },
+    {
+      "assetId": "polyhaven:wooden_picnic_table",
+      "attribution": "Wooden Picnic Table by Ulan Cabanilla — Poly Haven (CC0)",
+      "automatic": {
+        "issues": [],
+        "materials": [
+          {
+            "classification": {
+              "version": 1,
+              "baseMaterial": "wood",
+              "finish": "raw",
+              "renderMode": "opaque",
+              "structuralRole": "secondaryStructure",
+              "contentFlags": [],
+              "classificationSource": "inferred",
+              "confidence": 0.94
+            },
+            "fieldsCorrect": true,
+            "materialId": "wooden_picnic_table_bottom",
+            "unresolved": false,
+            "useCount": 1
+          },
+          {
+            "classification": {
+              "version": 1,
+              "baseMaterial": "wood",
+              "finish": "raw",
+              "renderMode": "opaque",
+              "structuralRole": "primaryMass",
+              "contentFlags": [],
+              "classificationSource": "inferred",
+              "confidence": 0.94
+            },
+            "fieldsCorrect": true,
+            "materialId": "wooden_picnic_table_table",
+            "unresolved": false,
+            "useCount": 1
+          }
+        ],
+        "ready": true,
+        "summary": {
+          "autoResolvedMaterials": 2,
+          "materialCount": 2,
+          "overrideCount": 0,
+          "unresolvedCount": 0
+        }
+      },
+      "repaired": {
+        "issues": [],
+        "materials": [
+          {
+            "classification": {
+              "version": 1,
+              "baseMaterial": "wood",
+              "finish": "raw",
+              "renderMode": "opaque",
+              "structuralRole": "secondaryStructure",
+              "contentFlags": [],
+              "classificationSource": "inferred",
+              "confidence": 0.94
+            },
+            "fieldsCorrect": true,
+            "materialId": "wooden_picnic_table_bottom",
+            "unresolved": false,
+            "useCount": 1
+          },
+          {
+            "classification": {
+              "version": 1,
+              "baseMaterial": "wood",
+              "finish": "raw",
+              "renderMode": "opaque",
+              "structuralRole": "primaryMass",
+              "contentFlags": [],
+              "classificationSource": "inferred",
+              "confidence": 0.94
+            },
+            "fieldsCorrect": true,
+            "materialId": "wooden_picnic_table_table",
+            "unresolved": false,
+            "useCount": 1
+          }
+        ],
+        "ready": true,
+        "summary": {
+          "autoResolvedMaterials": 2,
+          "materialCount": 2,
+          "overrideCount": 0,
+          "unresolvedCount": 0
+        }
+      }
+    },
+    {
+      "assetId": "polyhaven:street_lamp_01",
+      "attribution": "Street Lamp 01 by Josh Dean — Poly Haven (CC0)",
+      "automatic": {
+        "issues": [
+          {
+            "code": "low-confidence-material",
+            "materialId": "street_lamp_01",
+            "message": "Material \"street_lamp_01\" classification confidence 0.72 is below 0.75."
+          }
+        ],
+        "materials": [
+          {
+            "classification": {
+              "version": 1,
+              "baseMaterial": "metal",
+              "finish": "painted",
+              "renderMode": "opaque",
+              "structuralRole": "primaryMass",
+              "contentFlags": [],
+              "classificationSource": "inferred",
+              "confidence": 0.72
+            },
+            "fieldsCorrect": true,
+            "materialId": "street_lamp_01",
+            "unresolved": true,
+            "useCount": 1
+          },
+          {
+            "classification": {
+              "version": 1,
+              "baseMaterial": "glass",
+              "finish": "polished",
+              "renderMode": "translucent",
+              "structuralRole": "window",
+              "contentFlags": [],
+              "classificationSource": "inferred",
+              "confidence": 0.96
+            },
+            "fieldsCorrect": true,
+            "materialId": "street_lamp_01_glass",
+            "unresolved": false,
+            "useCount": 1
+          },
+          {
+            "classification": {
+              "version": 1,
+              "baseMaterial": "glass",
+              "finish": "polished",
+              "renderMode": "opaque",
+              "structuralRole": "lightEmitter",
+              "contentFlags": [
+                "emissive"
+              ],
+              "classificationSource": "inferred",
+              "confidence": 0.96
+            },
+            "fieldsCorrect": true,
+            "materialId": "street_lamp_01_bulb",
+            "unresolved": false,
+            "useCount": 1
+          }
+        ],
+        "ready": false,
+        "summary": {
+          "autoResolvedMaterials": 2,
+          "materialCount": 3,
+          "overrideCount": 0,
+          "unresolvedCount": 1
+        }
+      },
+      "repaired": {
+        "issues": [],
+        "materials": [
+          {
+            "classification": {
+              "version": 1,
+              "baseMaterial": "metal",
+              "finish": "painted",
+              "renderMode": "opaque",
+              "structuralRole": "primaryMass",
+              "contentFlags": [],
+              "classificationSource": "explicit",
+              "confidence": 1
+            },
+            "fieldsCorrect": true,
+            "materialId": "street_lamp_01",
+            "unresolved": false,
+            "useCount": 1
+          },
+          {
+            "classification": {
+              "version": 1,
+              "baseMaterial": "glass",
+              "finish": "polished",
+              "renderMode": "translucent",
+              "structuralRole": "window",
+              "contentFlags": [],
+              "classificationSource": "inferred",
+              "confidence": 0.96
+            },
+            "fieldsCorrect": true,
+            "materialId": "street_lamp_01_glass",
+            "unresolved": false,
+            "useCount": 1
+          },
+          {
+            "classification": {
+              "version": 1,
+              "baseMaterial": "glass",
+              "finish": "polished",
+              "renderMode": "opaque",
+              "structuralRole": "lightEmitter",
+              "contentFlags": [
+                "emissive"
+              ],
+              "classificationSource": "inferred",
+              "confidence": 0.96
+            },
+            "fieldsCorrect": true,
+            "materialId": "street_lamp_01_bulb",
+            "unresolved": false,
+            "useCount": 1
+          }
+        ],
+        "ready": true,
+        "summary": {
+          "autoResolvedMaterials": 2,
+          "materialCount": 3,
+          "overrideCount": 1,
+          "unresolvedCount": 0
+        }
+      }
+    }
+  ],
+  "policy": {
+    "id": "material-labeling-qualification-advisory",
+    "mode": "advisory",
+    "note": "Qualification-only policy; external CC0 assets are not promoted into the Call Me Sensei library."
+  },
+  "rates": {
+    "assistedAssetReadiness": "3/3",
+    "assistedAssetReadinessRate": 1,
+    "automaticAssetReadiness": "2/3",
+    "automaticAssetReadinessRate": 0.6666666666666666,
+    "automaticMaterialReadiness": "5/6",
+    "automaticMaterialReadinessRate": 0.8333333333333334,
+    "exactSemanticIdentification": "6/6",
+    "exactSemanticIdentificationRate": 1
+  },
+  "strictLiveCoverage": {
+    "directApplyRejectsStaleContract": true,
+    "rejectedBeforeMutation": true,
+    "repairedTargetCount": 3
+  }
+}

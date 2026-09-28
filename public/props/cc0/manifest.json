@@ -1,0 +1,28 @@
+{
+  "note": "Registry of bundled CC0 asset packs. Set enabled:false to pull a pack out of every lab scene without touching scene code. Each pack dir keeps its original LICENSE.txt; credits in ATTRIBUTION.md.",
+  "packs": {
+    "kaykit-city": {
+      "author": "Kay Lousberg",
+      "authorUrl": "https://kaylousberg.com",
+      "cdnPrefix": "https://cdn.toonlab.io/cc0/kaykit-city/",
+      "enabled": false,
+      "kind": "model",
+      "label": "KayKit City Builder Bits 1.0",
+      "license": "CC0-1.0",
+      "source": "kaykit",
+      "sourceUrl": "https://github.com/KayKit-Game-Assets/KayKit-City-Builder-Bits-1.0"
+    },
+    "kaykit-furniture": {
+      "author": "Kay Lousberg",
+      "authorUrl": "https://kaylousberg.com",
+      "cdnPrefix": "https://cdn.toonlab.io/cc0/kaykit-furniture/",
+      "enabled": false,
+      "kind": "model",
+      "label": "KayKit Furniture Bits 1.0",
+      "license": "CC0-1.0",
+      "source": "kaykit",
+      "sourceUrl": "https://github.com/KayKit-Game-Assets/KayKit-Furniture-Bits-1.0"
+    }
+  },
+  "version": 1
+}

@@ -1,0 +1,91 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://toonlab.io/schemas/golden-fixture-matrix-v1.json",
+  "title": "ToonLab golden fixture matrix v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "bundle", "packageVersion", "capture", "axes", "fixtures"],
+  "properties": {
+    "$schema": { "type": "string" },
+    "schema": { "const": "toonlab/golden-fixture-matrix@1" },
+    "bundle": { "type": "string", "minLength": 1 },
+    "packageVersion": { "type": "string", "minLength": 1 },
+    "capture": {
+      "type": "object",
+      "required": ["viewport", "seed", "warmupMs", "fixedFrameCount", "capturePrimeCount", "repeatCount", "contentThresholds", "thresholds"],
+      "properties": {
+        "viewport": {
+          "type": "object",
+          "required": ["width", "height", "deviceScaleFactor"],
+          "properties": {
+            "width": { "type": "integer", "minimum": 1 },
+            "height": { "type": "integer", "minimum": 1 },
+            "deviceScaleFactor": { "type": "number", "exclusiveMinimum": 0 }
+          }
+        },
+        "seed": { "type": "integer" },
+        "warmupMs": { "type": "integer", "minimum": 0 },
+        "fixedFrameCount": { "type": "integer", "minimum": 1 },
+        "capturePrimeCount": { "type": "integer", "minimum": 0 },
+        "repeatCount": { "type": "integer", "minimum": 2 },
+        "contentThresholds": {
+          "type": "object",
+          "required": ["maxClippedPixelRatio", "minNonBlackPixelRatio", "minLumaStandardDeviation"],
+          "properties": {
+            "maxClippedPixelRatio": { "type": "number", "minimum": 0, "maximum": 1 },
+            "minNonBlackPixelRatio": { "type": "number", "minimum": 0, "maximum": 1 },
+            "minLumaStandardDeviation": { "type": "number", "minimum": 0 }
+          }
+        },
+        "thresholds": {
+          "type": "object",
+          "required": ["meanDeltaE", "p95DeltaE", "pixelRatioAboveDeltaE", "pixelDeltaE", "ssim"],
+          "properties": {
+            "meanDeltaE": { "type": "number", "minimum": 0 },
+            "p95DeltaE": { "type": "number", "minimum": 0 },
+            "pixelRatioAboveDeltaE": { "type": "number", "minimum": 0, "maximum": 1 },
+            "pixelDeltaE": { "type": "number", "minimum": 0 },
+            "ssim": { "type": "number", "minimum": -1, "maximum": 1 }
+          }
+        }
+      }
+    },
+    "axes": {
+      "type": "object",
+      "required": ["renderers", "qualities", "timesOfDay", "cameras"],
+      "properties": {
+        "renderers": { "type": "array", "minItems": 2, "items": { "type": "string" } },
+        "qualities": { "type": "array", "minItems": 2, "items": { "type": "string" } },
+        "timesOfDay": { "type": "array", "minItems": 4, "items": { "type": "string" } },
+        "cameras": { "type": "array", "minItems": 3, "items": { "type": "string" } }
+      }
+    },
+    "fixtures": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "domain", "label", "route", "captureEnabled", "releaseEvidence", "cases"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
+          "domain": { "type": "string", "minLength": 1 },
+          "label": { "type": "string", "minLength": 1 },
+          "route": { "type": "string", "pattern": "^/" },
+          "captureEnabled": { "type": "boolean" },
+          "captureFrom": { "type": "string" },
+          "axes": {
+            "type": "object",
+            "properties": {
+              "renderers": { "type": "array", "items": { "type": "string" } },
+              "qualities": { "type": "array", "items": { "type": "string" } },
+              "timesOfDay": { "type": "array", "items": { "type": "string" } },
+              "cameras": { "type": "array", "items": { "type": "string" } }
+            }
+          },
+          "releaseEvidence": { "type": "boolean" },
+          "cases": { "type": "array", "minItems": 1, "items": { "type": "string" } }
+        }
+      }
+    }
+  }
+}

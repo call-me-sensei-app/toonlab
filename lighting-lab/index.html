@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0a0e15" />
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M0 0H100V78L78 100H0Z' fill='%23e8332e'/%3E%3Ctext x='50' y='72' font-size='64' font-weight='900' font-family='Hiragino Sans, Yu Gothic, Noto Sans JP, sans-serif' fill='white' text-anchor='middle'%3E%E3%83%88%3C/text%3E%3C/svg%3E" />
+    <title>Lighting Lab — ToonLab</title>
+  </head>
+  <body data-scene="lighting-lab">
+    <div id="stage" aria-label="Interactive lighting preview"></div>
+    <div id="lightingLab">
+      <header class="ll-topbar">
+        <a class="ll-brand" href="/">TOONLAB <span>Lighting Lab</span></a>
+        <label class="ll-compact-field">
+          <span>Scene</span>
+          <select id="sceneHub" aria-label="Open another ToonLab scene">
+            <option value="/lighting-lab/">Lighting Lab</option>
+            <option value="/playground/">Playground</option>
+            <option value="/weather-lab/">Weather Lab</option>
+            <option value="/water-lab/">Water Lab</option>
+            <option value="/vfx-lab/">VFX Lab</option>
+          </select>
+        </label>
+        <input id="styleName" class="ll-name" value="Call Me Sensei" aria-label="Lighting style name" />
+        <span class="ll-grow"></span>
+        <label class="ll-compact-field">
+          <span>Weather</span>
+          <select id="weatherSelect" aria-label="Weather modulation">
+            <option value="clear">Clear</option>
+            <option value="overcast">Overcast</option>
+            <option value="rain">Rain</option>
+            <option value="storm">Storm</option>
+          </select>
+        </label>
+        <button id="importStyle" type="button">Import</button>
+        <button id="saveStyle" type="button">Save local</button>
+        <button id="exportStyle" class="primary" type="button">Export JSON</button>
+        <input id="styleFile" type="file" accept="application/json,.json" hidden />
+      </header>
+
+      <aside class="ll-panel ll-left">
+        <section>
+          <div class="ll-panel-title"><span>STYLE</span><small>Game-wide identity</small></div>
+          <label class="ll-row"><span>Style</span><select id="stylePreset" aria-label="Lighting style"></select></label>
+          <p id="styleDescription" class="ll-hint"></p>
+        </section>
+        <section class="ll-fixtures-section">
+          <div class="ll-panel-title"><span>FIXTURES</span><small>Reusable vocabulary</small></div>
+          <div id="fixtureList" class="ll-fixture-list"></div>
+          <div class="ll-variation-head"><span>VARIATIONS</span><button id="placeFixture" type="button">Place in scene</button></div>
+          <div id="fixtureVariations" class="ll-variations"></div>
+          <div class="ll-panel-title ll-sub"><span>PLACED</span><small id="placementCount">0</small></div>
+          <div id="placementList" class="ll-placements"></div>
+        </section>
+      </aside>
+
+      <div class="ll-scenebar">
+        <nav id="sceneTabs" class="ll-scene-tabs" aria-label="Preview scene"></nav>
+        <div class="ll-time">
+          <button id="timePlay" type="button" title="Play day cycle">▶</button>
+          <input id="timeOfDay" type="range" min="0" max="24" step="0.1" value="12" aria-label="Time of day" />
+          <output id="timeValue">12:00</output>
+        </div>
+      </div>
+
+      <aside class="ll-panel ll-right">
+        <section>
+          <div class="ll-panel-title"><span>STYLE GENERATOR</span><small>Deterministic per seed</small></div>
+          <label class="ll-row"><span>Family</span><select id="styleFamily" aria-label="Style generator family"></select></label>
+          <label class="ll-row"><span>Seed</span><input id="styleSeed" type="number" min="1" step="1" value="1" aria-label="Style generator seed" /></label>
+          <div class="ll-locks">
+            <label><input id="lockSun" type="checkbox" /> Lock sun palette</label>
+            <label><input id="lockFog" type="checkbox" /> Lock fog palette</label>
+            <label><input id="lockExposure" type="checkbox" /> Lock exposure</label>
+          </div>
+          <div class="ll-action-row">
+            <button id="generateStyle" class="primary" type="button">Generate</button>
+            <button id="styleCandidates" type="button">Candidates</button>
+          </div>
+          <div id="candidateGrid" class="ll-candidates"></div>
+        </section>
+        <section>
+          <div class="ll-panel-title"><span>FIXTURE GENERATOR</span><small>Seeded vocabulary</small></div>
+          <label class="ll-row"><span>Family</span><select id="fixtureFamily" aria-label="Fixture generator family"></select></label>
+          <label class="ll-row"><span>Seed</span><input id="fixtureSeed" type="number" min="1" step="1" value="1" aria-label="Fixture generator seed" /></label>
+          <div class="ll-action-row">
+            <button id="generateFixture" class="primary" type="button">Generate fixture</button>
+            <button id="exportFixture" type="button">Export fixture</button>
+          </div>
+        </section>
+        <section>
+          <div class="ll-panel-title"><span>EXPORT</span><small>Portable documents</small></div>
+          <div class="ll-action-row">
+            <button id="copyRuntime" type="button">Copy runtime snippet</button>
+            <button id="exportToonLab" type="button">ToonLab manifest</button>
+          </div>
+          <p id="importError" class="ll-error" role="alert"></p>
+        </section>
+        <section>
+          <div class="ll-panel-title"><span>DIAGNOSTICS</span><small>system.stats()</small></div>
+          <div id="diagWarnings" class="ll-warning-list"></div>
+        </section>
+      </aside>
+
+      <footer class="ll-statusbar">
+        <span id="statusMessage">Starting Lighting Lab…</span>
+        <span class="ll-grow"></span>
+        <span id="statusLights">0/0 lights</span>
+        <span id="statusShadowed">0 shadowed</span>
+        <span id="statusBackend">Renderer booting…</span>
+        <span id="statusFps">0 fps</span>
+      </footer>
+      <div id="toast" class="ll-toast" role="status" aria-live="polite"></div>
+    </div>
+    <script type="module" src="../labs/lighting-lab/main.js"></script>
+  </body>
+</html>

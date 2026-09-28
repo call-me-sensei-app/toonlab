@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M0 0H100V78L78 100H0Z' fill='%23e8332e'/%3E%3Ctext x='50' y='72' font-size='64' font-weight='900' font-family='Hiragino Sans, Yu Gothic, Noto Sans JP, sans-serif' fill='white' text-anchor='middle'%3E%E3%83%88%3C/text%3E%3C/svg%3E" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ToonLab — Fauna Demo</title>
+  <style>
+    html, body { margin: 0; height: 100%; overflow: hidden; background: #0e1219; }
+    canvas { display: block; }
+    #hud {
+      position: fixed; top: 14px; left: 14px; z-index: 10;
+      display: flex; gap: 8px; align-items: center;
+      font: 13px/1.4 system-ui, sans-serif;
+    }
+    #hud button {
+      padding: 7px 14px; border-radius: 999px; border: 1px solid rgba(255,255,255,0.25);
+      background: rgba(20,26,36,0.72); color: #e6ebf2; cursor: pointer; font: inherit;
+    }
+    #hud button[data-active="true"] { background: #15837d; border-color: #15837d; }
+    #fps {
+      position: fixed; top: 14px; right: 14px; z-index: 10; color: #e6ebf2;
+      font: 13px/1.4 ui-monospace, monospace; background: rgba(20,26,36,0.72);
+      padding: 6px 12px; border-radius: 8px; white-space: pre;
+    }
+    #hint {
+      position: fixed; bottom: 14px; left: 14px; z-index: 10; color: #cfd6df;
+      font: 12px/1.5 system-ui, sans-serif; background: rgba(20,26,36,0.6);
+      padding: 6px 12px; border-radius: 8px;
+    }
+    #loading {
+      position: fixed; inset: 0; z-index: 20; display: flex; align-items: center;
+      justify-content: center; color: #e6ebf2; background: #0e1219;
+      font: 15px/1.4 system-ui, sans-serif;
+    }
+  </style>
+</head>
+<body>
+  <div id="hud">
+    <button id="view-orbit" data-active="true">1 · Lake</button>
+    <button id="view-birds">2 · Birds</button>
+    <button id="view-fish">3 · Fish</button>
+    <button id="view-butterflies">4 · Meadow</button>
+  </div>
+  <div id="fps">— fps</div>
+  <div id="hint">drag orbit · wheel zoom · 1/2/3/4 camera presets · ?birds=&amp;butterflies=&amp;dragonflies=&amp;fish=&amp;seed=</div>
+  <div id="loading">Hatching the fauna…</div>
+  <script type="module" src="./main.js"></script>
+</body>
+</html>

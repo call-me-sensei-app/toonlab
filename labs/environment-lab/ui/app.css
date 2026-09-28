@@ -1,0 +1,166 @@
+/* Environment Shader Lab layout chrome (el- prefix). Controls come from the shared
+   kit (tk-); only layout and lab-specific widgets live here. */
+
+#app { position: fixed; inset: 0; pointer-events: none; z-index: 10; }
+body[data-hide-hud='true'] #app { display: none; }
+
+.el-root {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  grid-template-rows: var(--topbar-h) 1fr var(--statusbar-h);
+  grid-template-columns: var(--rail-w) 1fr auto;
+  grid-template-areas:
+    'topbar topbar topbar'
+    'rail viewport inspector'
+    'status status status';
+  color: var(--text-primary);
+  font: var(--type-body);
+  pointer-events: none;
+}
+
+/* --- topbar ------------------------------------------------------------ */
+.el-topbar {
+  grid-area: topbar;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 0 var(--space-3);
+  background: var(--bg-app);
+  border-bottom: 1px solid var(--border-subtle);
+  pointer-events: auto;
+}
+/* Brand lockup + lab name come from the kit (.tk-brand, LabChrome.jsx). */
+.el-topbar .tk-brand {
+  padding-right: var(--space-2);
+  margin-right: var(--space-1);
+}
+.el-title {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: 30px;
+  padding: var(--space-1) var(--space-2);
+  border: none;
+  border-radius: var(--radius-2);
+  background: none;
+  color: var(--text-primary);
+  font: var(--type-title);
+  cursor: pointer;
+}
+.el-title:hover { background: var(--surface-3); }
+.el-dirty { color: var(--accent-400); font-size: 8px; }
+.el-topbar-spacer { flex: 1; }
+
+/* --- workflow rail ------------------------------------------------------ */
+.el-rail {
+  grid-area: rail;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-1);
+  overflow-y: auto;
+  padding: var(--space-2) 0;
+  background: var(--surface-1);
+  border-right: 1px solid var(--border-subtle);
+  pointer-events: auto;
+}
+.el-rail-stage {
+  position: relative;
+  display: flex;
+  flex: 0 0 auto;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  width: 52px;
+  padding: var(--space-2) 0;
+  border: none;
+  border-radius: var(--radius-2);
+  background: none;
+  color: var(--text-tertiary);
+  font: var(--type-caption);
+  cursor: pointer;
+}
+.el-rail-stage:hover { background: var(--surface-3); color: var(--text-secondary); }
+.el-rail-stage[data-active='true'] {
+  background: var(--accent-subtle);
+  color: var(--accent-300);
+}
+.el-rail-stage[data-active='true']::before {
+  content: '';
+  position: absolute;
+  top: 18%;
+  bottom: 18%;
+  left: -6px;
+  width: 3px;
+  border-radius: var(--radius-full);
+  background: var(--accent-400);
+}
+
+/* --- inspector ----------------------------------------------------------- */
+.el-inspector {
+  grid-area: inspector;
+  width: var(--inspector-w);
+  overflow-y: auto;
+  padding: var(--space-3) var(--space-3) var(--space-7);
+  background: var(--surface-1);
+  border-left: 1px solid var(--border-subtle);
+  pointer-events: auto;
+}
+.el-inspector-header { margin: var(--space-1); font: var(--type-title); }
+.el-inspector-caption { margin: 0 var(--space-1) var(--space-3); color: var(--text-tertiary); font: var(--type-caption); }
+.el-preset-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin: 0 var(--space-1) var(--space-3);
+}
+.el-preset-row .tk-select { flex: 1; }
+
+/* --- document menu ---------------------------------------------------------- */
+.el-doc-menu { display: flex; flex-direction: column; gap: var(--space-2); }
+.el-save-row { display: flex; gap: var(--space-2); }
+.el-save-row .tk-textfield { flex: 1; }
+
+/* --- floating stage bar ---------------------------------------------------- */
+.el-stagebar {
+  position: fixed;
+  bottom: calc(var(--statusbar-h) + var(--space-3));
+  left: calc((100vw + var(--rail-w) - var(--inspector-w)) / 2);
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-1) var(--space-2);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-3);
+  background: var(--surface-overlay);
+  backdrop-filter: var(--blur-overlay);
+  box-shadow: var(--shadow-2);
+  pointer-events: auto;
+  z-index: var(--z-hud);
+}
+.el-stagebar-hint { padding: 0 var(--space-2); color: var(--text-tertiary); font: var(--type-caption); white-space: nowrap; }
+
+/* --- status bar ----------------------------------------------------------------- */
+.el-status {
+  grid-area: status;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 0 var(--space-3);
+  background: var(--bg-app);
+  border-top: 1px solid var(--border-subtle);
+  color: var(--text-secondary);
+  font: var(--type-caption);
+  pointer-events: auto;
+}
+.el-status-spacer { flex: 1; }
+.el-status-meta { color: var(--text-tertiary); }
+
+/* --- floating stage bar selects ------------------------------------------ */
+.el-preset-row { margin-top: var(--space-1); }
+.el-stagebar-select { width: 200px; }
+.el-stagebar-select--debug { width: 132px; }
+
+/* --- preview accent: everything amber is never saved ----------------------- */

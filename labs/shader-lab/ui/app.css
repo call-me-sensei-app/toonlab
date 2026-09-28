@@ -1,0 +1,162 @@
+/* Character Shader Lab layout chrome (cs- prefix). Controls come from the shared
+   kit (tk-); only layout and lab-specific widgets live here. */
+
+#app { position: fixed; inset: 0; pointer-events: none; z-index: 10; }
+body[data-hide-hud='true'] #app { display: none; }
+
+.cs-root {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  grid-template-rows: var(--topbar-h) 1fr var(--statusbar-h);
+  grid-template-columns: var(--rail-w) 1fr auto;
+  grid-template-areas:
+    'topbar topbar topbar'
+    'rail viewport inspector'
+    'status status status';
+  color: var(--text-primary);
+  font: var(--type-body);
+  pointer-events: none;
+}
+
+/* --- topbar ------------------------------------------------------------ */
+.cs-topbar {
+  grid-area: topbar;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 0 var(--space-3);
+  background: var(--bg-app);
+  border-bottom: 1px solid var(--border-subtle);
+  pointer-events: auto;
+}
+/* Brand lockup + lab name come from the kit (.tk-brand, LabChrome.jsx). */
+.cs-topbar .tk-brand {
+  padding-right: var(--space-2);
+  margin-right: var(--space-1);
+}
+.cs-title {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: 30px;
+  padding: var(--space-1) var(--space-2);
+  border: none;
+  border-radius: var(--radius-2);
+  background: none;
+  color: var(--text-primary);
+  font: var(--type-title);
+  cursor: pointer;
+}
+.cs-title:hover { background: var(--surface-3); }
+.cs-dirty { color: var(--accent-400); font-size: 8px; }
+.cs-topbar-spacer { flex: 1; }
+
+/* --- workflow rail ------------------------------------------------------ */
+.cs-rail {
+  grid-area: rail;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-1);
+  overflow-y: auto;
+  padding: var(--space-2) 0;
+  background: var(--surface-1);
+  border-right: 1px solid var(--border-subtle);
+  pointer-events: auto;
+}
+.cs-rail-stage {
+  position: relative;
+  display: flex;
+  flex: 0 0 auto;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  width: 52px;
+  padding: var(--space-2) 0;
+  border: none;
+  border-radius: var(--radius-2);
+  background: none;
+  color: var(--text-tertiary);
+  font: var(--type-caption);
+  cursor: pointer;
+}
+.cs-rail-stage:hover { background: var(--surface-3); color: var(--text-secondary); }
+.cs-rail-stage[data-active='true'] {
+  background: var(--accent-subtle);
+  color: var(--accent-300);
+}
+.cs-rail-stage[data-active='true']::before {
+  content: '';
+  position: absolute;
+  top: 18%;
+  bottom: 18%;
+  left: -6px;
+  width: 3px;
+  border-radius: var(--radius-full);
+  background: var(--accent-400);
+}
+
+/* --- inspector ----------------------------------------------------------- */
+.cs-inspector {
+  grid-area: inspector;
+  width: var(--inspector-w);
+  overflow-y: auto;
+  padding: var(--space-3) var(--space-3) var(--space-7);
+  background: var(--surface-1);
+  border-left: 1px solid var(--border-subtle);
+  pointer-events: auto;
+}
+.cs-inspector-header { margin: var(--space-1); font: var(--type-title); }
+.cs-inspector-caption { margin: 0 var(--space-1) var(--space-3); color: var(--text-tertiary); font: var(--type-caption); }
+.cs-preset-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin: 0 var(--space-1) var(--space-3);
+}
+.cs-preset-row .tk-select { flex: 1; }
+
+/* --- document menu ---------------------------------------------------------- */
+.cs-doc-menu { display: flex; flex-direction: column; gap: var(--space-2); }
+.cs-save-row { display: flex; gap: var(--space-2); }
+.cs-save-row .tk-textfield { flex: 1; }
+
+/* --- floating stage bar ---------------------------------------------------- */
+.cs-stagebar {
+  position: fixed;
+  bottom: calc(var(--statusbar-h) + var(--space-3));
+  left: calc((100vw + var(--rail-w) - var(--inspector-w)) / 2);
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-1) var(--space-2);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-3);
+  background: var(--surface-overlay);
+  backdrop-filter: var(--blur-overlay);
+  box-shadow: var(--shadow-2);
+  pointer-events: auto;
+  z-index: var(--z-hud);
+}
+.cs-stagebar-hint { padding: 0 var(--space-2); color: var(--text-tertiary); font: var(--type-caption); white-space: nowrap; }
+
+/* --- status bar ----------------------------------------------------------------- */
+.cs-status {
+  grid-area: status;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 0 var(--space-3);
+  background: var(--bg-app);
+  border-top: 1px solid var(--border-subtle);
+  color: var(--text-secondary);
+  font: var(--type-caption);
+  pointer-events: auto;
+}
+.cs-status-spacer { flex: 1; }
+.cs-status-meta { color: var(--text-tertiary); }
+
+/* Preview bar comes from the kit (.tk-previewbar); only widths live here. */
+.cs-stagebar-select { width: 200px; }

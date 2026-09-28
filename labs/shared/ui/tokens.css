@@ -1,0 +1,118 @@
+/* toonlab design tokens — the single source of visual truth for the tool
+ * UIs (Tree Lab first, Rock Lab next). Dark pro theme only (v1).
+ * Never hardcode a color/size in kit or app CSS: add a token here. */
+
+:root {
+  /* ---- color: surfaces --------------------------------------------- */
+  --bg-app: #0b0e13;
+  --surface-1: #11151c;
+  --surface-2: #171c25;
+  --surface-3: #1e2530;
+  --surface-overlay: rgba(15, 19, 26, 0.86);
+  --surface-scrim: rgba(7, 9, 12, 0.62);
+
+  /* ---- color: borders ---------------------------------------------- */
+  --border-subtle: rgba(255, 255, 255, 0.07);
+  --border-strong: rgba(255, 255, 255, 0.14);
+  --border-active: rgba(143, 198, 255, 0.6);
+
+  /* ---- color: text -------------------------------------------------- */
+  --text-primary: #edf2f7;
+  --text-secondary: rgba(237, 242, 247, 0.62);
+  --text-tertiary: rgba(237, 242, 247, 0.38);
+  --text-on-accent: #0b0e13;
+
+  /* ---- color: accent + states --------------------------------------- */
+  --accent-300: #b9dcff;
+  --accent-400: #8fc6ff;
+  --accent-500: #5fa9ef;
+  --accent-600: #3e87d3;
+  --accent-subtle: rgba(143, 198, 255, 0.13);
+  /* Preview-scene accent (amber) — controls that only affect how you LOOK
+     at the document, never the document itself. Product controls keep the
+     blue accent; anything amber is never saved. */
+  --preview-300: #ffd98a;
+  --preview-400: #f0c05a;
+  --preview-subtle: rgba(240, 192, 90, 0.14);
+  --preview-border: rgba(240, 192, 90, 0.45);
+  --success: #7bd69a;
+  --success-subtle: rgba(123, 214, 154, 0.14);
+  --warning: #f0c05a;
+  --warning-subtle: rgba(240, 192, 90, 0.14);
+  --danger: #f07a6a;
+  --danger-subtle: rgba(240, 122, 106, 0.14);
+
+  /* ---- brand (the ToonLab Pro site lockup: vermillion mark + wordmark;
+     fonts resolve to the site webfonts inside Pro, system elsewhere) ---- */
+  --brand-accent: #e8332e;
+  --font-brand: 'M PLUS 1', 'Zen Kaku Gothic New', var(--font-ui);
+  --font-brand-jp: 'Zen Kaku Gothic New', 'M PLUS 1', sans-serif;
+
+  /* ---- spacing (4pt) ------------------------------------------------- */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-7: 32px;
+  --space-8: 48px;
+
+  /* ---- radii --------------------------------------------------------- */
+  --radius-1: 4px;
+  --radius-2: 6px;
+  --radius-3: 8px;
+  --radius-4: 12px;
+  --radius-full: 999px;
+
+  /* ---- type ----------------------------------------------------------- */
+  --font-ui: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
+  /* roles: size/line-height/weight */
+  --type-display: 650 20px/28px var(--font-ui);
+  --type-title: 650 15px/20px var(--font-ui);
+  --type-section: 700 12px/16px var(--font-ui); /* + uppercase + ls .04em */
+  --type-label: 600 12px/16px var(--font-ui);
+  --type-body: 450 13px/18px var(--font-ui);
+  --type-caption: 500 11px/14px var(--font-ui);
+  --type-value: 500 12px/16px var(--font-mono);
+
+  /* ---- elevation ------------------------------------------------------ */
+  --shadow-1: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-2: 0 4px 16px rgba(0, 0, 0, 0.45);
+  --shadow-3: 0 12px 40px rgba(0, 0, 0, 0.55);
+  --blur-overlay: blur(16px);
+
+  /* ---- z layers -------------------------------------------------------- */
+  --z-hud: 10;
+  --z-drawer: 20;
+  --z-popover: 30;
+  --z-modal: 40;
+  --z-toast: 50;
+
+  /* ---- motion ----------------------------------------------------------- */
+  --motion-fast: 120ms ease-out;
+  --motion-panel: 200ms cubic-bezier(0.2, 0, 0, 1);
+
+  /* ---- chrome budget ------------------------------------------------------ */
+  --topbar-h: 76px;
+  --rail-w: 64px;
+  --inspector-w: 320px;
+  --drawer-w: 340px;
+  --statusbar-h: 28px;
+  --toolstrip-w: 44px;
+}
+
+/* Focus ring: :focus-visible only, double ring for contrast on any surface. */
+.tk-focusable:focus-visible,
+.tk :is(button, input, select, textarea, [tabindex]):focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--bg-app), 0 0 0 4px rgba(143, 198, 255, 0.55);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --motion-fast: 0ms;
+    --motion-panel: 0ms;
+  }
+}

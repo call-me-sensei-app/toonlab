@@ -1,0 +1,159 @@
+/* Sky/cloud authoring-contract widgets layered on the shared Lab chrome. */
+
+.vs-document-menu,
+.vs-style-dialog {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.vs-document-menu > button,
+.vs-document-menu__recent > button {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  width: 100%;
+  min-height: 34px;
+  padding: 0 var(--space-3);
+  border: 0;
+  border-radius: var(--radius-2);
+  background: transparent;
+  color: var(--text-primary);
+  font: var(--type-body);
+  text-align: left;
+  cursor: pointer;
+}
+
+.vs-document-menu > button:hover,
+.vs-document-menu > button:focus-visible,
+.vs-document-menu__recent > button:hover,
+.vs-document-menu__recent > button:focus-visible {
+  outline: none;
+  background: var(--surface-3);
+}
+
+.vs-document-menu > button:disabled {
+  opacity: 0.46;
+  cursor: default;
+}
+
+.vs-document-menu > button:disabled:hover { background: transparent; }
+
+.vs-document-menu button small {
+  flex: none;
+  color: var(--text-secondary);
+  font: var(--type-caption);
+}
+
+.vs-document-menu__danger:not(:disabled) span { color: var(--danger); }
+
+.vs-document-menu__separator {
+  height: 1px;
+  margin: var(--space-1) 0;
+  background: var(--border-subtle);
+}
+
+.vs-document-menu__recent {
+  display: grid;
+  gap: 2px;
+  margin-left: var(--space-3);
+  padding: var(--space-1) 0 var(--space-1) var(--space-2);
+  border-left: 1px solid var(--border-strong);
+}
+
+.vs-document-menu__recent > button {
+  min-height: 30px;
+  padding-left: var(--space-2);
+}
+
+.vs-document-menu__recent span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.vs-style-dialog p {
+  margin: 0;
+  color: var(--text-secondary);
+  font: var(--type-caption);
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+
+.vs-style-dialog {
+  gap: var(--space-4);
+  padding-top: var(--space-2);
+}
+
+.vs-style-dialog > p { font: var(--type-body); }
+
+.vs-style-dialog .tk-search-select,
+.vs-style-dialog .tk-text-field {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.vs-style-selection {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: 58px;
+  padding: var(--space-3);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-3);
+  background: var(--surface-2);
+}
+
+.vs-style-selection__marker {
+  width: 9px;
+  height: 9px;
+  flex: none;
+  border: 2px solid var(--surface-1);
+  border-radius: var(--radius-full);
+  background: var(--accent-400);
+  box-shadow: 0 0 0 1px var(--accent-400);
+}
+
+.vs-style-selection div {
+  display: grid;
+  min-width: 0;
+  gap: 3px;
+}
+
+.vs-style-selection strong {
+  overflow: hidden;
+  color: var(--text-primary);
+  font: var(--type-label);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.vs-style-selection small {
+  color: var(--text-secondary);
+  font: var(--type-caption);
+}
+
+.vs-style-name-field {
+  display: grid;
+  gap: var(--space-2);
+  color: var(--text-primary);
+  font: var(--type-label);
+}
+
+.vs-dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-2);
+  padding-top: var(--space-2);
+}
+
+.vs-export-dialog > .vs-section {
+  padding: 0;
+  border-top: 0;
+}
+
+.vs-export-dialog .vs-export textarea {
+  height: min(340px, 34vh);
+}

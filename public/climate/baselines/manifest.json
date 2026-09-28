@@ -1,0 +1,573 @@
+{
+  "entries": [
+    {
+      "authoredHash": "ac7cbe6420735592d067d77838d0702f7ec6b8c3c1337be5410dc7b9eb7273ac",
+      "path": "/climate/baselines/openSky/day.png",
+      "phase": 0,
+      "profile": "openSky",
+      "runtimeCoordinatorCount": 1,
+      "runtimeVerified": true,
+      "time": "day"
+    },
+    {
+      "authoredHash": "b711a3af033c12817510f768155a634949cdd97ef4466fce0d27d7ad08a3bd71",
+      "path": "/climate/baselines/openSky/sunset.png",
+      "phase": 0.25,
+      "profile": "openSky",
+      "runtimeCoordinatorCount": 1,
+      "runtimeVerified": true,
+      "time": "sunset"
+    },
+    {
+      "authoredHash": "0bb29304b7a77d3614fc18723b7f97b19f477b528b13399f1176d6d2823ab153",
+      "path": "/climate/baselines/openSky/night.png",
+      "phase": 0.5,
+      "profile": "openSky",
+      "runtimeCoordinatorCount": 1,
+      "runtimeVerified": true,
+      "time": "night"
+    },
+    {
+      "authoredHash": "0c8d9815dae01fd0a7c40ebb2eb2b87376199e002903286bcbc7b4ae4ac0115a",
+      "path": "/climate/baselines/openSky/sunrise.png",
+      "phase": 0.75,
+      "profile": "openSky",
+      "runtimeCoordinatorCount": 1,
+      "runtimeVerified": true,
+      "time": "sunrise"
+    },
+    {
+      "authoredHash": "777d51047c40a98409c369c0cfb51ac51fdaf50d31211aba92e0a901f3446e2c",
+      "path": "/climate/baselines/lowMist/day.png",
+      "phase": 0,
+      "profile": "lowMist",
+      "runtimeCoordinatorCount": 1,
+      "runtimeVerified": true,
+      "time": "day"
+    },
+    {
+      "authoredHash": "5add863ec91215f204e3908da46c59c91cbad77b5fdb270b6ef4ff520ae83141",
+      "path": "/climate/baselines/lowMist/sunset.png",
+      "phase": 0.25,
+      "profile": "lowMist",
+      "runtimeCoordinatorCount": 1,
+      "runtimeVerified": true,
+      "time": "sunset"
+    },
+    {
+      "authoredHash": "cc99465fef0d2f835aa683267ff4d03c540e8862b0b799c1dcf78705112bc1dc",
+      "path": "/climate/baselines/lowMist/night.png",
+      "phase": 0.5,
+      "profile": "lowMist",
+      "runtimeCoordinatorCount": 1,
+      "runtimeVerified": true,
+      "time": "night"
+    },
+    {
+      "authoredHash": "e57d00628c80636e03b2cdcb780e970354cc135fe0ade03241f4f72549c56115",
+      "path": "/climate/baselines/lowMist/sunrise.png",
+      "phase": 0.75,
+      "profile": "lowMist",
+      "runtimeCoordinatorCount": 1,
+      "runtimeVerified": true,
+      "time": "sunrise"
+    },
+    {
+      "authoredHash": "765befaf07fbecc5f60937aaaeec72a0e102b63f78aeb316e342643f9ff6450d",
+      "path": "/climate/baselines/closedSky/day.png",
+      "phase": 0,
+      "profile": "closedSky",
+      "runtimeCoordinatorCount": 1,
+      "runtimeVerified": true,
+      "time": "day"
+    },
+    {
+      "authoredHash": "69669474a2c081f296afcbc2bac9297953469845d31ae6cc15e6487135c92763",
+      "path": "/climate/baselines/closedSky/sunset.png",
+      "phase": 0.25,
+      "profile": "closedSky",
+      "runtimeCoordinatorCount": 1,
+      "runtimeVerified": true,
+      "time": "sunset"
+    },
+    {
+      "authoredHash": "be3be21727e93f805584c23be6fbe02423e3975c950489cb6c04dd1b17f89a81",
+      "path": "/climate/baselines/closedSky/night.png",
+      "phase": 0.5,
+      "profile": "closedSky",
+      "runtimeCoordinatorCount": 1,
+      "runtimeVerified": true,
+      "time": "night"
+    },
+    {
+      "authoredHash": "5cb92d80ec76471671ed93aa77148ffe08ba4abb1a7795f0e43e0210c27594c9",
+      "path": "/climate/baselines/closedSky/sunrise.png",
+      "phase": 0.75,
+      "profile": "closedSky",
+      "runtimeCoordinatorCount": 1,
+      "runtimeVerified": true,
+      "time": "sunrise"
+    },
+    {
+      "authoredHash": "50874c26f4232efb871e0b3997f59b533ce305a76aa0bf9f9a5f2d45997ca1ef",
+      "path": "/climate/baselines/softDrizzle/day.png",
+      "phase": 0,
+      "profile": "softDrizzle",
+      "runtimeCoordinatorCount": 1,
+      "runtimeVerified": true,
+      "time": "day"
+    },
+    {
+      "authoredHash": "77ddef23211dde3e4fd07d43eb8de8760ebbe4771aa0b6132f95938279bd8208",
+      "path": "/climate/baselines/softDrizzle/sunset.png",
+      "phase": 0.25,
+      "profile": "softDrizzle",
+      "runtimeCoordinatorCount": 1,
+      "runtimeVerified": true,
+      "time": "sunset"
+    },
+    {
+      "authoredHash": "941a26a1e1463a6d554d714573c9af0fb0f23867e045a0bf6542330e03ea6842",
+      "path": "/climate/baselines/softDrizzle/night.png",
+      "phase": 0.5,
+      "profile": "softDrizzle",
+      "runtimeCoordinatorCount": 1,
+      "runtimeVerified": true,
+      "time": "night"
+    },
+    {
+      "authoredHash": "d3b1daf92178a63649c9d874be4a7741dff7392e4c7975a2f81b0bad0de3349e",
+      "path": "/climate/baselines/softDrizzle/sunrise.png",
+      "phase": 0.75,
+      "profile": "softDrizzle",
+      "runtimeCoordinatorCount": 1,
+      "runtimeVerified": true,
+      "time": "sunrise"
+    },
+    {
+      "authoredHash": "55609765ad965d9dec37f2e86681d177a74ce402b354f4af0307ad41777433b8",
+      "path": "/climate/baselines/steadyShower/day.png",
+      "phase": 0,
+      "profile": "steadyShower",
+      "runtimeCoordinatorCount": 1,
+      "runtimeVerified": true,
+      "time": "day"
+    },
+    {
+      "authoredHash": "a8728ff171f99b9128266554053afdd70c7461b8a2c8a665589e55961552e13c",
+      "path": "/climate/baselines/steadyShower/sunset.png",
+      "phase": 0.25,
+      "profile": "steadyShower",
+      "runtimeCoordinatorCount": 1,
+      "runtimeVerified": true,
+      "time": "sunset"
+    },
+    {
+      "authoredHash": "cd00b7dc7986d5711c8a67667f74acc6eaa55ac32e3bed4d156ab93fa4f3b3fb",
+      "path": "/climate/baselines/steadyShower/night.png",
+      "phase": 0.5,
+      "profile": "steadyShower",
+      "runtimeCoordinatorCount": 1,
+      "runtimeVerified": true,
+      "time": "night"
+    },
+    {
+      "authoredHash": "dbd755e07f6d3b260d113cfc3537eb6a79d3dc5ed67b86a6ebe4ac5a2ba51eda",
+      "path": "/climate/baselines/steadyShower/sunrise.png",
+      "phase": 0.75,
+      "profile": "steadyShower",
+      "runtimeCoordinatorCount": 1,
+      "runtimeVerified": true,
+      "time": "sunrise"
+    },
+    {
+      "authoredHash": "047275e4adad300590517b76fd057708ea494004962ec572f0be886a38919d35",
+      "path": "/climate/baselines/deepDownpour/day.png",
+      "phase": 0,
+      "profile": "deepDownpour",
+      "runtimeCoordinatorCount": 1,
+      "runtimeVerified": true,
+      "time": "day"
+    },
+    {
+      "authoredHash": "4aad44333dba7de0e29517e8a63041997ce9932f9c68cbd672a1d0f09d7b7282",
+      "path": "/climate/baselines/deepDownpour/sunset.png",
+      "phase": 0.25,
+      "profile": "deepDownpour",
+      "runtimeCoordinatorCount": 1,
+      "runtimeVerified": true,
+      "time": "sunset"
+    },
+    {
+      "authoredHash": "93e350d90c31758d9942439130ee39ef7fb90586e5ad9cbd75c2908034c91139",
+      "path": "/climate/baselines/deepDownpour/night.png",
+      "phase": 0.5,
+      "profile": "deepDownpour",
+      "runtimeCoordinatorCount": 1,
+      "runtimeVerified": true,
+      "time": "night"
+    },
+    {
+      "authoredHash": "3fb8c65fa3a0b3b530a2db54dfa5a66c5b5783c4b89033b72310a552b89c047f",
+      "path": "/climate/baselines/deepDownpour/sunrise.png",
+      "phase": 0.75,
+      "profile": "deepDownpour",
+      "runtimeCoordinatorCount": 1,
+      "runtimeVerified": true,
+      "time": "sunrise"
+    },
+    {
+      "authoredHash": "4f231083e0aee85dc516db6b242777b8e54dd073907731dd17b68005bb2b6ea1",
+      "path": "/climate/baselines/sparseFlurry/day.png",
+      "phase": 0,
+      "profile": "sparseFlurry",
+      "runtimeCoordinatorCount": 1,
+      "runtimeVerified": true,
+      "time": "day"
+    },
+    {
+      "authoredHash": "f23a49a1feff7401d2c668b56f2df6f03970be37dd49349e2e22da0d36db2132",
+      "path": "/climate/baselines/sparseFlurry/sunset.png",
+      "phase": 0.25,
+      "profile": "sparseFlurry",
+      "runtimeCoordinatorCount": 1,
+      "runtimeVerified": true,
+      "time": "sunset"
+    },
+    {
+      "authoredHash": "6309cbaf3becd253941c357cc9af82d0b59c3d7ae032eb71139f184fa594119b",
+      "path": "/climate/baselines/sparseFlurry/night.png",
+      "phase": 0.5,
+      "profile": "sparseFlurry",
+      "runtimeCoordinatorCount": 1,
+      "runtimeVerified": true,
+      "time": "night"
+    },
+    {
+      "authoredHash": "f9778264d228f680a39162ab1062960b7fd3337f29b067153f9ab113bad1d342",
+      "path": "/climate/baselines/sparseFlurry/sunrise.png",
+      "phase": 0.75,
+      "profile": "sparseFlurry",
+      "runtimeCoordinatorCount": 1,
+      "runtimeVerified": true,
+      "time": "sunrise"
+    },
+    {
+      "authoredHash": "ae8fdfa41e43d65de77195fee375ce0a292acf7695f9ece3c3d8a2792ba35db9",
+      "path": "/climate/baselines/steadyFlurry/day.png",
+      "phase": 0,
+      "profile": "steadyFlurry",
+      "runtimeCoordinatorCount": 1,
+      "runtimeVerified": true,
+      "time": "day"
+    },
+    {
+      "authoredHash": "374d5b1be854333f7a952144c203623adebedf9f628ffcbb177cc8256f659ac5",
+      "path": "/climate/baselines/steadyFlurry/sunset.png",
+      "phase": 0.25,
+      "profile": "steadyFlurry",
+      "runtimeCoordinatorCount": 1,
+      "runtimeVerified": true,
+      "time": "sunset"
+    },
+    {
+      "authoredHash": "12867daab9c598aaa3bf654ab4b3fc233c6aee282db0cd8a389a031d999e2bbd",
+      "path": "/climate/baselines/steadyFlurry/night.png",
+      "phase": 0.5,
+      "profile": "steadyFlurry",
+      "runtimeCoordinatorCount": 1,
+      "runtimeVerified": true,
+      "time": "night"
+    },
+    {
+      "authoredHash": "1419e5528cfb1da98368e19a45404dfe92a78b75c608bafb913c22351d4b268f",
+      "path": "/climate/baselines/steadyFlurry/sunrise.png",
+      "phase": 0.75,
+      "profile": "steadyFlurry",
+      "runtimeCoordinatorCount": 1,
+      "runtimeVerified": true,
+      "time": "sunrise"
+    },
+    {
+      "authoredHash": "77643dda840eaa8a429ec6f5ddc5252b058cee5368290c285147fa503ac52ea9",
+      "path": "/climate/baselines/whiteout/day.png",
+      "phase": 0,
+      "profile": "whiteout",
+      "runtimeCoordinatorCount": 1,
+      "runtimeVerified": true,
+      "time": "day"
+    },
+    {
+      "authoredHash": "56e2c27df18cbad89ba2350d6bc89409325de529de08a9e7db36f45581165ce0",
+      "path": "/climate/baselines/whiteout/sunset.png",
+      "phase": 0.25,
+      "profile": "whiteout",
+      "runtimeCoordinatorCount": 1,
+      "runtimeVerified": true,
+      "time": "sunset"
+    },
+    {
+      "authoredHash": "30e88bd7e280b4d9f402ba78b73fa3df7d8f2340825efdcc6210ae74327efbe2",
+      "path": "/climate/baselines/whiteout/night.png",
+      "phase": 0.5,
+      "profile": "whiteout",
+      "runtimeCoordinatorCount": 1,
+      "runtimeVerified": true,
+      "time": "night"
+    },
+    {
+      "authoredHash": "cbea20ef50416d686e0dc14bcba4ab4a230409ca12abe48f6cc0210bb9017f92",
+      "path": "/climate/baselines/whiteout/sunrise.png",
+      "phase": 0.75,
+      "profile": "whiteout",
+      "runtimeCoordinatorCount": 1,
+      "runtimeVerified": true,
+      "time": "sunrise"
+    },
+    {
+      "authoredHash": "28333e2b82c05266833442958c011e472c52bd9aaebd9b3c44ab5c8d4ed51a36",
+      "path": "/climate/baselines/farThunder/day.png",
+      "phase": 0,
+      "profile": "farThunder",
+      "runtimeCoordinatorCount": 1,
+      "runtimeVerified": true,
+      "time": "day"
+    },
+    {
+      "authoredHash": "480cf9a263eb34deabd73c3f2e695c7e53132f2ddef3d8b108d9e47e1b7e9e7d",
+      "path": "/climate/baselines/farThunder/sunset.png",
+      "phase": 0.25,
+      "profile": "farThunder",
+      "runtimeCoordinatorCount": 1,
+      "runtimeVerified": true,
+      "time": "sunset"
+    },
+    {
+      "authoredHash": "f22aa26d8249b8c69f380dcaf99910b4c24c058fa6b2449e647c4edbf5cfdd53",
+      "path": "/climate/baselines/farThunder/night.png",
+      "phase": 0.5,
+      "profile": "farThunder",
+      "runtimeCoordinatorCount": 1,
+      "runtimeVerified": true,
+      "time": "night"
+    },
+    {
+      "authoredHash": "81f9bb364f93a8bfad91dddf78d1a341e8c1708da88bdc2be010ccdbc3313948",
+      "path": "/climate/baselines/farThunder/sunrise.png",
+      "phase": 0.75,
+      "profile": "farThunder",
+      "runtimeCoordinatorCount": 1,
+      "runtimeVerified": true,
+      "time": "sunrise"
+    },
+    {
+      "authoredHash": "ab678cda3e7ccec956311a6d4e5a963bb3d044bcdccf16ce019fc8d0a44409af",
+      "path": "/climate/baselines/closeThunder/day.png",
+      "phase": 0,
+      "profile": "closeThunder",
+      "runtimeCoordinatorCount": 1,
+      "runtimeVerified": true,
+      "time": "day"
+    },
+    {
+      "authoredHash": "e8499586af9def7332b9593dff18f8f39a6ec38f01eee7eb6cd5972fcc31fcdc",
+      "path": "/climate/baselines/closeThunder/sunset.png",
+      "phase": 0.25,
+      "profile": "closeThunder",
+      "runtimeCoordinatorCount": 1,
+      "runtimeVerified": true,
+      "time": "sunset"
+    },
+    {
+      "authoredHash": "425a6738ee3c9810848c1c301a966f34a39c9d527cbfa8f5faca2b3b5a80cdb8",
+      "path": "/climate/baselines/closeThunder/night.png",
+      "phase": 0.5,
+      "profile": "closeThunder",
+      "runtimeCoordinatorCount": 1,
+      "runtimeVerified": true,
+      "time": "night"
+    },
+    {
+      "authoredHash": "69e05cc34df9810acea0ef3e43a1cfba689e8047a50fe4a3c17f3a7f711e28dc",
+      "path": "/climate/baselines/closeThunder/sunrise.png",
+      "phase": 0.75,
+      "profile": "closeThunder",
+      "runtimeCoordinatorCount": 1,
+      "runtimeVerified": true,
+      "time": "sunrise"
+    },
+    {
+      "authoredHash": "ef1e4d82f04c11f8caf7f5e99d015266ecff43ffc64e613ec4719a0e2d873119",
+      "path": "/climate/baselines/causticFront/day.png",
+      "phase": 0,
+      "profile": "causticFront",
+      "runtimeCoordinatorCount": 1,
+      "runtimeVerified": true,
+      "time": "day"
+    },
+    {
+      "authoredHash": "c9b837ff9a05e40775d2caa5fab358a1f88c7ad383bde89a453b72171d3d2dcf",
+      "path": "/climate/baselines/causticFront/sunset.png",
+      "phase": 0.25,
+      "profile": "causticFront",
+      "runtimeCoordinatorCount": 1,
+      "runtimeVerified": true,
+      "time": "sunset"
+    },
+    {
+      "authoredHash": "97d63412f42651108d8959575e992d3169ba3574f34dfaf6fd0caca23d0aa582",
+      "path": "/climate/baselines/causticFront/night.png",
+      "phase": 0.5,
+      "profile": "causticFront",
+      "runtimeCoordinatorCount": 1,
+      "runtimeVerified": true,
+      "time": "night"
+    },
+    {
+      "authoredHash": "82be23698aad4dd69013d61319841e2d8b0f1270e146d9626d2b0772e1ae56c0",
+      "path": "/climate/baselines/causticFront/sunrise.png",
+      "phase": 0.75,
+      "profile": "causticFront",
+      "runtimeCoordinatorCount": 1,
+      "runtimeVerified": true,
+      "time": "sunrise"
+    },
+    {
+      "authoredHash": "ce562cddb4bb7c08b4b5083c7f1a187c39e8b515688610477e57df49e09a1f5c",
+      "path": "/climate/baselines/crimsonVeil/day.png",
+      "phase": 0,
+      "profile": "crimsonVeil",
+      "runtimeCoordinatorCount": 1,
+      "runtimeVerified": true,
+      "time": "day"
+    },
+    {
+      "authoredHash": "132518b4d22e8c6e82798de41136d3b12fef783d57b28e7378b0b5b17e634e10",
+      "path": "/climate/baselines/crimsonVeil/sunset.png",
+      "phase": 0.25,
+      "profile": "crimsonVeil",
+      "runtimeCoordinatorCount": 1,
+      "runtimeVerified": true,
+      "time": "sunset"
+    },
+    {
+      "authoredHash": "dfa387b0f998141ec7da70d176adaa716f6dfeb0a7895feb4ae7c038d8ad18b8",
+      "path": "/climate/baselines/crimsonVeil/night.png",
+      "phase": 0.5,
+      "profile": "crimsonVeil",
+      "runtimeCoordinatorCount": 1,
+      "runtimeVerified": true,
+      "time": "night"
+    },
+    {
+      "authoredHash": "ca726f659a6d26b14d392c54097c152912b34a6d61b0abee589d4f7173dbaebf",
+      "path": "/climate/baselines/crimsonVeil/sunrise.png",
+      "phase": 0.75,
+      "profile": "crimsonVeil",
+      "runtimeCoordinatorCount": 1,
+      "runtimeVerified": true,
+      "time": "sunrise"
+    },
+    {
+      "authoredHash": "e0640804ef8368bb8cfda75cefc5c53ff1a5bc77dd9a7461384b748913f725a9",
+      "path": "/climate/baselines/ionSquall/day.png",
+      "phase": 0,
+      "profile": "ionSquall",
+      "runtimeCoordinatorCount": 1,
+      "runtimeVerified": true,
+      "time": "day"
+    },
+    {
+      "authoredHash": "c02337287e7be75a2cf8ef3c15649f11955c36f02c593951ba200edb835f1915",
+      "path": "/climate/baselines/ionSquall/sunset.png",
+      "phase": 0.25,
+      "profile": "ionSquall",
+      "runtimeCoordinatorCount": 1,
+      "runtimeVerified": true,
+      "time": "sunset"
+    },
+    {
+      "authoredHash": "83ed75615f5099d3e5a9c8c74fa5a73d8cf0d833c6500bf0a864fd43fd74e971",
+      "path": "/climate/baselines/ionSquall/night.png",
+      "phase": 0.5,
+      "profile": "ionSquall",
+      "runtimeCoordinatorCount": 1,
+      "runtimeVerified": true,
+      "time": "night"
+    },
+    {
+      "authoredHash": "14beb758587bf13e7e3b0f1877bd1d028a336bf7371ac0227cb365d2c62d3128",
+      "path": "/climate/baselines/ionSquall/sunrise.png",
+      "phase": 0.75,
+      "profile": "ionSquall",
+      "runtimeCoordinatorCount": 1,
+      "runtimeVerified": true,
+      "time": "sunrise"
+    },
+    {
+      "authoredHash": "08184c2e38b88e62e162d1f081e2810971cd7dd8816de30a55c9005c309a1b12",
+      "path": "/climate/baselines/ashFall/day.png",
+      "phase": 0,
+      "profile": "ashFall",
+      "runtimeCoordinatorCount": 1,
+      "runtimeVerified": true,
+      "time": "day"
+    },
+    {
+      "authoredHash": "4ea8576a5373180270a9533ec04e2d6fcfcfc49d01e9bf816d9acf7540145719",
+      "path": "/climate/baselines/ashFall/sunset.png",
+      "phase": 0.25,
+      "profile": "ashFall",
+      "runtimeCoordinatorCount": 1,
+      "runtimeVerified": true,
+      "time": "sunset"
+    },
+    {
+      "authoredHash": "35ad25dc30949dc52266d9358c658469e83b7431c6d6bc8fdba514d2a4697f9b",
+      "path": "/climate/baselines/ashFall/night.png",
+      "phase": 0.5,
+      "profile": "ashFall",
+      "runtimeCoordinatorCount": 1,
+      "runtimeVerified": true,
+      "time": "night"
+    },
+    {
+      "authoredHash": "99e947bcb191a6f0a4791f49bed609845f3ab37c62347919d225a40a3f726fc3",
+      "path": "/climate/baselines/ashFall/sunrise.png",
+      "phase": 0.75,
+      "profile": "ashFall",
+      "runtimeCoordinatorCount": 1,
+      "runtimeVerified": true,
+      "time": "sunrise"
+    }
+  ],
+  "conditionSet": "call_me_sensei",
+  "entryCount": 60,
+  "height": 720,
+  "metadataFieldChecks": 720,
+  "profiles": [
+    "openSky",
+    "lowMist",
+    "closedSky",
+    "softDrizzle",
+    "steadyShower",
+    "deepDownpour",
+    "sparseFlurry",
+    "steadyFlurry",
+    "whiteout",
+    "farThunder",
+    "closeThunder",
+    "causticFront",
+    "crimsonVeil",
+    "ionSquall",
+    "ashFall"
+  ],
+  "schema": "toonlab.climate-authored-baseline-matrix",
+  "times": [
+    "day",
+    "sunset",
+    "night",
+    "sunrise"
+  ],
+  "width": 1280
+}

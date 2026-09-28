@@ -1,0 +1,3 @@
+/* Flower Lab deliberately shares Tree Lab's production workspace visual
+ * system. Its distinction is authoring scope, not a new interface skin. */
+@import '../../tree-lab/ui/app.css';

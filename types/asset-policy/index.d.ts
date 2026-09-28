@@ -1,0 +1,20 @@
+// Source inference fallback: public names retained with permissive signatures.
+export const APPROVED_CATALOG_SPDX_LICENSES: any;
+export const ASSET_GAP_DOCUMENT_TYPE: any;
+export const ASSET_GAP_SCHEMA_VERSION: any;
+export const ASSET_POLICY_MODES: any;
+export const ASSET_SOURCE_CLASSES: any;
+export const ASSET_SOURCING_POLICY_DOCUMENT_TYPE: any;
+export const ASSET_SOURCING_POLICY_SCHEMA_VERSION: any;
+export const CALL_ME_SENSEI_STRICT_ASSET_POLICY: any;
+export const CATALOG_LICENSE_UNSPECIFIED: any;
+export const DEFAULT_ASSET_SOURCE_ORDER: any;
+export const REVIEWED_CATALOG_LICENSES: any;
+export function assertCatalogLicenseRelease(...args: any[]): any;
+export function createAssetGapRecord(...args: any[]): any;
+export function createAssetSourcingPolicy(...args: any[]): any;
+export function describeCatalogLicense(...args: any[]): any;
+export function evaluateAssetCandidate(...args: any[]): any;
+export function renderAssetGapReport(...args: any[]): any;
+export function resolveCatalogLicense(...args: any[]): any;
+export function validateAssetSourcingPolicy(...args: any[]): any;

@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M0 0H100V78L78 100H0Z' fill='%23e8332e'/%3E%3Ctext x='50' y='72' font-size='64' font-weight='900' font-family='Hiragino Sans, Yu Gothic, Noto Sans JP, sans-serif' fill='white' text-anchor='middle'%3E%E3%83%88%3C/text%3E%3C/svg%3E" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Playground — ToonLab</title>
+    <script>
+      // The old water/sample URL now resolves to the independently authored
+      // Scene Three reference. Preserve developer-selected character, renderer,
+      // quality, style bundle, and review parameters while removing retired
+      // playground routing flags.
+      (function () {
+        var params = new URLSearchParams(window.location.search);
+        if (params.get('sample') !== 'walkable' && params.get('scene') !== 'water') return;
+        params.delete('scene');
+        params.delete('sample');
+        window.location.replace('/examples/walkable-reference/?' + params.toString() + window.location.hash);
+      })();
+    </script>
+    <link rel="stylesheet" href="/labs/shared/hud.css" />
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 100%; height: 100%; overflow: hidden; background: #1a1a1a; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; color: #fff; }
+      #app { width: 100vw; height: 100vh; }
+      .controls-hud {
+        position: fixed;
+        bottom: 16px;
+        left: 16px;
+        z-index: 11;
+        padding: 10px 14px;
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        border-radius: 8px;
+        background: rgba(15, 23, 32, 0.72);
+        backdrop-filter: blur(8px);
+        color: #cfe9f7;
+        font-size: 12px;
+        line-height: 1.7;
+        pointer-events: none;
+      }
+      .controls-hud-title { margin-bottom: 2px; color: #fff; font-weight: 700; }
+      .controls-hud kbd {
+        display: inline-block;
+        min-width: 18px;
+        margin-right: 6px;
+        padding: 0 6px;
+        border: 1px solid rgba(255, 255, 255, 0.28);
+        border-bottom-width: 2px;
+        border-radius: 4px;
+        background: rgba(255, 255, 255, 0.08);
+        color: #fff;
+        font-family: 'SF Mono', 'Menlo', monospace;
+        font-size: 11px;
+        text-align: center;
+      }
+      .perf-hud {
+        position: fixed;
+        top: 16px;
+        right: 16px;
+        z-index: 12;
+        min-width: 148px;
+        padding: 8px 12px;
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        border-radius: 8px;
+        background: rgba(15, 23, 32, 0.74);
+        backdrop-filter: blur(8px);
+        color: #cfe9f7;
+        font-family: 'SF Mono', 'Menlo', 'Consolas', monospace;
+        font-size: 11px;
+        line-height: 1.55;
+        pointer-events: none;
+        white-space: nowrap;
+      }
+      .perf-hud b { color: #7ff0b2; font-size: 20px; font-weight: 700; }
+      .perf-hud .perf-hud-note { display: inline-block; max-width: 200px; color: #ffd28a; white-space: normal; }
+      .water-hud {
+        position: fixed;
+        top: 16px;
+        left: 16px;
+        z-index: 10;
+        width: min(360px, calc(100vw - 32px));
+        max-height: calc(100vh - 32px);
+        overflow: auto;
+        padding: 10px;
+        border: 1px solid rgba(255, 255, 255, 0.16);
+        border-radius: 8px;
+        background: rgba(18, 28, 32, 0.72);
+        backdrop-filter: blur(8px);
+      }
+      .water-hud-title { margin-bottom: 8px; color: rgba(255, 255, 255, 0.9); font-size: 14px; font-weight: 750; }
+      .water-hud-grid { display: grid; grid-template-columns: 70px minmax(104px, 1fr) 82px; gap: 8px; align-items: center; }
+      .water-hud label,
+      .water-hud-label { color: rgba(255, 255, 255, 0.78); font-size: 12px; font-weight: 650; }
+      .water-hud-package { min-width: 0; color: rgba(255, 255, 255, 0.9); font-size: 12px; font-weight: 650; line-height: 1.2; overflow-wrap: anywhere; }
+      .water-hud output { color: rgba(255, 255, 255, 0.84); font-size: 12px; font-variant-numeric: tabular-nums; text-align: right; }
+      .water-hud input[type="range"] { width: 100%; accent-color: #7fd6e8; }
+      .water-hud select,
+      .water-drop-buttons { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; }
+      .water-hud select { min-width: 0; text-transform: capitalize; }
+      .style-inspector { margin-top: 10px; padding-top: 10px; border-top: 1px solid rgba(255, 255, 255, 0.14); }
+      .style-inspector-heading { display: flex; justify-content: space-between; gap: 12px; color: rgba(255, 255, 255, 0.92); font-size: 12px; }
+      .style-inspector-heading span { color: rgba(255, 255, 255, 0.56); font-size: 11px; font-variant-numeric: tabular-nums; }
+      .style-inspector-domains { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 10px; margin-top: 8px; }
+      .style-inspector-toggle { display: grid; grid-template-columns: 16px minmax(0, 1fr) auto; align-items: center; gap: 5px; min-width: 0; cursor: pointer; }
+      .style-inspector-toggle input { width: 14px; height: 14px; accent-color: #7ff0b2; }
+      .style-inspector-toggle span { overflow: hidden; color: rgba(255, 255, 255, 0.84); font-size: 11px; text-overflow: ellipsis; white-space: nowrap; }
+      .style-inspector-toggle small { color: rgba(255, 255, 255, 0.45); font-size: 10px; }
+      .style-inspector-note, .style-inspector-empty { display: block; margin-top: 7px; color: rgba(207, 233, 247, 0.62); font-size: 10px; line-height: 1.35; }
+      .style-inspector-error { margin-top: 7px; color: #ffb4ab; font-size: 10px; line-height: 1.35; }
+      .water-drop-button,
+      .water-sinker-button {
+        width: 100%;
+        min-height: 28px;
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        border-radius: 6px;
+        background: rgba(255, 255, 255, 0.1);
+        color: #fff;
+        cursor: pointer;
+        font: inherit;
+        font-size: 12px;
+        font-weight: 700;
+      }
+      .water-sinker-button { border-color: rgba(154, 203, 255, 0.35); background: rgba(74, 101, 128, 0.56); }
+      @media (max-width: 600px) {
+        .controls-hud { right: 12px; bottom: 12px; left: 12px; font-size: 11px; }
+        .perf-hud { top: 12px; right: 12px; }
+        .water-hud { top: 12px; left: 12px; width: min(360px, calc(100vw - 24px)); padding: 8px; }
+        .water-hud-grid { grid-template-columns: 58px minmax(80px, 1fr) 72px; gap: 7px; }
+      }
+    </style>
+  </head>
+  <body data-hud-tab="character">
+    <div id="app"></div>
+    <div id="info">
+      <h1>Playground</h1>
+      <span id="mode"></span>
+      <div class="hud-control scene-hub-control">
+        <label for="sceneHub" title="Switches between built-in demo scenes.">Scene</label>
+        <!-- Options are generated from SCENE_HUB_OPTIONS (sceneHub.js). -->
+        <select id="sceneHub"></select>
+        <output id="sceneHubValue" for="sceneHub">Playground</output>
+        <button id="resetLabButton" type="button" title="Clears this lab's saved state (model, presets, debug views) and reloads with defaults.">Reset Lab</button>
+      </div>
+      <div id="modelLoadError" class="model-load-error" hidden></div>
+      <div class="hud-tabs" role="tablist" aria-label="HUD sections">
+        <button id="hudTabCharacter" class="hud-tab" type="button" role="tab" aria-selected="true" data-hud-tab-target="character">Character</button>
+        <button id="hudTabEnvironment" class="hud-tab" type="button" role="tab" aria-selected="false" data-hud-tab-target="environment">Environment</button>
+        <button id="hudTabDemo" class="hud-tab" type="button" role="tab" aria-selected="false" data-hud-tab-target="demo">Demo Settings</button>
+      </div>
+      <div id="sceneControls" class="scene-controls">
+        <div class="hud-tab-panel" data-hud-tab-panel="character">
+        <div class="hud-control">
+          <label for="characterModel" title="Switches the character model (reloads the scene with ?model=).">Model</label>
+          <select id="characterModel"></select>
+          <output id="characterModelValue" for="characterModel">Mannequin</output>
+        </div>
+        <div class="hud-control model-url-control">
+          <label for="modelUrlInput" title="Load any model by path or hosted URL (GLB/VRM/PMX/FBX/OBJ). Remote hosts must send CORS headers.">Model URL</label>
+          <input id="modelUrlInput" type="text" placeholder="https://… or path/to/model.glb" spellcheck="false" />
+          <button id="modelUrlApply" type="button">Load</button>
+        </div>
+        <div class="hud-control">
+          <label for="toonPreset" title="Selects the named toon settings preset used when converting source materials.">Preset</label>
+          <select id="toonPreset"></select>
+          <output id="toonPresetValue" for="toonPreset">Default</output>
+        </div>
+        <div class="hud-control">
+          <label for="toonDebug" title="Shows one shader channel instead of final color for inspection.">Debug</label>
+          <select id="toonDebug">
+            <option value="off">Off</option>
+          </select>
+          <output id="toonDebugValue" for="toonDebug">Off</output>
+        </div>
+        <details id="toonSettingsPanel" class="toon-settings-panel">
+          <summary title="Edit toon shader settings through the same metadata used by the public preset API.">Toon Settings</summary>
+          <div class="toon-settings-body">
+            <div id="toonSettingGroups" class="toon-setting-groups"></div>
+          </div>
+        </details>
+        </div>
+
+        <div class="hud-tab-panel" data-hud-tab-panel="environment">
+        <details id="environmentSettingsPanel" class="toon-settings-panel environment-settings-panel" open>
+          <summary title="Edit environment shader features and material-lighting parameters.">Environment Shader</summary>
+          <div class="toon-settings-body">
+            <output id="environmentSettingsStatus" class="toon-preset-status">Auto material defaults</output>
+            <div id="environmentSettingGroups" class="toon-setting-groups"></div>
+          </div>
+        </details>
+        </div>
+
+        <div class="hud-tab-panel" data-hud-tab-panel="demo">
+        <div class="hud-actions">
+          <button id="animationToggle" type="button" disabled>Animation Loading</button>
+          <button id="ceilingLightToggle" type="button" disabled>Ceiling Light Off</button>
+        </div>
+        <div class="hud-control">
+          <label for="ceilingLightStrength">Ceiling</label>
+          <input id="ceilingLightStrength" type="range" min="1" max="8" step="0.05" value="1" disabled />
+          <output id="ceilingLightStrengthValue" for="ceilingLightStrength">1.00x</output>
+        </div>
+        <div class="hud-control">
+          <label for="timeOfDay">Time</label>
+          <input id="timeOfDay" type="range" min="0" max="24" step="0.25" value="14" disabled />
+          <output id="timeOfDayValue" for="timeOfDay">14:00</output>
+        </div>
+        <div class="hud-control">
+          <label for="roomYaw">Room Dir</label>
+          <input id="roomYaw" type="range" min="0" max="360" step="1" value="0" disabled />
+          <output id="roomYawValue" for="roomYaw">0 deg</output>
+        </div>
+        </div>
+      </div>
+    </div>
+    <script type="module" src="../labs/shared/entry.js"></script>
+  </body>
+</html>

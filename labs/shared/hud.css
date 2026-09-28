@@ -1,0 +1,246 @@
+/* Shared lab HUD chrome — the single source of truth for the #info panel,
+   .hud-control rows, tab strip, and settings-group styling used by every lab
+   page. Extracted verbatim from the Shader Lab so ports look identical;
+   page-specific styles stay in each page's own <style>. */
+
+#info {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  background: rgba(0, 0, 0, 0.6);
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  line-height: 1.4;
+  pointer-events: auto;
+  backdrop-filter: blur(8px);
+  width: min(500px, calc(100vw - 32px));
+  max-height: calc(100vh - 32px);
+  overflow: auto;
+}
+#info h1 {
+  font-size: 16px;
+  margin-bottom: 4px;
+}
+#info span {
+  opacity: 0.7;
+}
+body[data-hide-hud="true"] #info {
+  display: none;
+}
+body[data-scene="water"] #info,
+body[data-scene="rock"] #info {
+  display: none;
+}
+.hud-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+}
+.hud-tabs {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 6px;
+  margin-top: 10px;
+}
+.hud-tab {
+  min-height: 30px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.07);
+  color: rgba(255, 255, 255, 0.72);
+  font: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.hud-tab[aria-selected="true"] {
+  border-color: rgba(143, 198, 255, 0.72);
+  background: rgba(143, 198, 255, 0.16);
+  color: #fff;
+}
+.scene-controls {
+  display: block;
+  margin-top: 10px;
+}
+.scene-hub-control {
+  grid-template-columns: 76px minmax(150px, 1fr) 94px;
+  margin-top: 8px;
+}
+.hud-tab-panel {
+  display: none;
+  gap: 7px;
+}
+body[data-hud-tab="character"] [data-hud-tab-panel="character"],
+body[data-hud-tab="environment"] [data-hud-tab-panel="environment"],
+body[data-hud-tab="demo"] [data-hud-tab-panel="demo"] {
+  display: grid;
+}
+.hud-control {
+  display: grid;
+  grid-template-columns: 76px minmax(120px, 1fr) 54px;
+  align-items: center;
+  gap: 9px;
+}
+#resetLabButton,
+.model-url-control button {
+  min-height: 26px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  font: inherit;
+  font-size: 11px;
+  font-weight: 650;
+  padding: 0 8px;
+  cursor: pointer;
+}
+.model-url-control input {
+  min-width: 0;
+}
+.model-load-error {
+  margin: 6px 0;
+  padding: 7px 9px;
+  border: 1px solid rgba(255, 122, 122, 0.55);
+  border-radius: 6px;
+  background: rgba(122, 28, 28, 0.5);
+  color: #ffd9d9;
+  font-size: 12px;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+.hud-control label {
+  color: rgba(255, 255, 255, 0.78);
+  font-size: 12px;
+  font-weight: 650;
+}
+.hud-control output {
+  color: rgba(255, 255, 255, 0.82);
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+.hud-control input[type="range"] {
+  width: 100%;
+  accent-color: #8fc6ff;
+}
+.hud-control input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  accent-color: #8fc6ff;
+}
+.hud-control select {
+  width: 100%;
+  min-width: 0;
+  min-height: 28px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  font: inherit;
+  font-size: 12px;
+}
+.hud-control input[type="text"],
+.hud-control input[type="number"] {
+  width: 100%;
+  min-width: 0;
+  min-height: 28px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 6px;
+  padding: 0 8px;
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  font: inherit;
+  font-size: 12px;
+}
+.hud-control input[type="color"] {
+  width: 44px;
+  min-height: 28px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.08);
+  cursor: pointer;
+}
+.hud-control input[type="range"]:disabled,
+.hud-control input[type="checkbox"]:disabled,
+.hud-control select:disabled,
+.hud-control input[type="text"]:disabled,
+.hud-control input[type="number"]:disabled,
+.hud-control input[type="color"]:disabled {
+  opacity: 0.4;
+}
+.toon-settings-panel,
+.toon-setting-group {
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 7px;
+  background: rgba(255, 255, 255, 0.045);
+}
+.toon-settings-panel {
+  margin-top: 2px;
+}
+.toon-settings-panel > summary,
+.toon-setting-group > summary {
+  cursor: pointer;
+  list-style: none;
+  font-size: 12px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.86);
+}
+.toon-settings-panel > summary {
+  padding: 8px 10px;
+}
+.toon-setting-group > summary {
+  padding: 7px 8px;
+}
+.toon-settings-panel > summary::-webkit-details-marker,
+.toon-setting-group > summary::-webkit-details-marker {
+  display: none;
+}
+.toon-settings-body {
+  display: grid;
+  gap: 8px;
+  padding: 0 8px 8px;
+}
+.toon-setting-groups {
+  display: grid;
+  gap: 7px;
+}
+.toon-setting-fields {
+  display: grid;
+  gap: 6px;
+  padding: 0 8px 8px;
+}
+.hud-control:has(> :nth-child(2):last-child),
+.hud-control:has(> :last-child:empty) {
+  grid-template-columns: 76px minmax(120px, 1fr);
+}
+.hud-control > :last-child:empty {
+  display: none;
+}
+@media (max-width: 600px) {
+  #info {
+    top: 12px;
+    left: 12px;
+    padding: 8px;
+    width: min(390px, calc(100vw - 24px));
+  }
+  #info h1,
+  #info span {
+    display: none;
+  }
+  .hud-actions {
+    margin-top: 0;
+  }
+  .scene-controls {
+    gap: 5px;
+    margin-top: 8px;
+  }
+  .hud-control {
+    grid-template-columns: 58px minmax(90px, 1fr) 46px;
+    gap: 7px;
+  }
+  .hud-control:has(> :nth-child(2):last-child),
+  .hud-control:has(> :last-child:empty) {
+    grid-template-columns: 58px minmax(90px, 1fr);
+  }
+}

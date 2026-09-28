@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ToonLab MCP material-labeling qualification</title>
+    <style>
+      :root { color-scheme: dark; font-family: Inter, ui-sans-serif, system-ui, sans-serif; }
+      * { box-sizing: border-box; }
+      body { margin: 0; overflow: hidden; background: #b9dcf5; color: #f4f8fb; }
+      canvas { display: block; width: 100vw; height: 100vh; }
+      .title, .summary, .cards { position: fixed; z-index: 2; }
+      .title { left: 24px; top: 20px; }
+      .title h1 { margin: 0; font-size: 20px; }
+      .title p { margin: 5px 0 0; color: #c8d6e5; font-size: 12px; }
+      .summary { right: 20px; top: 20px; padding: 12px 14px; border-radius: 10px; background: #11271fe8; border: 1px solid #71ddaa66; font-size: 12px; line-height: 1.55; }
+      .summary strong { color: #75e2ae; font-size: 18px; }
+      .cards { display: grid; grid-template-columns: repeat(3, minmax(230px, 1fr)); gap: 12px; left: 20px; right: 20px; bottom: 18px; }
+      .card { padding: 11px 13px; border-radius: 10px; background: #12283ae8; border: 1px solid #8dbbd655; box-shadow: 0 12px 30px #10223244; }
+      .card h2 { margin: 0 0 5px; font-size: 13px; }
+      .card p { margin: 2px 0; color: #d4e3ed; font-size: 11px; }
+      .pass { color: #7ee6ae; font-weight: 700; }
+      .assisted { color: #ffd37c; font-weight: 700; }
+      .loading { color: #d4e3ed; }
+      @media (max-width: 800px) { .cards { grid-template-columns: 1fr; } }
+    </style>
+  </head>
+  <body>
+    <div class="title">
+      <h1>MCP asset labeling qualification</h1>
+      <p>Actual CC0 glTF assets · Call Me Sensei bundle · package API only</p>
+    </div>
+    <div class="summary"><strong>6/6</strong> semantics correct<br />5/6 automatic-ready · 3/3 assisted-ready</div>
+    <div class="cards" id="cards"></div>
+    <script type="module" src="./preview.js"></script>
+  </body>
+</html>

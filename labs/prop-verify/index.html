@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Styled-scene verification for generated garden props under the Stillwater Garden rig." />
+  <link rel="icon" href="data:," />
+  <title>Prop Verify — Stillwater Garden rig</title>
+  <style>
+    :root { color-scheme: dark; }
+    html, body { margin: 0; height: 100%; background: #10131a; color: #e8ecf4;
+      font: 13px/1.5 ui-sans-serif, system-ui, -apple-system, sans-serif; }
+    #stage { position: fixed; inset: 0; }
+    canvas { display: block; width: 100%; height: 100%; }
+    #hud { position: fixed; top: 12px; left: 12px; z-index: 5; background: #0d1017cc;
+      border: 1px solid #ffffff1f; border-radius: 8px; padding: 10px 12px; max-width: 380px;
+      backdrop-filter: blur(6px); }
+    #hud b { display: block; font-size: 12px; letter-spacing: .08em; text-transform: uppercase;
+      color: #9fb0c9; margin-bottom: 4px; }
+    #hud code { color: #8fd0a8; }
+    #readout { margin-top: 6px; font-size: 12px; color: #c3ccdb; white-space: pre-wrap; }
+  </style>
+</head>
+<body data-prop-ready="false">
+  <main id="stage" aria-label="Prop verification stage"></main>
+  <div id="hud">
+    <b>Prop verify · Stillwater rig</b>
+    <div>?prop=<code>lantern-yukimi</code>|lantern-kasuga|lantern-oribe|tsukubai|stones|fence</div>
+    <div>?shadowFill=<code>0.35</code> &nbsp; ?roles=<code>on</code>|off</div>
+    <div id="readout">Loading…</div>
+  </div>
+  <script type="module" src="/labs/prop-verify/main.js"></script>
+</body>
+</html>

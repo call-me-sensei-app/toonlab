@@ -1,0 +1,20 @@
+services:
+  postgres:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: toonlab
+      POSTGRES_USER: toonlab
+      POSTGRES_PASSWORD: toonlab
+    ports:
+      - "127.0.0.1:${TOONLAB_POSTGRES_PORT:-55432}:5432"
+    volumes:
+      - toonlab-postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U toonlab -d toonlab"]
+      interval: 2s
+      timeout: 3s
+      retries: 30
+
+volumes:
+  toonlab-postgres:

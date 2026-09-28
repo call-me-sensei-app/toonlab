@@ -1,0 +1,73 @@
+.rs-style-library {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 5px;
+  margin-left: 6px;
+  padding-left: 10px;
+  border-left: 1px solid var(--border-subtle);
+}
+
+.rs-style-library > span {
+  flex: none;
+  color: var(--text-tertiary);
+  font: var(--type-caption);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.rs-style-library .tk-search-select,
+.rs-style-library .tk-search-select .tk-text-field {
+  width: 188px;
+}
+
+.gr-title {
+  min-width: 0;
+}
+
+/* Keep every camera mode visible in the editor viewport at laptop widths.
+   The preview strip remains scrollable as a final fallback, but it should not
+   make Pan or Zoom look absent at the common 1280px review size. */
+@media (max-width: 1400px) {
+  .gr-root + .tk-previewbar {
+    gap: 4px;
+    padding-inline: 4px;
+  }
+
+  .gr-root + .tk-previewbar .tk-previewbar-chip,
+  .gr-root + .tk-previewbar .tk-previewbar-hint,
+  .gr-root + .tk-previewbar .rock-preview-fixture > span {
+    display: none;
+  }
+
+  .gr-root + .tk-previewbar .rock-preview-fixture .tk-select {
+    width: 138px;
+  }
+
+  .gr-root + .tk-previewbar .tk-previewbar-time {
+    gap: 4px;
+    padding-left: 4px;
+  }
+
+  .gr-root + .tk-previewbar .tk-previewbar-time .tk-segmented button {
+    min-width: 34px;
+  }
+}
+
+@media (max-width: 1240px) {
+  .rs-style-library > span,
+  .rs-style-library > .tk-icon-button {
+    display: none;
+  }
+
+  .rs-style-library .tk-search-select,
+  .rs-style-library .tk-search-select .tk-text-field {
+    width: 136px;
+  }
+}
+
+@media (max-width: 980px) {
+  .rs-style-library {
+    display: none;
+  }
+}

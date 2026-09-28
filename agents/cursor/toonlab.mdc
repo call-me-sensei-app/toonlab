@@ -1,0 +1,41 @@
+---
+description: ToonLab developer guidance for Cursor agents
+globs: "**/*"
+alwaysApply: true
+---
+
+# ToonLab
+
+- Treat `node_modules/@call-me-sensei/toonlab/agents/codex/AGENTS.md` as the
+  shared developer guide.
+- Build the requested host game or integrate ToonLab into supplied scenes.
+  For new games, use the game-dev skill and start with movement, collision,
+  one objective and restart. Host-owned gameplay and layout are authorized
+  development work when requested; ToonLab does not generate finished worlds.
+- Prefer package subpath imports such as `@call-me-sensei/toonlab/toon`,
+  `@call-me-sensei/toonlab/water`,
+  `@call-me-sensei/toonlab/vegetation-shaders`,
+  `@call-me-sensei/toonlab/grass-palettes`, and
+  `@call-me-sensei/toonlab/rockgen`;
+  keep root imports lightweight.
+- Use TSL/NodeMaterial patterns. Do not guide developers toward raw GLSL,
+  `ShaderMaterial`, or classic WebGL-only forks for ToonLab features.
+- Treat ToonLab labs, sample assets, screenshots, captures, and generated
+  manifests as examples, not runtime API.
+- Resolve `agents/` references from the installed package root, including
+  when a skill is copied. Use `agents/references/game-lifecycle.md` for update
+  ownership and cleanup, and `agents/skills/` for focused workflows.
+- Material metadata is a blocking modeling deliverable. Every modeled,
+  generated, converted, or imported renderable needs a stable target ID and
+  domain; every material slot needs a stable material ID and semantic role in
+  the versioned ToonLab material contract. A root-only label is incomplete for
+  a multi-material asset. Split incompatible atlas regions or supply an ID
+  mask. Strict mode blocks handoff; advisory mode reports the gap and must not
+  describe incomplete material coverage as bundle-ready.
+- Treat Sky and Cloud as supported focused authoring/runtime systems. Whole
+  terrain/biome/coast/cliff formation remains outside the npm boundary.
+- Before style-aware construction, read the matching `style-presets` skill.
+  Before approving screenshots or reporting a package gap use
+  `visual-verification`. The Claude and Codex copies are byte-identical, so
+  either directory is authoritative.
+- Verify with the consumer app's normal checks.

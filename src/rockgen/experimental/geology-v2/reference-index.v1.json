@@ -1,0 +1,385 @@
+{
+  "schema": "toonlab/rock-geology-reference-index",
+  "version": 1,
+  "status": "repository-only-metadata",
+  "policy": {
+    "externalMediaBundled": false,
+    "fabAssetsDownloaded": false,
+    "fabEntitlementRequiredBeforePrivateAB": true,
+    "aiTrainingOrGenerationUse": false,
+    "userSuppliedMedia": "local checkpoint evidence only; do not package or redistribute"
+  },
+  "references": [
+    {
+      "id": "user-video-modular-mountain",
+      "kind": "user-supplied-video",
+      "path": "/Users/juminoz/Downloads/cmqh6t9yt5cqr07ogm1zz77r2.mp4",
+      "sha256": "dbe2f08a83a43d0b7c219c9e3196685a78a1f9ff8dc6d07892102a955f62e868",
+      "media": { "codec": "h264", "width": 1920, "height": 1080, "framesPerSecond": "30000/1001", "durationSeconds": 12.9129 },
+      "use": "formation-scale silhouette, module assembly, ledge, buttress, crown, and flyover composition reference",
+      "rightsStatus": "user-supplied-local-evidence-only"
+    },
+    {
+      "id": "user-image-wulingyuan-like-pillars",
+      "kind": "user-supplied-image",
+      "path": "/var/folders/m5/24vyz9796jg2tc1wj2p2scr00000gn/T/codex-clipboard-088903b6-4dbd-412e-9063-813e964d3857.png",
+      "sha256": "9ea66e7e4820c2a1e8291440a9c598a30cf6902b480233deb0435f801c0c43cb",
+      "media": { "width": 399, "height": 501 },
+      "use": "visual-composition reference for Wulingyuan-like residual sandstone pillars; locality and lithology are not inferred from the image alone",
+      "rightsStatus": "user-supplied-local-evidence-only"
+    },
+    {
+      "id": "unesco-wulingyuan-quartz-sandstone-pillars",
+      "kind": "intergovernmental-geology-and-landform-page",
+      "url": "https://whc.unesco.org/en/list/640/",
+      "use": "authority for Wulingyuan narrow quartz-sandstone pillar, column, peak, ravine, gorge, bridge, and cave morphology",
+      "reviewTraits": ["more than 3000 narrow quartz sandstone pillars", "many pillars exceed 200 metres", "pillars coexist with ravines, gorges, bridges, caves, and dense vegetation"],
+      "rightsStatus": "factual-reference; page media rights must be checked before reuse"
+    },
+    {
+      "id": "unesco-south-china-karst",
+      "kind": "intergovernmental-geology-and-landform-page",
+      "url": "https://whc.unesco.org/en/list/1248",
+      "use": "authority separating limestone fenglin tower karst, fengcong cone karst, and shilin pinnacle karst from sandstone residual pillars",
+      "reviewTraits": ["Guilin is a reference fenglin tower-karst landscape", "Libo is a reference cone-karst landscape", "carbonate dissolution and drainage context control landform family"],
+      "rightsStatus": "factual-reference; page content is CC-BY-SA IGO 3.0 and media credits require checking"
+    },
+    {
+      "id": "fab-granite-rock-f749",
+      "kind": "fab-listing-metadata",
+      "url": "https://www.fab.com/listings/f749d09f-9309-43cb-ae0d-41c39cab58d7",
+      "use": "private scale-matched granite boulder benchmark after entitlement confirmation",
+      "publishedMetrics": { "texelsPerMetre": 4826, "dimensionsMetres": [0.89, 1.3, 0.7], "meshBoundary": "closed", "displacementTier": "high-only" },
+      "rightsStatus": "metadata-only-entitlement-not-confirmed"
+    },
+    {
+      "id": "fab-granite-rock-9faf",
+      "kind": "fab-listing-metadata",
+      "url": "https://www.fab.com/listings/9faf9fcc-2354-4f27-901b-78c490353620",
+      "use": "second private granite shape/material benchmark after entitlement confirmation",
+      "publishedMetrics": { "texelsPerMetre": 6383, "dimensionsMetres": [0.69, 0.91, 0.59], "meshBoundary": "closed" },
+      "rightsStatus": "metadata-only-entitlement-not-confirmed"
+    },
+    {
+      "id": "fab-sandstone-cliff-86cf",
+      "kind": "fab-listing-metadata",
+      "url": "https://www.fab.com/listings/86cfbc5f-3ae2-4231-87b0-f10eb16c17ca",
+      "use": "private sandstone cliff surface/ledge benchmark after entitlement confirmation",
+      "publishedMetrics": { "texelsPerMetre": 5514, "dimensionsMetres": [0.53, 4.75, 2.66], "meshBoundary": "open" },
+      "rightsStatus": "metadata-only-entitlement-not-confirmed"
+    },
+    {
+      "id": "fab-limestone-rocks-def0",
+      "kind": "fab-listing-metadata",
+      "url": "https://www.fab.com/listings/def04cd0-311d-4d3e-a61a-5a420c7de44b",
+      "use": "private limestone surface and block benchmark after entitlement confirmation",
+      "publishedMetrics": { "texelsPerMetre": 5439, "dimensionsMetres": [1.57, 2.29, 0.22], "meshBoundary": "open" },
+      "rightsStatus": "metadata-only-entitlement-not-confirmed"
+    },
+    {
+      "id": "fab-icelandic-basalt-cliff-7caa",
+      "kind": "fab-listing-metadata",
+      "url": "https://www.fab.com/listings/7caa5113-fc45-4a91-9683-a942c7c21e78",
+      "use": "private basalt cliff surface benchmark after entitlement confirmation",
+      "publishedMetrics": { "texelsPerMetre": 8192, "scanAreaMetres": [1, 1] },
+      "rightsStatus": "metadata-only-entitlement-not-confirmed"
+    },
+    {
+      "id": "fab-jagged-shale-cliff-a342",
+      "kind": "fab-listing-metadata",
+      "url": "https://www.fab.com/listings/a34269ec-3e3a-4f1c-a4f2-7b41fe3699dc",
+      "use": "private fissile shale cliff benchmark after entitlement confirmation",
+      "publishedMetrics": { "texelsPerMetre": 4096, "scanAreaMetres": [2, 2] },
+      "rightsStatus": "metadata-only-entitlement-not-confirmed"
+    },
+    {
+      "id": "fab-layered-shale-cliff-b670",
+      "kind": "fab-listing-metadata",
+      "url": "https://www.fab.com/listings/b670c2b4-1000-4bbc-b040-097030569ae1",
+      "use": "private bedded/fissile shale benchmark after entitlement confirmation",
+      "publishedMetrics": { "texelsPerMetre": 4096, "scanAreaMetres": [2, 2] },
+      "rightsStatus": "metadata-only-entitlement-not-confirmed"
+    },
+    {
+      "id": "fab-shale-beach-rock-c2dc",
+      "kind": "fab-listing-metadata",
+      "url": "https://www.fab.com/listings/c2dc5ba7-965e-4091-a65c-e1e1ad66e7ff",
+      "use": "private transported shale rock benchmark after entitlement confirmation",
+      "publishedMetrics": { "texelsPerMetre": 4096, "scanAreaMetres": [2, 2] },
+      "rightsStatus": "metadata-only-entitlement-not-confirmed"
+    },
+    {
+      "id": "nps-serpentine-granite-tors",
+      "kind": "government-geology-photo-page",
+      "url": "https://home.nps.gov/articles/000/geology-of-serpentine-hot-springs.htm",
+      "previewUrl": "https://home.nps.gov/bela/learn/nature/images/annotated-tors-01.jpg?autorotate=false&maxwidth=650",
+      "use": "joint-controlled granite tor silhouette and non-uniform stacked-mass reference",
+      "reviewTraits": ["freestanding jointed residual", "offset unequal masses", "wide non-periodic joint spacing", "abrupt rise from surrounding ground"],
+      "rightsStatus": "NPS-credited page image; local review evidence only, recheck the individual media record before redistribution"
+    },
+    {
+      "id": "nps-joshua-tree-granite-boulders",
+      "kind": "government-geology-photo-page",
+      "url": "https://www.nps.gov/places/starwarsrockpullout.htm",
+      "previewUrl": "https://www.nps.gov/common/uploads/cropped_image/primary/4552D44B-9008-3133-D3C8CDD1ECF36373.jpg?mode=crop&quality=90&width=1600",
+      "use": "jointed and chemically rounded granite boulder-pile silhouette reference",
+      "reviewTraits": ["rounded edges derived from joint-bounded blocks", "irregular nested boulder sizes", "notches and tafoni are local rather than periodic"],
+      "rightsStatus": "NPS / Hannah Schwalbe; local review evidence only, not a distributable texture input"
+    },
+    {
+      "id": "nps-zion-sandstone-crossbedding",
+      "kind": "government-geology-photo-page",
+      "url": "https://www.nps.gov/media/photo/view.htm?id=96EB4F1E-155D-451F-676CE924220E6D9D",
+      "previewUrl": "https://www.nps.gov/npgallery/GetAsset/96EB4F1E-155D-451F-676CE924220E6D9D",
+      "use": "Navajo Sandstone cross-bed orientation, scale, truncation, and non-periodic spacing reference",
+      "reviewTraits": ["oblique foresets inside larger beds", "changing foreset direction", "cross-bedding is finer than primary ledges"],
+      "rightsStatus": "NPS page explicitly marks the NPS photo public domain"
+    },
+    {
+      "id": "nps-natural-bridges-arch",
+      "kind": "government-geology-photo-page",
+      "url": "https://www.nps.gov/nabr/learn/nature/geologicformations.htm?fullweb=1",
+      "previewUrl": "https://www.nps.gov/nabr/learn/nature/images/960-pix-owachomo.jpg?autorotate=false&format=webp&maxheight=1300&maxwidth=1300",
+      "use": "sandstone natural-bridge opening, intact roof, abutment, and differential erosion reference",
+      "reviewTraits": ["opening breaches beneath a continuous roof", "unequal abutments", "outer silhouette and opening are not concentric primitives"],
+      "rightsStatus": "NPS page visual; local review evidence only, verify the individual media credit before redistribution"
+    },
+    {
+      "id": "nps-columnar-jointing",
+      "kind": "government-geology-page",
+      "url": "https://www.nps.gov/subjects/volcanoes/columnar-jointing.htm",
+      "use": "cooling-boundary and polygonal column morphology reference",
+      "previewUrl": "https://www.nps.gov/subjects/volcanoes/images/Columns-and-Entablature-photo-and-Labeled-diagram.jpg?autorotate=false&maxwidth=1300",
+      "reviewTraits": ["three-to-seven-sided columns", "columns perpendicular to cooling surface", "varied column width and local tilt", "irregular entablature is not horizontal bedding"],
+      "rightsStatus": "factual-reference; individual media credits must be checked before reuse"
+    },
+    {
+      "id": "usgs-kaibab-limestone-pinnacles",
+      "kind": "government-geology-image-page",
+      "url": "https://www.usgs.gov/media/images/south-rim-tour-layers-rock-pinnacles-kaibab-limestone",
+      "previewUrl": "https://d9-wret.s3.us-west-2.amazonaws.com/assets/palladium/production/s3fs-public/styles/medium/public/thumbnails/image/South%20Rim%20Tour3.jpg?itok=k8uPGlUj",
+      "use": "bedded limestone step and residual pinnacle silhouette reference",
+      "reviewTraits": ["asymmetric residual pinnacles", "step-forming beds", "joint- and dissolution-controlled recesses", "no uniformly repeated rings"],
+      "rightsStatus": "USGS page marks the image Public Domain"
+    },
+    {
+      "id": "nps-timpanogos-limestone-cave",
+      "kind": "government-geology-page",
+      "url": "https://home.nps.gov/articles/nps-geodiversity-atlas-timpanogos-cave-national-monument.htm",
+      "previewUrl": "https://home.nps.gov/articles/images/gri-photo-tica.jpg?autorotate=false&maxwidth=650",
+      "use": "limestone cave dissolution, stable host mass, and void-following-structure reference",
+      "reviewTraits": ["finite dissolution void", "host bedrock remains continuous around opening", "opening follows groundwater paths, faults, joints, and beds"],
+      "rightsStatus": "NPS page visual; local review evidence only, verify the individual media credit before redistribution"
+    },
+    {
+      "id": "nps-florissant-shale-outcrop",
+      "kind": "government-geology-photo-page",
+      "url": "https://www.nps.gov/places/shale-outcrop.htm",
+      "previewUrl": "https://www.nps.gov/common/uploads/cropped_image/primary/72C1857F-9300-2D86-913A3E180F4BCA79.jpg?mode=crop&quality=90&width=1600",
+      "use": "thin fissile shale layers and slope-forming outcrop reference",
+      "reviewTraits": ["paper-thin local splitting", "platy fragments", "thin layers group into larger irregular masses", "not a uniformly corrugated box"],
+      "rightsStatus": "NPS page visual; local review evidence only, verify the individual media credit before redistribution"
+    },
+    {
+      "id": "bgs-beacon-hill-bedding-cleavage",
+      "kind": "government-geology-photo-page",
+      "url": "https://www.bgs.ac.uk/discovering-geology/maps-and-resources/office-geology/beacon-hill-leicestershire/",
+      "use": "field-scale distinction between horizontal bedding and near-vertical slaty cleavage",
+      "reviewTraits": ["cleavage can cut bedding", "outcrop splits along cleavage", "bedding and cleavage must not collapse into one procedural stripe direction"],
+      "rightsStatus": "UKRI/BGS copyrighted visual and factual locator; link-only review reference, no local media copy"
+    },
+    {
+      "id": "usgs-catalina-gneiss-outcrop",
+      "kind": "government-geology-image-page",
+      "url": "https://www.usgs.gov/media/images/saguaro-outcrop-catalina-gneiss",
+      "previewUrl": "https://d9-wret.s3.us-west-2.amazonaws.com/assets/palladium/production/s3fs-public/styles/medium/public/thumbnails/image/Saguaro15.jpg?itok=RQ4wg8CF",
+      "use": "real-world gneiss outcrop reference with visible metamorphic foliation rather than sedimentary layering",
+      "reviewTraits": ["wavy recrystallized mineral foliation", "band thickness varies", "blocky joints interrupt rather than duplicate foliation"],
+      "rightsStatus": "USGS page marks the image Public Domain; provenance must remain attached to any local comparison copy"
+    },
+    {
+      "id": "usgs-schist-specimen",
+      "kind": "government-geology-image-page",
+      "url": "https://www.usgs.gov/media/images/schist",
+      "previewUrl": "https://d9-wret.s3.us-west-2.amazonaws.com/assets/palladium/production/s3fs-public/styles/medium/public/thumbnails/image/schist.jpg?itok=bF530w6Y",
+      "use": "mica-schist platy mineral alignment and schistosity reference",
+      "reviewTraits": ["visible aligned flat grains", "sheet-like schistosity", "sparkling mica belongs to surfacing rather than periodic silhouette ribs"],
+      "rightsStatus": "USGS page marks the image Public Domain"
+    },
+    {
+      "id": "nps-gable-creek-conglomerate",
+      "kind": "government-geology-page",
+      "url": "https://www.nps.gov/joda/learn/nature/gable-creek-formation.htm",
+      "previewUrl": "https://www.nps.gov/joda/learn/nature/images/Goose-Rock-BLillie-06-5.JPG?autorotate=false&maxwidth=650",
+      "use": "real-world rounded, imbricated conglomerate outcrop and high-energy fluvial depositional reference",
+      "reviewTraits": ["abundant rounded clasts", "clast contact and imbrication", "varied clast scale", "matrix retreat and breakout"],
+      "rightsStatus": "factual and visual locator; verify the individual NPS/B. Lillie media credit before copying"
+    },
+    {
+      "id": "usgs-tolay-volcanic-breccia",
+      "kind": "government-geology-image-page",
+      "url": "https://www.usgs.gov/media/images/vitrophyre-breccia-tolay-volcanic-field",
+      "previewUrl": "https://d9-wret.s3.us-west-2.amazonaws.com/assets/palladium/production/s3fs-public/styles/medium/public/media/images/Tolay_outcrop.jpg?itok=9LbVM92G",
+      "use": "volcanic breccia outcrop and angular broken-vitrophyre fragment reference",
+      "reviewTraits": ["angular fragments", "rough matrix-supported outcrop", "fragment size and orientation vary", "angularity differs visibly from conglomerate rounding"],
+      "rightsStatus": "USGS page marks the image Public Domain; photo courtesy of Ross Wagner"
+    },
+    {
+      "id": "usgs-yosemite-talus-scree",
+      "kind": "government-geology-image-page",
+      "url": "https://www.usgs.gov/media/images/landslide-detail-below-moran-point",
+      "previewUrl": "https://d9-wret.s3.us-west-2.amazonaws.com/assets/palladium/production/s3fs-public/styles/medium/public/Landslide_Below_Moran_Point_Detail.jpg?itok=yK6YOhXn",
+      "use": "gravity-driven talus/scree accumulation silhouette and fragment distribution reference",
+      "reviewTraits": ["angular broken fragments", "size and orientation variation", "gravity-supported apron", "overlap and burial rather than a grid"],
+      "rightsStatus": "USGS page marks the image Public Domain; photographer Alex Demas"
+    },
+    {
+      "id": "usgs-colorado-river-boulder",
+      "kind": "government-geology-image-page",
+      "url": "https://www.usgs.gov/media/images/colorado-river-raft-tour-a-great-sandstone-boulder-river",
+      "previewUrl": "https://www.usgs.gov/s3/files/styles/medium/public/thumbnails/image/Colorado%20River%20Raft%20Tour21.jpg?itok=BjUy2qBJ",
+      "use": "transported river-boulder scale, rounding, flattening, asymmetry, and partial submergence reference",
+      "reviewTraits": ["rounded but not spherical", "broad stable footprint", "transport abrasion softens corners", "waterline or burial hides part of the mass"],
+      "rightsStatus": "USGS page marks the image Public Domain"
+    },
+    {
+      "id": "nps-joshua-tree-granite-boulders-photo",
+      "kind": "government-geology-photo-page",
+      "url": "https://www.nps.gov/subjects/geology/igneous.htm",
+      "previewUrl": "https://www.nps.gov/subjects/geology/images/jotr-Photo-by-Eva-DiDonato.jpg?autorotate=false&maxwidth=1300",
+      "use": "close visual reference for joint-rounded granite boulder piles at Joshua Tree",
+      "reviewTraits": ["joint-bounded blocks retain unequal sizes", "corners round without becoming spheres", "boulder piles preserve local contacts and deep joints"],
+      "rightsStatus": "NPS geology page credits Eva DiDonato; local review evidence only, recheck media rights before redistribution"
+    },
+    {
+      "id": "nps-coronado-limestone-cave-entrance",
+      "kind": "government-geology-photo-page",
+      "url": "https://www.nps.gov/coro/learn/nature/cavegeology.htm",
+      "previewUrl": "https://www.nps.gov/coro/learn/nature/images/cave_entrance_1.jpg?autorotate=false&maxwidth=650",
+      "use": "exterior limestone cave-mouth silhouette and host-rock continuity reference",
+      "reviewTraits": ["finite entrance breaches an exterior face", "continuous limestone host surrounds the void", "opening follows pre-existing cracks and groundwater dissolution"],
+      "rightsStatus": "NPS geology page image; local review evidence only, verify the individual media credit before redistribution"
+    },
+    {
+      "id": "usgs-devils-tower-talus-blocks",
+      "kind": "government-geology-image-page",
+      "url": "https://www.usgs.gov/media/images/devils-tower-national-monument-14",
+      "previewUrl": "https://d9-wret.s3.us-west-2.amazonaws.com/assets/palladium/production/s3fs-public/thumbnails/image/deto0010_0.jpg",
+      "use": "close reference for a gravity-supported talus apron of large angular blocks",
+      "reviewTraits": ["angular rubble blocks", "wide size and orientation variation", "overlap and partial burial", "apron organization follows gravity rather than a grid"],
+      "rightsStatus": "USGS page marks the Phil Stoffer image Public Domain"
+    },
+    {
+      "id": "usgs-lake-mead-fanglomerate",
+      "kind": "government-geology-image-page",
+      "url": "https://www.usgs.gov/media/images/lake-mead-fanglomerate",
+      "previewUrl": "https://d9-wret.s3.us-west-2.amazonaws.com/assets/palladium/production/s3fs-public/thumbnails/image/Lake%20Mead18_2.jpg",
+      "use": "bounded conglomerate-block silhouette and abundant mixed-scale clast reference",
+      "reviewTraits": ["abundant gravel-to-boulder clasts", "clasts remain matrix-bound", "irregular block silhouette", "cemented matrix and clasts weather at different rates"],
+      "rightsStatus": "USGS page marks the image Public Domain"
+    },
+    {
+      "id": "bgs-rock-classification",
+      "kind": "government-classification-page",
+      "url": "https://www.bgs.ac.uk/technologies/bgs-rock-classification-scheme/",
+      "use": "taxonomy and naming reference across the ontology",
+      "rightsStatus": "terminology-reference-no-media-copy"
+    },
+    {
+      "id": "bgs-discontinuities",
+      "kind": "government-engineering-geology-page",
+      "url": "https://earthwise.bgs.ac.uk/index.php/OR/15/065_Appendix_3_-_Discontinuities_classification_terms_and_descriptions",
+      "use": "joint spacing, persistence, aperture, roughness, infill, and weathering vocabulary",
+      "rightsStatus": "terminology-reference-no-media-copy"
+    },
+    {
+      "id": "nps-rock-formations-overview",
+      "kind": "government-geomorphology-page",
+      "url": "https://www.nps.gov/subjects/rockformations/about.htm",
+      "use": "shape distinctions among plateaus, mesas, buttes, pillars, spires, fins, needles, pinnacles, and natural bridges",
+      "reviewTraits": ["mesa remains broader than tall", "butte is a smaller isolated flat-topped remnant", "pillar or spire remains slender and vertically dominant"],
+      "rightsStatus": "factual-reference; individual media credits must be checked before reuse"
+    },
+    {
+      "id": "nps-rocky-coast-landforms",
+      "kind": "government-geomorphology-page",
+      "url": "https://home.nps.gov/articles/rocky-coast-landforms.htm",
+      "use": "coastal cliff, cave, arch, stack, and collapse-sequence morphology",
+      "reviewTraits": ["sea cave remains connected to a cliff or headland", "sea arch breaches a once-continuous headland", "sea stack is a detached steep residual", "layered sea cliffs step while massive cliffs retreat more uniformly"],
+      "rightsStatus": "factual-reference; individual media credits must be checked before reuse"
+    },
+    {
+      "id": "nps-hawaii-sea-arches",
+      "kind": "government-geomorphology-page",
+      "url": "https://www.nps.gov/havo/learn/nature/sea-arches.htm",
+      "use": "cliff-to-cave-to-arch-to-stack coastal erosion sequence and silhouette continuity",
+      "reviewTraits": ["arch roof and abutments remain part of a sea cliff", "stack follows roof collapse", "coastal remnant preserves wave-cut context"],
+      "rightsStatus": "factual-reference; individual media credits must be checked before reuse"
+    },
+    {
+      "id": "nps-hoodoos",
+      "kind": "government-geomorphology-page",
+      "url": "https://home.nps.gov/brca/learn/nature/hoodoos.htm",
+      "use": "differentially eroded hoodoo silhouette, ledge-and-recess hierarchy, and material-control reference",
+      "reviewTraits": ["narrower erodible neck or pedestal", "resistant protruding beds or cap", "non-uniform repeated ledges follow material contrasts"],
+      "rightsStatus": "factual-reference; individual media credits must be checked before reuse"
+    },
+    {
+      "id": "nps-badlands-geomorphology",
+      "kind": "government-geology-report-pdf",
+      "url": "https://home.nps.gov/articles/000/badl-geologic-formations.htm",
+      "use": "dissected badlands, wall, butte, pinnacle, hoodoo, gully, and layered erodibility morphology",
+      "reviewTraits": ["nested gullies dissect weak layered sediment", "walls, buttes, pinnacles, and hoodoos remain scale-distinct", "resistant layers interrupt rather than uniformly ring slopes"],
+      "rightsStatus": "factual-reference; individual media credits must be checked before reuse"
+    },
+    {
+      "id": "nps-erosional-volcanic-landforms",
+      "kind": "government-geomorphology-page",
+      "url": "https://www.nps.gov/subjects/volcanoes/erosional-volcanic-landforms.htm",
+      "use": "volcanic neck, monolith, hoodoo, spire, and erosion-controlled volcanic residual reference",
+      "reviewTraits": ["resistant volcanic core remains distinct from eroded host", "joint systems control spires and hoodoos", "volcanic residuals are not generic cones"],
+      "rightsStatus": "factual-reference; individual media credits must be checked before reuse"
+    },
+    {
+      "id": "nps-karst-topography-model",
+      "kind": "government-karst-reference-pdf",
+      "url": "https://www.nps.gov/subjects/caves/upload/Karst-Topography-Model-_Written-Section_508c.pdf",
+      "use": "fracture-guided limestone pinnacle, cone, tower, gorge, and etched-surface morphology",
+      "reviewTraits": ["solution follows joints and fractures", "isolated residuals range from pinnacles to towers", "karst surfaces carry etched channels rather than arbitrary horizontal rings"],
+      "rightsStatus": "factual-reference; linked NPS document, no bundled redistribution"
+    },
+    {
+      "id": "usgs-wentworth-size-scale",
+      "kind": "government-sediment-classification-page",
+      "url": "https://pubs.usgs.gov/publication/tm5E1/full",
+      "use": "pebble, cobble, and boulder size-class boundaries; shape remains a separate morphology attribute",
+      "reviewTraits": ["pebble 4 to 64 millimetres", "cobble 64 to 256 millimetres", "boulder above 256 millimetres", "size class alone does not imply roundness"],
+      "rightsStatus": "USGS factual-reference"
+    },
+    {
+      "id": "nps-talus-caves",
+      "kind": "government-geomorphology-page",
+      "url": "https://www.nps.gov/subjects/caves/talus-caves.htm",
+      "use": "talus, scree, rockfall, interlocking-block, and mechanically formed void morphology",
+      "reviewTraits": ["gravity-supported angular rubble", "boulder talus differs in scale from pebble scree", "voids arise between lodged blocks rather than dissolution"],
+      "rightsStatus": "factual-reference; individual media credits must be checked before reuse"
+    }
+  ],
+  "basisCoverage": [
+    { "basis": "jointed-exfoliating-granite", "referenceIds": ["nps-serpentine-granite-tors", "nps-joshua-tree-granite-boulders", "nps-joshua-tree-granite-boulders-photo", "fab-granite-rock-f749", "fab-granite-rock-9faf", "bgs-discontinuities"] },
+    { "basis": "cross-bedded-sandstone", "referenceIds": ["nps-zion-sandstone-crossbedding", "nps-natural-bridges-arch", "fab-sandstone-cliff-86cf", "bgs-rock-classification"] },
+    { "basis": "columnar-entablature-basalt", "referenceIds": ["fab-icelandic-basalt-cliff-7caa", "nps-columnar-jointing"] },
+    { "basis": "bedded-limestone-karst", "referenceIds": ["usgs-kaibab-limestone-pinnacles", "nps-timpanogos-limestone-cave", "nps-coronado-limestone-cave-entrance", "fab-limestone-rocks-def0", "unesco-south-china-karst", "bgs-discontinuities"] },
+    { "basis": "quartz-sandstone-residual-pillars", "referenceIds": ["unesco-wulingyuan-quartz-sandstone-pillars", "user-image-wulingyuan-like-pillars", "bgs-discontinuities"] },
+    { "basis": "fissile-shale-or-slate", "referenceIds": ["nps-florissant-shale-outcrop", "bgs-beacon-hill-bedding-cleavage", "fab-jagged-shale-cliff-a342", "fab-layered-shale-cliff-b670", "fab-shale-beach-rock-c2dc"] },
+    { "basis": "foliated-gneiss-or-schist", "referenceIds": ["usgs-catalina-gneiss-outcrop", "usgs-schist-specimen", "bgs-rock-classification", "bgs-discontinuities"] },
+    { "basis": "clast-supported-conglomerate-or-breccia", "referenceIds": ["nps-gable-creek-conglomerate", "usgs-lake-mead-fanglomerate", "usgs-tolay-volcanic-breccia", "bgs-rock-classification"] },
+    { "basis": "transported-river-boulder-and-talus", "referenceIds": ["usgs-yosemite-talus-scree", "usgs-devils-tower-talus-blocks", "usgs-colorado-river-boulder", "fab-granite-rock-f749", "nps-gable-creek-conglomerate", "bgs-discontinuities"] },
+    { "basis": "modular-bedrock-mountain", "referenceIds": ["user-video-modular-mountain", "bgs-discontinuities"] }
+  ],
+  "familyCoveragePolicy": {
+    "checkpoint1": "all 65 lithologies have taxonomy/provenance coverage; the eight basis families and supplied mountain have selected comparison references",
+    "checkpoint10": "each production recipe requires a rights-cleared lithology-, landform-, scale-, and weathering-matched visual reference before visual approval",
+    "noColorOnlyReference": true
+  }
+}

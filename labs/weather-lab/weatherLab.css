@@ -1,0 +1,80 @@
+:root {
+  color-scheme: dark;
+  font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --wl-panel: rgba(10, 14, 21, 0.91);
+  --wl-panel-2: rgba(16, 22, 32, 0.94);
+  --wl-line: rgba(255, 255, 255, 0.1);
+  --wl-muted: #8f9bad;
+  --wl-text: #eef4ff;
+  --wl-accent: #79b8ff;
+  --wl-hot: #ffc46b;
+}
+
+#weatherLab { position: fixed; inset: 0; z-index: 10; color: var(--wl-text); pointer-events: none; }
+#weatherLab button, #weatherLab input, #weatherLab select, #weatherLab a { pointer-events: auto; }
+.wl-rain-lens {
+  position: absolute; inset: 0; z-index: 2; width: 100%; height: 100%; opacity: 0;
+  pointer-events: none; mix-blend-mode: screen;
+}
+.wl-grow { flex: 1; }
+.wl-topbar {
+  position: absolute; inset: 0 0 auto 0; height: 56px; display: flex; align-items: center; gap: 8px;
+  padding: 0 14px; background: var(--wl-panel); border-bottom: 1px solid var(--wl-line); backdrop-filter: blur(18px);
+}
+.wl-brand { color: var(--wl-text); text-decoration: none; font-size: 12px; font-weight: 800; letter-spacing: .13em; }
+.wl-brand span { color: var(--wl-accent); margin-left: 7px; font-weight: 650; letter-spacing: .02em; }
+.wl-name { width: 220px; margin-left: 14px; border: 0; border-left: 1px solid var(--wl-line); padding: 7px 12px; background: transparent; color: var(--wl-text); font-size: 13px; }
+.wl-style { display: flex; align-items: center; gap: 7px; color: var(--wl-muted); font-size: 11px; }
+.wl-style select { border: 1px solid var(--wl-line); border-radius: 6px; padding: 6px 8px; background: var(--wl-panel-2); color: var(--wl-text); font-size: 11px; }
+.wl-transition { display: flex; align-items: center; gap: 7px; color: var(--wl-muted); font-size: 11px; }
+.wl-transition input { width: 90px; accent-color: var(--wl-accent); }
+.wl-transition output { width: 34px; color: var(--wl-text); font-variant-numeric: tabular-nums; }
+#weatherLab button {
+  border: 1px solid var(--wl-line); border-radius: 7px; padding: 8px 10px; background: rgba(255,255,255,.05);
+  color: var(--wl-text); cursor: pointer; font: inherit; font-size: 11px;
+}
+#weatherLab button:hover { background: rgba(255,255,255,.11); }
+#weatherLab button.primary { border-color: rgba(121,184,255,.55); background: #2c77bd; }
+.wl-library, .wl-inspector {
+  position: absolute; top: 68px; bottom: 38px; width: 282px; background: var(--wl-panel);
+  border: 1px solid var(--wl-line); border-radius: 10px; overflow: hidden; backdrop-filter: blur(18px); pointer-events: auto;
+}
+.wl-library { left: 12px; }
+.wl-inspector { right: 12px; width: 352px; }
+.wl-panel-title { height: 45px; display: flex; align-items: center; justify-content: space-between; padding: 0 13px; border-bottom: 1px solid var(--wl-line); font-size: 10px; font-weight: 750; letter-spacing: .12em; }
+.wl-panel-title small { color: var(--wl-muted); font-size: 9px; font-weight: 500; letter-spacing: 0; }
+.wl-condition-list { height: calc(100% - 45px); overflow: auto; padding: 8px; }
+.wl-category { padding: 9px 6px 5px; color: var(--wl-muted); font-size: 9px; font-weight: 750; letter-spacing: .12em; text-transform: uppercase; }
+.wl-condition { width: 100%; display: grid; grid-template-columns: 28px 1fr auto; align-items: center; gap: 8px; margin-bottom: 4px; padding: 8px; text-align: left; border-color: transparent; background: transparent; }
+.wl-condition:hover { background: rgba(255,255,255,.06); }
+.wl-condition.active { border-color: rgba(121,184,255,.45); background: rgba(63,132,198,.2); }
+.wl-condition-icon { width: 28px; height: 28px; display: grid; place-items: center; border-radius: 7px; background: rgba(255,255,255,.06); font-size: 16px; }
+.wl-condition-copy { min-width: 0; }
+.wl-condition-copy strong { display: block; font-size: 11px; font-weight: 650; }
+.wl-condition-copy small { display: block; overflow: hidden; color: var(--wl-muted); font-size: 9px; text-overflow: ellipsis; white-space: nowrap; }
+.wl-condition-tag { color: var(--wl-hot); font-size: 8px; text-transform: uppercase; }
+.wl-groups { display: grid; grid-template-columns: repeat(5, 1fr); border-bottom: 1px solid var(--wl-line); }
+.wl-groups button { min-width: 0; border: 0; border-radius: 0; padding: 9px 2px; color: var(--wl-muted); background: transparent; font-size: 9px; }
+.wl-groups button.active { color: var(--wl-text); box-shadow: inset 0 -2px var(--wl-accent); }
+.wl-fields { height: calc(100% - 78px); overflow: auto; padding: 8px 12px 18px; }
+.wl-group-intro { margin: 2px 0 12px; color: var(--wl-muted); font-size: 10px; line-height: 1.45; }
+.wl-field { display: grid; grid-template-columns: 1fr 145px; gap: 7px 10px; align-items: center; padding: 9px 0; border-bottom: 1px solid rgba(255,255,255,.055); }
+.wl-field-label { font-size: 11px; }
+.wl-field-description { grid-column: 1 / -1; color: var(--wl-muted); font-size: 9px; line-height: 1.35; }
+.wl-field input[type="range"] { width: 96px; accent-color: var(--wl-accent); }
+.wl-field input[type="color"] { width: 40px; height: 25px; justify-self: end; padding: 0; border: 1px solid var(--wl-line); border-radius: 5px; background: none; }
+.wl-field input[type="checkbox"] { justify-self: end; accent-color: var(--wl-accent); }
+.wl-field select, .wl-vector input { min-width: 0; border: 1px solid var(--wl-line); border-radius: 5px; padding: 5px; background: var(--wl-panel-2); color: var(--wl-text); font-size: 10px; }
+.wl-value-wrap { display: flex; align-items: center; gap: 5px; }
+.wl-value { width: 42px; color: var(--wl-text); text-align: right; font-size: 9px; font-variant-numeric: tabular-nums; }
+.wl-vector { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3px; }
+.wl-vector input { width: 100%; }
+.wl-null-color { display: flex; justify-content: flex-end; align-items: center; gap: 5px; }
+.wl-null-color button { padding: 5px 6px; font-size: 9px; }
+.wl-status { position: absolute; inset: auto 0 0 0; height: 28px; display: flex; align-items: center; gap: 18px; padding: 0 12px; background: var(--wl-panel); border-top: 1px solid var(--wl-line); color: var(--wl-muted); font-size: 9px; pointer-events: auto; }
+.wl-status span + span { white-space: nowrap; }
+@media (max-width: 980px) {
+  .wl-library { width: 220px; }
+  .wl-inspector { width: 290px; }
+  .wl-style, .wl-transition, #importWeather, #saveWeather { display: none; }
+}

@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ToonLab Level D clean consumer</title>
+  <style>
+    :root { color-scheme: dark; font: 13px/1.35 Inter, ui-sans-serif, system-ui, sans-serif; }
+    * { box-sizing: border-box; }
+    html, body, #scene { width: 100%; height: 100%; margin: 0; overflow: hidden; }
+    body { background: #78c8ed; }
+    canvas { display: block; width: 100%; height: 100%; }
+    #panel {
+      position: fixed; inset: 14px auto auto 14px; z-index: 10; width: 330px;
+      max-height: calc(100% - 28px); overflow: auto; padding: 14px;
+      border: 1px solid rgb(255 255 255 / 22%); border-radius: 12px;
+      background: rgb(20 34 48 / 88%); box-shadow: 0 12px 34px rgb(0 0 0 / 25%);
+      backdrop-filter: blur(12px);
+    }
+    h1 { margin: 0 0 10px; font-size: 16px; }
+    .grid { display: grid; grid-template-columns: 92px 1fr; gap: 7px 10px; align-items: center; }
+    label { color: #cfe0ec; }
+    select, button {
+      min-width: 0; padding: 5px 7px; border: 1px solid rgb(255 255 255 / 22%);
+      border-radius: 6px; color: #f5fbff; background: #243c50; font: inherit;
+    }
+    #domains { margin-top: 12px; padding-top: 10px; border-top: 1px solid rgb(255 255 255 / 16%); }
+    .domain { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 3px 0; }
+    .domain span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .domain input { accent-color: #66d49e; }
+    #status { margin-top: 10px; color: #9fd6b8; }
+    #status[data-error="true"] { color: #ff9a9a; white-space: pre-wrap; }
+    #help { margin-top: 8px; color: #a9bdcc; font-size: 11px; }
+  </style>
+</head>
+<body>
+  <div id="scene"></div>
+  <aside id="panel">
+    <h1>Level D clean consumer</h1>
+    <div class="grid">
+      <label for="backend">Backend</label><select id="backend"><option value="webgpu">WebGPU</option><option value="webgl">WebGL2 fallback</option></select>
+      <label for="quality">Quality</label><select id="quality"><option value="balanced">Balanced</option><option value="performance">Performance</option></select>
+      <label for="time">Lighting</label><select id="time"><option value="partly_cloudy">Partly Cloudy (11 AM)</option><option value="golden_hour">Golden Hour</option><option value="moonlit">Moonlit</option><option value="overcast">Overcast</option></select>
+      <label for="character">Character</label><select id="character"><option value="glb">Mannequin GLB</option><option value="vrm">Mannequin VRM</option><option value="fbx">Mannequin FBX</option></select>
+      <label for="view">Review view</label><select id="view"><option value="overview">Overview</option><option value="character">Character</option><option value="ground">Ground + grass</option><option value="water">Water + shore</option><option value="underwater">Underwater volume</option><option value="bench">Bench + shadows</option></select>
+      <span>Bundle</span><strong>Call Me Sensei · strict</strong>
+      <span>Package</span><strong id="package">—</strong>
+    </div>
+    <div id="domains" aria-label="Shader domains"></div>
+    <div id="status">Starting…</div>
+    <div id="help">Choose a fixed review view, then drag to orbit · wheel to zoom · toggle each domain off/on and capture both backends.</div>
+  </aside>
+  <script type="module" src="/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M0 0H100V78L78 100H0Z' fill='%23e8332e'/%3E%3Ctext x='50' y='72' font-size='64' font-weight='900' font-family='Hiragino Sans, Yu Gothic, Noto Sans JP, sans-serif' fill='white' text-anchor='middle'%3E%E3%83%88%3C/text%3E%3C/svg%3E" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Character Shader (legacy) — ToonLab</title>
+    <link rel="stylesheet" href="/labs/shared/hud.css" />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html, body {
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        background: #1a1a1a;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        color: #fff;
+      }
+      #app {
+        width: 100vw;
+        height: 100vh;
+      }
+      body:not([data-post-advanced="true"]) .post-control,
+      body:not([data-post-advanced="true"]) .post-advanced-control {
+        display: none;
+      }
+      .toon-preset-tools {
+        display: grid;
+        grid-template-columns: minmax(120px, 1fr) repeat(4, auto);
+        gap: 6px;
+        align-items: center;
+      }
+      .toon-preset-tools input,
+      .toon-preset-tools button {
+        min-height: 28px;
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        border-radius: 6px;
+        background: rgba(255, 255, 255, 0.08);
+        color: #fff;
+        font: inherit;
+        font-size: 12px;
+      }
+      .toon-preset-tools input {
+        min-width: 0;
+        padding: 0 8px;
+      }
+      .toon-preset-tools button {
+        padding: 0 8px;
+        cursor: pointer;
+        font-weight: 650;
+      }
+      .toon-preset-status {
+        color: rgba(255, 255, 255, 0.68);
+        font-size: 12px;
+        min-height: 16px;
+      }
+      .toon-preset-json {
+        width: 100%;
+        min-height: 76px;
+        resize: vertical;
+        border: 1px solid rgba(255, 255, 255, 0.16);
+        border-radius: 6px;
+        padding: 7px 8px;
+        background: rgba(0, 0, 0, 0.34);
+        color: rgba(255, 255, 255, 0.82);
+        font: 11px/1.35 ui-monospace, SFMono-Regular, Menlo, monospace;
+      }
+      #animationToggle,
+      #ceilingLightToggle,
+      #postProcessingToggle {
+        margin-top: 8px;
+        min-height: 30px;
+        padding: 0 10px;
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        border-radius: 6px;
+        background: rgba(255, 255, 255, 0.08);
+        color: #fff;
+        font: inherit;
+        font-weight: 600;
+        cursor: pointer;
+      }
+      .hud-actions #animationToggle,
+      .hud-actions #ceilingLightToggle,
+      .hud-actions #postProcessingToggle {
+        margin-top: 0;
+      }
+      #animationToggle:disabled,
+      #ceilingLightToggle:disabled,
+      #postProcessingToggle:disabled {
+        cursor: default;
+        opacity: 0.5;
+      }
+      body[data-controller="ecctrl"] #animationToggle {
+        display: none;
+      }
+      .scene-status {
+        min-width: 118px;
+        padding: 8px 10px;
+        border-radius: 6px;
+        background: rgba(0, 0, 0, 0.62);
+        color: #fff;
+        font-size: 13px;
+        font-weight: 650;
+        text-align: center;
+        backdrop-filter: blur(8px);
+      }
+      .controls-hud {
+        position: fixed;
+        bottom: 16px;
+        left: 16px;
+        z-index: 11;
+        padding: 10px 14px;
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        border-radius: 8px;
+        background: rgba(15, 23, 32, 0.72);
+        backdrop-filter: blur(8px);
+        color: #cfe9f7;
+        font-size: 12px;
+        line-height: 1.7;
+        pointer-events: none;
+      }
+      .controls-hud-title {
+        font-weight: 700;
+        color: #ffffff;
+        margin-bottom: 2px;
+      }
+      .controls-hud kbd {
+        display: inline-block;
+        min-width: 18px;
+        padding: 0 6px;
+        margin-right: 6px;
+        border: 1px solid rgba(255, 255, 255, 0.28);
+        border-bottom-width: 2px;
+        border-radius: 4px;
+        background: rgba(255, 255, 255, 0.08);
+        font-family: 'SF Mono', 'Menlo', monospace;
+        font-size: 11px;
+        text-align: center;
+        color: #ffffff;
+      }
+      .perf-hud {
+        position: fixed;
+        top: 16px;
+        right: 16px;
+        z-index: 12;
+        min-width: 148px;
+        padding: 8px 12px;
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        border-radius: 8px;
+        background: rgba(15, 23, 32, 0.74);
+        backdrop-filter: blur(8px);
+        color: #cfe9f7;
+        font-family: 'SF Mono', 'Menlo', 'Consolas', monospace;
+        font-size: 11px;
+        line-height: 1.55;
+        pointer-events: none;
+        white-space: nowrap;
+      }
+      .perf-hud b {
+        font-size: 20px;
+        font-weight: 700;
+        color: #7ff0b2;
+      }
+      .perf-hud .perf-hud-note {
+        display: inline-block;
+        max-width: 200px;
+        white-space: normal;
+        color: #ffd28a;
+      }
+      .water-hud {
+        position: fixed;
+        top: 16px;
+        left: 16px;
+        z-index: 10;
+        width: min(360px, calc(100vw - 32px));
+        max-height: calc(100vh - 32px);
+        overflow: auto;
+        padding: 10px;
+        border: 1px solid rgba(255, 255, 255, 0.16);
+        border-radius: 8px;
+        background: rgba(18, 28, 32, 0.72);
+        backdrop-filter: blur(8px);
+      }
+      .water-hud-title {
+        margin-bottom: 8px;
+        color: rgba(255, 255, 255, 0.9);
+        font-size: 14px;
+        font-weight: 750;
+      }
+      .water-hud-grid {
+        display: grid;
+        grid-template-columns: 70px minmax(104px, 1fr) 82px;
+        gap: 8px;
+        align-items: center;
+      }
+      .water-hud label {
+        color: rgba(255, 255, 255, 0.78);
+        font-size: 12px;
+        font-weight: 650;
+      }
+      .water-hud output {
+        color: rgba(255, 255, 255, 0.84);
+        font-size: 12px;
+        font-variant-numeric: tabular-nums;
+        text-align: right;
+      }
+      .water-hud input[type="range"] {
+        width: 100%;
+        accent-color: #7fd6e8;
+      }
+      .water-hud select,
+      .water-drop-buttons {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+        margin-top: 10px;
+      }
+      .water-drop-button,
+      .water-sinker-button {
+        min-height: 28px;
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        border-radius: 6px;
+        background: rgba(255, 255, 255, 0.1);
+        color: #fff;
+        font: inherit;
+        font-size: 12px;
+      }
+      .water-hud select {
+        min-width: 0;
+        text-transform: capitalize;
+      }
+      .water-drop-button,
+      .water-sinker-button {
+        width: 100%;
+        cursor: pointer;
+        font-weight: 700;
+      }
+      .water-sinker-button {
+        border-color: rgba(154, 203, 255, 0.35);
+        background: rgba(74, 101, 128, 0.56);
+      }
+      .rock-hud {
+        position: fixed;
+        top: 16px;
+        left: 16px;
+        z-index: 10;
+        width: min(380px, calc(100vw - 32px));
+        max-height: calc(100vh - 32px);
+        overflow: auto;
+        padding: 10px;
+        border: 1px solid rgba(255, 255, 255, 0.16);
+        border-radius: 8px;
+        background: rgba(24, 24, 20, 0.74);
+        backdrop-filter: blur(8px);
+      }
+      body[data-hide-hud="true"] .rock-hud {
+        display: none;
+      }
+      .rock-hud-title {
+        margin-bottom: 8px;
+        color: rgba(255, 255, 255, 0.9);
+        font-size: 14px;
+        font-weight: 750;
+      }
+      .rock-hud-status {
+        margin-top: 8px;
+        min-height: 16px;
+        color: rgba(255, 226, 166, 0.9);
+        font-size: 12px;
+      }
+      .rock-hud .hud-actions button {
+        min-height: 28px;
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        border-radius: 6px;
+        background: rgba(255, 255, 255, 0.08);
+        color: #fff;
+        font: inherit;
+        font-size: 12px;
+        font-weight: 700;
+        padding: 0 10px;
+        cursor: pointer;
+      }
+      .rock-hud .hud-actions button:disabled {
+        opacity: 0.45;
+        cursor: default;
+      }
+      .rock-piece-row {
+        display: grid;
+        grid-template-columns: 22px 1fr repeat(3, 24px);
+        align-items: center;
+        gap: 4px;
+        padding: 3px 6px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 12px;
+        color: rgba(255, 255, 255, 0.82);
+      }
+      .rock-piece-row:hover {
+        background: rgba(255, 255, 255, 0.07);
+      }
+      .rock-piece-row[data-selected="true"] {
+        background: rgba(143, 198, 255, 0.18);
+        color: #fff;
+      }
+      .rock-piece-row[data-hidden="true"] .rock-piece-name {
+        opacity: 0.45;
+        text-decoration: line-through;
+      }
+      .rock-piece-badge {
+        opacity: 0.65;
+        font-variant-numeric: tabular-nums;
+      }
+      .rock-piece-name {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .rock-piece-action {
+        min-height: 22px;
+        border: none;
+        border-radius: 4px;
+        background: transparent;
+        color: rgba(255, 255, 255, 0.6);
+        font: inherit;
+        font-size: 12px;
+        cursor: pointer;
+      }
+      .rock-piece-action:hover {
+        background: rgba(255, 255, 255, 0.12);
+        color: #fff;
+      }
+      .rock-piece-add {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 6px;
+        margin-top: 4px;
+      }
+      .rock-piece-add select,
+      .rock-piece-add button {
+        min-height: 26px;
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        border-radius: 6px;
+        background: rgba(255, 255, 255, 0.08);
+        color: #fff;
+        font: inherit;
+        font-size: 12px;
+        cursor: pointer;
+      }
+      @media (max-width: 600px) {
+        .rock-hud {
+          top: 12px;
+          left: 12px;
+          width: min(380px, calc(100vw - 24px));
+          padding: 8px;
+        }
+      }
+      @media (max-width: 600px) {
+        .toon-preset-tools {
+          grid-template-columns: 1fr 1fr;
+        }
+        .water-hud {
+          top: 12px;
+          left: 12px;
+          width: min(360px, calc(100vw - 24px));
+          padding: 8px;
+        }
+        .water-hud-grid {
+          grid-template-columns: 58px minmax(80px, 1fr) 72px;
+          gap: 7px;
+        }
+      }
+    </style>
+  </head>
+  <body data-hud-tab="character">
+    <div id="app"></div>
+    <div id="info">
+      <h1>Shader Lab</h1>
+      <span id="mode">Shader: anime</span>
+      <div class="hud-control scene-hub-control">
+        <label for="sceneHub" title="Switches between built-in demo scenes.">Scene</label>
+        <!-- Options are generated from SCENE_HUB_OPTIONS (sceneHub.js). -->
+        <select id="sceneHub"></select>
+        <output id="sceneHubValue" for="sceneHub">Character Lab</output>
+        <button id="resetLabButton" type="button" title="Clears this lab's saved state (model, presets, debug views) and reloads with defaults.">Reset Lab</button>
+      </div>
+      <div id="modelLoadError" class="model-load-error" hidden></div>
+      <div class="hud-tabs" role="tablist" aria-label="HUD sections">
+        <button id="hudTabCharacter" class="hud-tab" type="button" role="tab" aria-selected="true" data-hud-tab-target="character">Character</button>
+        <button id="hudTabEnvironment" class="hud-tab" type="button" role="tab" aria-selected="false" data-hud-tab-target="environment">Environment</button>
+        <button id="hudTabDemo" class="hud-tab" type="button" role="tab" aria-selected="false" data-hud-tab-target="demo">Demo Settings</button>
+      </div>
+      <div id="sceneControls" class="scene-controls">
+        <div class="hud-tab-panel" data-hud-tab-panel="character">
+        <div class="hud-control">
+          <label for="characterModel" title="Switches the character model (reloads the scene with ?model=).">Model</label>
+          <select id="characterModel"></select>
+          <output id="characterModelValue" for="characterModel">Mannequin</output>
+        </div>
+        <div class="hud-control model-url-control">
+          <label for="modelUrlInput" title="Load any model by path or hosted URL (GLB/VRM/PMX/FBX/OBJ). Remote hosts must send CORS headers.">Model URL</label>
+          <input id="modelUrlInput" type="text" placeholder="https://… or path/to/model.glb" spellcheck="false" />
+          <button id="modelUrlApply" type="button">Load</button>
+        </div>
+        <div class="hud-control">
+          <label for="toonPreset" title="Selects the IP-wide toon rendering style used when converting source materials.">Style</label>
+          <select id="toonPreset"></select>
+          <output id="toonPresetValue" for="toonPreset">Default</output>
+        </div>
+        <div class="hud-control">
+          <label for="toonDebug" title="Shows one shader channel instead of final color for inspection.">Debug</label>
+          <select id="toonDebug">
+            <option value="off">Off</option>
+          </select>
+          <output id="toonDebugValue" for="toonDebug">Off</output>
+        </div>
+        <details id="toonSettingsPanel" class="toon-settings-panel">
+          <summary title="Edit toon shader settings through the same metadata used by the public preset API.">Toon Settings</summary>
+          <div class="toon-settings-body">
+            <div class="toon-preset-tools">
+              <input id="toonPresetName" type="text" placeholder="preset_name" title="Name for a user-created preset." />
+              <button id="toonPresetSave" type="button" title="Save current shader settings as a local preset.">Save</button>
+              <button id="toonPresetReset" type="button" title="Reset unsaved edits back to the selected preset.">Reset</button>
+              <button id="toonPresetExport" type="button" title="Export the current shader settings as versioned JSON.">Export</button>
+              <button id="toonPresetImport" type="button" title="Import a versioned toon preset JSON document.">Import</button>
+            </div>
+            <output id="toonPresetDiffValue" class="toon-preset-status">Clean</output>
+            <textarea id="toonPresetJson" class="toon-preset-json" spellcheck="false" placeholder="Preset JSON"></textarea>
+            <div id="toonSettingGroups" class="toon-setting-groups"></div>
+          </div>
+        </details>
+        </div>
+
+        <div class="hud-tab-panel" data-hud-tab-panel="environment">
+        <details id="environmentSettingsPanel" class="toon-settings-panel environment-settings-panel" open>
+          <summary title="Edit environment shader features and material-lighting parameters.">Environment Shader</summary>
+          <div class="toon-settings-body">
+            <output id="environmentSettingsStatus" class="toon-preset-status">Auto material defaults</output>
+            <div id="environmentSettingGroups" class="toon-setting-groups"></div>
+          </div>
+        </details>
+        </div>
+
+        <div class="hud-tab-panel" data-hud-tab-panel="demo">
+        <div class="hud-actions">
+          <button id="animationToggle" type="button" disabled>Animation Loading</button>
+          <button id="postProcessingToggle" class="post-control" type="button">Post Off</button>
+          <button id="ceilingLightToggle" type="button" disabled>Ceiling Light Off</button>
+        </div>
+        <div class="hud-control">
+          <label for="characterAsset" title="Selects a demo character from the bundled default or ignored local test assets.">Character</label>
+          <select id="characterAsset"></select>
+          <output id="characterAssetValue" for="characterAsset">Ganyu PMX</output>
+        </div>
+        <div class="hud-control">
+          <label for="environmentAsset" title="Selects a demo environment from ignored local test scenes.">Environment</label>
+          <select id="environmentAsset"></select>
+          <output id="environmentAssetValue" for="environmentAsset">Demo</output>
+        </div>
+        <div class="hud-control">
+          <label for="ceilingLightStrength">Ceiling</label>
+          <input id="ceilingLightStrength" type="range" min="1" max="8" step="0.05" value="1" disabled />
+          <output id="ceilingLightStrengthValue" for="ceilingLightStrength">1.00x</output>
+        </div>
+        <div class="hud-control">
+          <label for="sunIntensity">Sun</label>
+          <input id="sunIntensity" type="range" min="0" max="5" step="0.05" value="2.6" disabled />
+          <output id="sunIntensityValue" for="sunIntensity">2.60</output>
+        </div>
+        <div class="hud-control">
+          <label for="timeOfDay">Time</label>
+          <input id="timeOfDay" type="range" min="0" max="24" step="0.25" value="14" disabled />
+          <output id="timeOfDayValue" for="timeOfDay">14:00</output>
+        </div>
+        <div class="hud-control">
+          <label for="roomYaw">Room Dir</label>
+          <input id="roomYaw" type="range" min="0" max="360" step="1" value="0" disabled />
+          <output id="roomYawValue" for="roomYaw">0 deg</output>
+        </div>
+        <div class="hud-control">
+          <label for="backdropDistance">Scenery</label>
+          <input id="backdropDistance" type="range" min="2" max="30" step="0.1" value="12" disabled />
+          <output id="backdropDistanceValue" for="backdropDistance">12.0</output>
+        </div>
+        <div class="hud-control post-control">
+          <label for="postPreset">Post</label>
+          <select id="postPreset">
+            <option value="off">Off</option>
+            <option value="softAnime">Presentation</option>
+            <option class="post-advanced-option" value="debugEdges">Debug Edges</option>
+            <option class="post-advanced-option" value="custom">Custom</option>
+          </select>
+          <output id="postPresetValue" for="postPreset">Off</output>
+        </div>
+        <div class="hud-control post-control">
+          <label for="postStrength">Post Amt</label>
+          <input id="postStrength" type="range" min="0" max="1" step="0.01" value="0.35" />
+          <output id="postStrengthValue" for="postStrength">0.35</output>
+        </div>
+        <div class="hud-control post-advanced-control">
+          <label for="postBloom">Bloom</label>
+          <input id="postBloom" type="checkbox" />
+          <output id="postBloomValue" for="postBloom">Off</output>
+        </div>
+        <div class="hud-control post-advanced-control">
+          <label for="postGrade">Grade</label>
+          <input id="postGrade" type="checkbox" />
+          <output id="postGradeValue" for="postGrade">Off</output>
+        </div>
+        <div class="hud-control post-advanced-control">
+          <label for="postVignette">Vignette</label>
+          <input id="postVignette" type="checkbox" />
+          <output id="postVignetteValue" for="postVignette">Off</output>
+        </div>
+        <div class="hud-control post-advanced-control">
+          <label for="postOutline">Outline</label>
+          <input id="postOutline" type="checkbox" />
+          <output id="postOutlineValue" for="postOutline">Off</output>
+        </div>
+        <div class="hud-control post-advanced-control">
+          <label for="postDepth">Depth</label>
+          <input id="postDepth" type="checkbox" />
+          <output id="postDepthValue" for="postDepth">Off</output>
+        </div>
+        <div class="hud-control post-advanced-control">
+          <label for="postBloomStrength">Bloom Amt</label>
+          <input id="postBloomStrength" type="range" min="0" max="0.12" step="0.005" value="0" />
+          <output id="postBloomStrengthValue" for="postBloomStrength">0.00</output>
+        </div>
+        <div class="hud-control post-advanced-control">
+          <label for="postExposure">Exposure</label>
+          <input id="postExposure" type="range" min="0.5" max="1.5" step="0.01" value="1" />
+          <output id="postExposureValue" for="postExposure">1.00</output>
+        </div>
+        <div class="hud-control post-advanced-control">
+          <label for="postContrast">Contrast</label>
+          <input id="postContrast" type="range" min="0.75" max="1.35" step="0.01" value="1" />
+          <output id="postContrastValue" for="postContrast">1.00</output>
+        </div>
+        <div class="hud-control post-advanced-control">
+          <label for="postVignetteStrength">Vignette</label>
+          <input id="postVignetteStrength" type="range" min="0" max="0.35" step="0.01" value="0" />
+          <output id="postVignetteStrengthValue" for="postVignetteStrength">0.00</output>
+        </div>
+        <div class="hud-control">
+          <label for="modelSize">Scale</label>
+          <input id="modelSize" type="range" min="0.5" max="1.4" step="0.01" value="0.86" disabled />
+          <output id="modelSizeValue" for="modelSize">0.86</output>
+        </div>
+        <div class="hud-control">
+          <label for="modelX">Side</label>
+          <input id="modelX" type="range" min="-2" max="2" step="0.01" value="0" disabled />
+          <output id="modelXValue" for="modelX">0.00</output>
+        </div>
+        <div class="hud-control">
+          <label for="modelDepth">Depth</label>
+          <input id="modelDepth" type="range" min="0.08" max="0.9" step="0.01" value="0.12" disabled />
+          <output id="modelDepthValue" for="modelDepth">0.12</output>
+        </div>
+        <div class="hud-control">
+          <label for="modelTurn">Turn</label>
+          <input id="modelTurn" type="range" min="0" max="360" step="1" value="0" disabled />
+          <output id="modelTurnValue" for="modelTurn">0 deg</output>
+        </div>
+        <div class="hud-control">
+          <label for="modelLift">Lift</label>
+          <input id="modelLift" type="range" min="-0.05" max="0.08" step="0.002" value="0" disabled />
+          <output id="modelLiftValue" for="modelLift">0.000</output>
+        </div>
+        </div>
+      </div>
+    </div>
+    <script type="module" src="/labs/shared/entry.js"></script>
+  </body>
+</html>

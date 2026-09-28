@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ToonLab Character Comparison</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body data-ready="false">
+    <main id="stage" aria-label="Neutral PBR and ToonLab character comparison">
+      <div class="label label-neutral">Neutral PBR</div>
+      <div class="label label-toon">ToonLab</div>
+      <div id="divider" aria-hidden="true"><span></span></div>
+      <input id="split" type="range" min="0" max="100" value="50" aria-label="Before and after split" />
+      <div id="status">Loading character…</div>
+    </main>
+    <script type="module" src="./main.js"></script>
+  </body>
+</html>

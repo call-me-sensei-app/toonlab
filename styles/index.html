@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Build portable ToonLab style bundles from the canonical rendering-system slots." />
+    <title>Styles — ToonLab</title>
+    <link rel="stylesheet" href="/labs/home/home.css" />
+    <link rel="stylesheet" href="/labs/gallery/gallery.css" />
+    <link rel="stylesheet" href="/labs/styles/styles.css" />
+  </head>
+  <body>
+    <toonlab-site-header active="styles"></toonlab-site-header>
+    <main class="home-main">
+      <section id="stylesIndex">
+        <div class="stb-index-head">
+          <div>
+            <div class="tl-kicker stb-kicker">Styles <span class="jp">スタイル</span></div>
+            <h1>Style bundles</h1>
+          </div>
+          <button id="newBundle" class="tl-btn tl-btn--primary">New bundle</button>
+        </div>
+        <p class="stb-intro">
+          Author one coordinated ToonLab style by choosing the treatment for each element:
+          characters, trees, grass, flowers, rocks, ground, manufactured surfaces, water,
+          sky, clouds, post-processing, and the remaining supported visual domains. Bundles are portable JSON
+          stored in your local Library; asset identity and runtime scenarios stay separate.
+        </p>
+        <div id="bundleToolbar" class="stb-toolbar" hidden>
+          <input id="bundleSearch" class="tl-input stb-search" type="search" placeholder="Search bundles…" />
+          <label class="tl-btn stb-import-button" for="importBundle">Import JSON</label>
+          <input id="importBundle" type="file" accept=".json,application/json" hidden />
+        </div>
+        <div id="bundleEmpty" class="tl-empty stb-empty" hidden>
+          <span class="stb-silhouette" aria-hidden="true">型</span>
+          <strong>No style bundles yet</strong>
+          <span>Create one and assign every element’s treatment from a single portable document.</span>
+        </div>
+        <div id="bundleList" class="stb-cards"></div>
+      </section>
+
+      <section id="stylesEditor" class="stb-editor-page" hidden>
+        <a class="stb-back" href="/styles/">← Style bundles</a>
+        <div class="stb-editor-grid">
+          <form id="bundleForm" class="stb-form">
+            <div class="stb-form-row">
+              <label class="stb-field stb-field--name">
+                <span>Name</span>
+                <input class="tl-input" name="label" required maxlength="120" placeholder="Sakura Dusk" />
+              </label>
+              <label class="stb-field stb-field--description">
+                <span>Description</span>
+                <input class="tl-input" name="description" maxlength="2000" placeholder="Warm cel shading, calm lake water, evening haze…" />
+              </label>
+            </div>
+            <div id="slotGroups"></div>
+            <div class="stb-actions">
+              <button class="tl-btn tl-btn--primary" type="submit">Save changes</button>
+              <span id="saveStatus" class="stb-saved" role="status"></span>
+            </div>
+          </form>
+          <aside class="stb-side">
+            <div class="stb-side-card">
+              <span id="portableBundleTitle" class="stb-side-title">Portable bundle</span>
+              <p id="portableBundleNote" class="stb-side-note">Export this bundle as JSON or import another bundle. Saved changes also appear in Library.</p>
+              <button id="exportBundle" class="tl-btn" type="button">Export JSON</button>
+              <label class="tl-btn" for="importBundleEditor">Import JSON</label>
+              <input id="importBundleEditor" type="file" accept=".json,application/json" hidden />
+            </div>
+            <div id="dangerBundleCard" class="stb-side-card stb-side-card--danger">
+              <span class="stb-side-title">Danger zone</span>
+              <button id="deleteBundle" class="tl-btn stb-danger" type="button">Delete bundle</button>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <div id="createOverlay" class="stb-overlay" role="dialog" aria-modal="true" aria-labelledby="createTitle" hidden>
+        <form id="createBundleForm" class="stb-dialog">
+          <div id="createTitle" class="tl-kicker">New bundle <span class="jp">新規</span></div>
+          <label class="stb-field">
+            <span>Name</span>
+            <input class="tl-input" name="label" required maxlength="120" placeholder="Sakura Dusk" />
+          </label>
+          <label class="stb-field">
+            <span>Description</span>
+            <input class="tl-input" name="description" maxlength="2000" placeholder="Warm cel shading, calm lake water, evening haze…" />
+          </label>
+          <span id="createStatus" class="stb-error" role="status"></span>
+          <div class="stb-dialog-actions">
+            <button id="cancelCreate" class="tl-btn" type="button">Cancel</button>
+            <button class="tl-btn tl-btn--primary" type="submit">Create &amp; edit</button>
+          </div>
+        </form>
+      </div>
+    </main>
+    <script type="module" src="/labs/styles/main.js"></script>
+  </body>
+</html>

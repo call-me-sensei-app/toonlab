@@ -1,0 +1,109 @@
+{
+  "schema": "toonlab/editable-rock-source-contract",
+  "version": 1,
+  "status": "repository-only-draft-checkpoint-8",
+  "independence": {
+    "newLibrary": true,
+    "existing480CatalogRole": "optional-reference-only",
+    "existing480MaySatisfyCoverage": false,
+    "existing480MaySatisfyCanonicalBaselineMinimums": false,
+    "existing480MayBeSilentlyCopied": false
+  },
+  "principles": [
+    "The editable canonical source is authoritative; all runtime meshes and texture maps are discardable derived artifacts.",
+    "A hand-shaped control mesh is allowed and preferred when it is the most reliable way to lock a subtype silhouette.",
+    "Procedural changes operate on named, bounded modifier parameters and must re-pass the selected morphology subtype contract.",
+    "Manual geometry changes create a new source revision and must re-pass geology, morphology, topology, UV, bake, and visual gates.",
+    "Arbitrary edits that leave the subtype envelope are never clamped or relabeled silently; they are rejected or explicitly reclassified.",
+    "One world unit equals one metre in every source, compiler, bake, and export stage."
+  ],
+  "sourcePackage": {
+    "requiredFiles": [
+      { "name": "source-manifest.json", "role": "identity, provenance, units, hashes, revisions, subtype, lithology, and artifact graph" },
+      { "name": "control-cage.glb", "role": "human-editable canonical silhouette and major structural planes" },
+      { "name": "recipe.json", "role": "geology recipe, dimensions in metres, fabrics, processes, and compiler inputs" },
+      { "name": "modifier-stack.json", "role": "ordered procedural edits with profile IDs and safe parameter bounds" },
+      { "name": "identity-landmarks.json", "role": "silhouette landmarks, supports, openings, crests, toes, seams, and subtype metrics" }
+    ],
+    "optionalFiles": [
+      { "name": "manual-high.glb", "role": "manually edited high-detail source override when edits cannot be represented on the control cage" },
+      { "name": "manual-delta.glb", "role": "vertex or sculpt delta tied to an exact source revision and topology hash" },
+      { "name": "authored-masks.exr", "role": "non-destructive geology-space masks such as protected caprock, cave roof, wetness exclusion, or seam zones" },
+      { "name": "reference-manifest.json", "role": "rights-cleared nature references and reviewer decisions" }
+    ],
+    "forbiddenAsSoleSource": ["runtime-low.glb", "baked-normal-map", "thumbnail", "opaque-generated-GLB-without-editable-cage-or-recipe"]
+  },
+  "revisionGraph": {
+    "immutableFields": ["sourceId", "originBaselineId", "metreUnit", "provenance"],
+    "revisionFields": ["sourceRevision", "parentRevision", "editKind", "editedBy", "editedAt", "contentHash", "topologyHash", "recipeHash"],
+    "editKinds": ["canonical-authoring", "procedural-modifier", "manual-control-cage", "manual-high-detail", "explicit-reclassification"],
+    "derivedArtifactRule": "Every output records the exact source revision, compiler version, recipe hash, modifier-stack hash, and bake profile."
+  },
+  "editModes": [
+    {
+      "id": "procedural-safe",
+      "input": "control-cage plus recipe plus modifier stack",
+      "allowed": ["bounded proportions", "joint spacing and finite offsets", "weathering exposure", "local silhouette relief", "material and bake resolution"],
+      "blocked": ["topology mutation not declared by subtype", "removing required supports", "changing opening class", "crossing identity metric bounds"],
+      "commit": "compile high detail, validate subtype, then rebake"
+    },
+    {
+      "id": "manual-control-cage",
+      "input": "control-cage revision with stable metre scale and named landmarks",
+      "allowed": ["vertex, edge, face, landmark, and structural-plane edits", "addition or deletion of cage topology with a new topology hash"],
+      "blocked": ["missing subtype", "missing landmark remap", "unresolved non-manifold cage", "silent unit conversion"],
+      "commit": "rebuild geology fields and high detail from the edited cage, validate subtype, then rebake"
+    },
+    {
+      "id": "manual-high-detail",
+      "input": "manual-high.glb tied to an exact parent revision",
+      "allowed": ["sculpting", "fracture cleanup", "art-directed erosion", "surface landmark refinement"],
+      "blocked": ["unknown units", "untracked mesh replacement", "missing high-to-low projection cage", "baked-detail-only edits"],
+      "commit": "validate high source directly, regenerate low mesh and UVs, then rebake all maps"
+    },
+    {
+      "id": "freeform-reclassify",
+      "input": "any valid source revision",
+      "allowed": ["edits outside the original subtype envelope"],
+      "blocked": ["keeping the old subtype after identity failure", "automatic nearest-label assignment"],
+      "commit": "select and approve a new subtype or create a reviewed taxonomy extension before rebake"
+    }
+  ],
+  "compileGraph": [
+    { "stage": 1, "id": "load-source", "output": "unit-normalized source package in formation-local geology space" },
+    { "stage": 2, "id": "apply-edit-stack", "output": "resolved control shape and manual override layers" },
+    { "stage": 3, "id": "identity-preflight", "output": "subtype metrics, forbidden-drift results, supports, openings, and landmark integrity" },
+    { "stage": 4, "id": "geology-high-detail", "output": "high-resolution neutral geometry with lithology, fabric, fracture, weathering, and process fields" },
+    { "stage": 5, "id": "high-source-audit", "output": "watertightness or declared terrain boundaries, finite features, support stability, metre scale, and geometry hashes" },
+    { "stage": 6, "id": "derive-runtime-mesh", "output": "topology-qualified low mesh or Nanite-ready production mesh with explicit LOD policy" },
+    { "stage": 7, "id": "unwrap", "output": "non-overlapping production UVs with measured texel density and padding" },
+    { "stage": 8, "id": "bake", "output": "normal, height, ambient occlusion, base color, roughness, metalness, and packed ORM maps" },
+    { "stage": 9, "id": "bake-audit", "output": "projection coverage, tangent consistency, seams, dilation, range, and determinism evidence" },
+    { "stage": 10, "id": "visual-gate", "output": "nature-reference, clay, baked neutral, and optionally stylized comparison renders" },
+    { "stage": 11, "id": "atomic-publish", "output": "new derived-artifact revision; previous valid output remains available until success" }
+  ],
+  "bakeProfiles": [
+    { "id": "shape-review", "resolution": 512, "productionReady": false, "purpose": "fast silhouette and projection diagnosis only" },
+    { "id": "standard-2k", "resolution": 2048, "productionReady": true, "purpose": "default prop and reusable module output after measured texel-density qualification" },
+    { "id": "hero-4k", "resolution": 4096, "productionReady": true, "purpose": "hero prop, outcrop, cliff module, and close camera output" },
+    { "id": "hero-8k", "resolution": 8192, "productionReady": "conditional", "purpose": "large hero modules only when measured screen coverage and memory budget justify it" }
+  ],
+  "roundTripQualification": {
+    "requiredPerSubtype": [
+      "canonical source to neutral bake",
+      "minimum safe procedural variation to rebake",
+      "maximum safe procedural variation to rebake",
+      "manual control-cage edit to rebake",
+      "out-of-envelope edit rejected or explicitly reclassified",
+      "deterministic rebuild of an unchanged source revision"
+    ],
+    "requiredEvidence": ["source and output hashes", "identity metric report", "clay turntable", "baked neutral turntable", "UV and projection diagnostics", "before-after comparison"],
+    "successRule": "Passing the compiler is necessary but never substitutes for morphology and visual approval."
+  },
+  "runtimeResize": {
+    "insideQualifiedEnvelope": "runtime transform is allowed without rebake",
+    "toonLabEditorOutsideEnvelope": "temporary preview followed by regenerate-and-rebake on commit",
+    "externalSceneOutsideEnvelope": "quality is not guaranteed and no automatic rebake occurs",
+    "futurePlugin": "may call the same content-addressed offline compiler and atomically swap the validated result"
+  }
+}

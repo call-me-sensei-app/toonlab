@@ -1,0 +1,211 @@
+{
+  "$schema": "./call-me-sensei-golden-matrix.schema.json",
+  "schema": "toonlab/golden-fixture-matrix@1",
+  "bundle": "call-me-sensei",
+  "packageVersion": "0.4.21",
+  "capture": {
+    "viewport": { "width": 1280, "height": 720, "deviceScaleFactor": 1 },
+    "seed": 18042026,
+    "warmupMs": 1200,
+    "fixedFrameCount": 60,
+    "capturePrimeCount": 2,
+    "repeatCount": 2,
+    "contentThresholds": {
+      "maxClippedPixelRatio": 0.18,
+      "minNonBlackPixelRatio": 0.1,
+      "minLumaStandardDeviation": 8
+    },
+    "thresholds": {
+      "meanDeltaE": 2.5,
+      "p95DeltaE": 8,
+      "pixelRatioAboveDeltaE": 0.04,
+      "pixelDeltaE": 6,
+      "ssim": 0.985
+    }
+  },
+  "axes": {
+    "renderers": ["webgpu", "webgl"],
+    "qualities": ["balanced", "performance"],
+    "timesOfDay": ["noon", "sunset", "moonlit", "overcast"],
+    "cameras": ["near", "medium", "far"]
+  },
+  "fixtures": [
+    {
+      "id": "walkable-coherence",
+      "domain": "integrated",
+      "label": "Walkable cross-domain coherence",
+      "route": "/playground/?scene=water&sample=walkable&anim=walking",
+      "captureEnabled": true,
+      "releaseEvidence": false,
+      "evidenceLimit": "Repository Playground regression fixture; Level D requires the clean packed consumer.",
+      "cases": ["mannequin-native"],
+      "datasets": {
+        "characterLoadStage": "ready",
+        "groundFieldReady": "true",
+        "sceneLook": "call-me-sensei",
+        "skySystemReady": "true",
+        "styleBundle": "call-me-sensei",
+        "walkablePhysicsReady": "true",
+        "waterReady": "true"
+      },
+      "selectorsToHide": [".water-hud", ".perf-hud", ".controls-hud", "#rendererSwitcher"],
+      "scenarioControl": { "selector": "#sampleTimeOfDay" },
+      "cameraControl": {
+        "selector": "#sampleCamera",
+        "values": { "near": "follow", "medium": "free", "far": "free" },
+        "wheel": { "near": 0, "medium": 420, "far": 1300 }
+      },
+      "cameraPoses": {
+        "near": { "position": [0, 2.35, 4.8], "target": [0, 1.05, -4] },
+        "medium": { "position": [8, 5.5, 11], "target": [0, 0.8, -12] },
+        "far": { "position": [24, 14, 30], "target": [0, 0, -22] }
+      },
+      "requiredDomains": ["character", "ground", "grass", "tree", "rock", "manufactured", "water", "sky-cloud", "lighting"]
+    },
+    {
+      "id": "character-materials-motion",
+      "domain": "character",
+      "label": "Character materials and rig motion",
+      "route": "/playground/?scene=water&sample=walkable&anim=walking&model=%2Fassets-local%2Fmodels%2Fganyu%2Fganyu.pmx",
+      "captureEnabled": true,
+      "captureFrom": "walkable-coherence",
+      "axes": { "renderers": ["webgpu", "webgl"], "qualities": ["balanced"], "timesOfDay": ["noon"], "cameras": ["near"] },
+      "datasets": { "animationReady": "true", "animationSource": "toonlab", "rigType": "mmd", "modelFormat": "mmd" },
+      "releaseEvidence": false,
+      "cases": ["pmx-ganyu"],
+      "requiredViews": ["front", "side", "back", "face", "walk", "jump"]
+    },
+    {
+      "id": "character-vrm-native-motion",
+      "domain": "character",
+      "label": "VRM humanoid and native motion",
+      "route": "/playground/?scene=water&sample=walkable&anim=walking&model=%2Fcharacters%2Fmannequin.vrm",
+      "captureEnabled": true,
+      "captureFrom": "walkable-coherence",
+      "axes": { "renderers": ["webgpu", "webgl"], "qualities": ["balanced"], "timesOfDay": ["noon"], "cameras": ["near"] },
+      "datasets": { "animationReady": "true", "animationSource": "native", "rigType": "vrm", "modelFormat": "vrm" },
+      "releaseEvidence": false,
+      "cases": ["vrm-1-humanoid", "embedded-idle", "embedded-walk"],
+      "requiredViews": ["back", "walk"]
+    },
+    {
+      "id": "character-fbx-native-motion",
+      "domain": "character",
+      "label": "FBX rig and namespaced native motion",
+      "route": "/playground/?scene=water&sample=walkable&anim=walking&model=%2Fcharacters%2Fmannequin.fbx",
+      "captureEnabled": true,
+      "captureFrom": "walkable-coherence",
+      "axes": { "renderers": ["webgpu", "webgl"], "qualities": ["balanced"], "timesOfDay": ["noon"], "cameras": ["near"] },
+      "datasets": { "animationReady": "true", "animationSource": "native", "rigType": "rigify", "modelFormat": "fbx" },
+      "releaseEvidence": false,
+      "cases": ["fbx-rigify", "namespaced-embedded-idle", "namespaced-embedded-walk"],
+      "requiredViews": ["back", "walk"]
+    },
+    {
+      "id": "ground-meadow-shoreline",
+      "domain": "ground",
+      "label": "Ground, meadow, and shoreline relationship",
+      "route": "/playground/?scene=water&sample=walkable&anim=walking",
+      "captureEnabled": true,
+      "captureFrom": "walkable-coherence",
+      "axes": { "renderers": ["webgpu", "webgl"], "qualities": ["balanced", "performance"], "timesOfDay": ["noon"], "cameras": ["near"] },
+      "datasets": { "groundShader": "call_me_sensei", "groundFieldReady": "true", "groundFieldWriters": "1" },
+      "releaseEvidence": false,
+      "cases": ["flat-meadow", "uneven-terrain", "shoreline-terrain"],
+      "requiredAssertions": ["grass-ground-color", "dry-land-outside-water", "stable-projection", "cool-day-shadow"]
+    },
+    {
+      "id": "rock-material-forms",
+      "domain": "rock",
+      "label": "Rock shader across supported forms",
+      "route": "/playground/?scene=water&sample=walkable&anim=walking",
+      "captureEnabled": true,
+      "captureFrom": "walkable-coherence",
+      "axes": { "renderers": ["webgpu", "webgl"], "qualities": ["balanced"], "timesOfDay": ["noon"], "cameras": ["medium"] },
+      "datasets": { "rockCatalogSource": "480", "rock0084Shader": "call_me_sensei", "horizonMountainConstruction": "catalog-cliff-composition" },
+      "releaseEvidence": false,
+      "cases": ["generated-rock", "catalog-boulder", "cliff-face", "mixed-textured-rock"],
+      "requiredAssertions": ["grey-albedo", "highlight-headroom", "cool-day-shadow", "rock-shader-only"]
+    },
+    {
+      "id": "manufactured-material-separation",
+      "domain": "manufactured",
+      "label": "Manufactured surface separation",
+      "route": "/playground/?scene=water&sample=walkable&anim=walking",
+      "captureEnabled": true,
+      "captureFrom": "walkable-coherence",
+      "axes": { "renderers": ["webgpu", "webgl"], "qualities": ["balanced"], "timesOfDay": ["noon"], "cameras": ["medium"] },
+      "datasets": { "quaterniusBenchShader": "manufacturedSurface", "quaterniusBenchManufacturedMaterials": "2" },
+      "cameraPoses": { "medium": { "position": [3, 1.8, -1.5], "target": [3, 0.45, -5.6] } },
+      "releaseEvidence": false,
+      "cases": ["separated-material-bench", "mixed-atlas-prop", "interior-surface"],
+      "requiredAssertions": ["material-separation", "manufactured-shader-only", "source-restore"]
+    },
+    {
+      "id": "tree-species-foliage",
+      "domain": "tree",
+      "label": "Tree species and foliage cards",
+      "route": "/playground/?scene=water&sample=walkable&anim=walking",
+      "captureEnabled": true,
+      "captureFrom": "walkable-coherence",
+      "axes": { "renderers": ["webgpu", "webgl"], "qualities": ["balanced"], "timesOfDay": ["noon"], "cameras": ["far"] },
+      "datasets": { "treeCanopyMode": "solid-per-tree", "treeCanopyUniqueColors": "5" },
+      "releaseEvidence": false,
+      "cases": ["broadleaf", "conifer", "card-heavy-foliage"],
+      "requiredAssertions": ["solid-color-per-tree", "intentional-between-tree-variation", "card-alpha", "lod-transition"]
+    },
+    {
+      "id": "grass-implementations",
+      "domain": "grass",
+      "label": "Grass implementations and dense meadow",
+      "route": "/playground/?scene=water&sample=walkable&anim=walking",
+      "captureEnabled": true,
+      "captureFrom": "walkable-coherence",
+      "axes": { "renderers": ["webgpu", "webgl"], "qualities": ["balanced", "performance"], "timesOfDay": ["noon"], "cameras": ["near"] },
+      "datasets": { "grassApi": "createCallMeSenseiGrassField", "grassPreset": "call_me_sensei_clump", "grassBladesPerClump": "40", "groundFieldReady": "true" },
+      "releaseEvidence": false,
+      "cases": ["procedural-clump", "retained-clump", "dense-ground-adopting-meadow"],
+      "requiredAssertions": ["call-me-sensei-clump-settings", "ground-adoption", "density", "lod-culling"]
+    },
+    {
+      "id": "water-shore-composition",
+      "domain": "water",
+      "label": "Water conditions and shoreline composition",
+      "route": "/playground/?scene=water&sample=walkable&anim=walking",
+      "captureEnabled": true,
+      "captureFrom": "walkable-coherence",
+      "axes": { "renderers": ["webgpu", "webgl"], "qualities": ["balanced"], "timesOfDay": ["noon", "sunset"], "cameras": ["medium"] },
+      "datasets": { "waterMode": "calm", "waterStyle": "call_me_sensei", "waterTone": "anime", "waterNearshorePhase": "true" },
+      "releaseEvidence": false,
+      "cases": ["calm-lake", "river-flow", "surf-shoreline"],
+      "requiredAssertions": ["anime-water-style", "condition-independence", "swash", "foam", "entry-exit-continuity"]
+    },
+    {
+      "id": "sky-cloud-scenarios",
+      "domain": "sky-cloud",
+      "label": "Sky and cloud scenario matrix",
+      "route": "/playground/?scene=water&sample=walkable&anim=walking",
+      "captureEnabled": true,
+      "captureFrom": "walkable-coherence",
+      "axes": { "renderers": ["webgpu", "webgl"], "qualities": ["balanced"], "timesOfDay": ["noon", "sunset", "moonlit", "overcast"], "cameras": ["far"] },
+      "cameraPoses": { "far": { "position": [24, 10, 30], "target": [0, 10, -22] } },
+      "datasets": { "skyApi": "SkySystem", "skyCloudApi": "raymarched-volumetric-deck", "skySystemReady": "true" },
+      "releaseEvidence": false,
+      "cases": ["clear-noon", "partly-cloudy-noon", "sunset", "moonlit", "overcast"],
+      "requiredAssertions": ["bright-blue-noon", "sun-probe-alignment", "cloud-lighting-alignment", "water-reflection-alignment"]
+    },
+    {
+      "id": "lighting-shadow-contract",
+      "domain": "lighting",
+      "label": "Call Me Sensei lighting and shadow contract",
+      "route": "/playground/?scene=water&sample=walkable&anim=walking",
+      "captureEnabled": true,
+      "captureFrom": "walkable-coherence",
+      "axes": { "renderers": ["webgpu", "webgl"], "qualities": ["balanced"], "timesOfDay": ["noon", "sunset", "moonlit", "overcast"], "cameras": ["near"] },
+      "datasets": { "sceneLightingContract": "call-me-sensei-reference", "shadowPassReady": "true", "shadowSunReady": "true" },
+      "releaseEvidence": false,
+      "cases": ["grey-sphere", "rock-back-shadow", "character-back-shadow", "tree-back-shadow"],
+      "requiredAssertions": ["blue-day-back-shadow", "no-white-clipping", "stable-walking-shadow", "probe-sun-coherence"]
+    }
+  ]
+}

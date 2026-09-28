@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M0 0H100V78L78 100H0Z' fill='%23e8332e'/%3E%3Ctext x='50' y='72' font-size='64' font-weight='900' font-family='Hiragino Sans, Yu Gothic, Noto Sans JP, sans-serif' fill='white' text-anchor='middle'%3E%E3%83%88%3C/text%3E%3C/svg%3E" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="ToonLab — open-source stylized (anime/toon) game toolkit for Three.js. Pick a lab: shading, water, procedural rocks, trees, textures and more." />
+    <title>ToonLab — Labs</title>
+    <script>
+      // Legacy deep links: the Shader Lab (and hub scenes reachable by query
+      // param) lived on this root page before the Labs home landed here. Any
+      // query string is a pre-move deep link — forward it, before paint, to
+      // the page that owns it now.
+      (function () {
+        var search = window.location.search;
+        if (!search || search.length <= 1) return;
+        var params = new URLSearchParams(search);
+        var scene = (params.get('scene') || '').toLowerCase();
+        var controller = (params.get('controller') || '').toLowerCase();
+        var target = '/shader-lab/';
+        if (scene === 'rock') target = '/rock-lab/';
+        else if (controller === 'ecctrl' || scene === 'water' || scene === 'indoor' || scene === 'liyue') target = '/playground/';
+        window.location.replace(target + search + window.location.hash);
+      })();
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=M+PLUS+1:wght@400;500;700;800;900&family=Zen+Kaku+Gothic+New:wght@500;700;900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap"
+    />
+    <link rel="stylesheet" href="/labs/home/home.css" />
+  </head>
+  <body>
+    <toonlab-site-header active="labs"></toonlab-site-header>
+
+    <main class="home-main">
+      <div data-reveal class="is-revealed">
+        <div class="tl-kicker">
+          ラボ <span class="jp">選択</span> <span data-i18n="chooseLab">Choose your lab</span>
+        </div>
+        <h1 class="sec-title">
+          <span data-i18n="labsTitle">Labs</span> <span class="dim" data-i18n="labsSuffix">— everything runs in your browser.</span>
+        </h1>
+        <p class="home-sub" data-home-explore>Explore 15 user-facing authoring Labs.</p>
+      </div>
+
+      <section class="home-section home-section--first" aria-labelledby="betaLabsHeading">
+        <div data-reveal>
+          <div class="tl-kicker">
+            ベータ <span class="jp">公開中</span> <span data-i18n="betaLabs">Live Labs</span>
+          </div>
+          <h2 id="betaLabsHeading" class="sec-title home-section-title">
+            <span data-i18n="chooseByType">Choose by product type</span> <span class="dim" data-i18n="chooseByTypeSuffix">— shaders, generated assets, and reusable source maps.</span>
+          </h2>
+        </div>
+        <div id="betaLabGroups" class="lab-product-groups"></div>
+      </section>
+
+      <section class="home-section" aria-labelledby="walkableSampleHeading">
+        <div data-reveal>
+          <div class="tl-kicker">
+            実例 <span class="jp">散策</span> <span data-i18n="demo">Example</span>
+          </div>
+          <h2 id="walkableSampleHeading" class="sec-title home-section-title">
+            Walkable sample scene <span class="dim">— see the packaged systems working together.</span>
+          </h2>
+        </div>
+        <div id="walkableSampleGrid" class="lab-grid" data-reveal-stagger></div>
+      </section>
+
+    </main>
+
+    <footer class="home-footer">
+      <span data-i18n="footer">MIT — ToonLab by Call Me Sensei</span>
+      <a href="https://github.com/call-me-sensei-app/toonlab" target="_blank" rel="noreferrer">github.com/call-me-sensei-app/toonlab</a>
+    </footer>
+
+    <script type="module" src="/labs/home/main.js"></script>
+  </body>
+</html>

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M0 0H100V78L78 100H0Z' fill='%23e8332e'/%3E%3Ctext x='50' y='72' font-size='64' font-weight='900' font-family='Hiragino Sans, Yu Gothic, Noto Sans JP, sans-serif' fill='white' text-anchor='middle'%3E%E3%83%88%3C/text%3E%3C/svg%3E" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="ToonLab gallery — locally indexed open and ToonLab-owned assets downloaded from immutable public releases." />
+    <title>Gallery — ToonLab</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=M+PLUS+1:wght@400;500;700;800;900&family=Zen+Kaku+Gothic+New:wght@500;700;900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap"
+    />
+    <link rel="stylesheet" href="/labs/home/home.css" />
+    <link rel="stylesheet" href="/labs/gallery/gallery.css" />
+  </head>
+  <body>
+    <toonlab-site-header active="gallery"></toonlab-site-header>
+
+    <main class="home-main gal-main">
+      <div class="gal-toolbar">
+        <h1>Gallery</h1>
+        <span class="jp">ギャラリー</span>
+        <span id="galStatus" class="gal-section-note mono"></span>
+        <form id="galFilters" class="gal-filters tl-control-row">
+          <input
+            id="galSearch"
+            class="tl-input gal-search"
+            type="search"
+            name="q"
+            placeholder="Search assets…"
+            autocomplete="off"
+          />
+          <select id="galSource" class="tl-input" name="src" title="Source">
+            <option value="">All sources</option>
+          </select>
+          <select id="galLicense" class="tl-input" name="license" title="License">
+            <option value="">All open licenses</option>
+          </select>
+          <select id="galType" class="tl-input" name="type" title="Type">
+            <option value="">All types</option>
+            <optgroup label="Open assets">
+              <option value="texture">Texture</option>
+              <option value="model">3D model</option>
+              <option value="hdri">HDRI</option>
+              <option value="vfx">VFX</option>
+              <option value="tree-recipe">Tree recipe</option>
+            </optgroup>
+          </select>
+          <select id="galSize" class="tl-input" name="size" title="Rock size" hidden>
+            <option value="">All rock sizes</option>
+            <option value="small">Small rocks</option>
+            <option value="medium">Medium rocks</option>
+            <option value="large">Large rocks</option>
+          </select>
+        </form>
+      </div>
+
+      <div id="galGrid" class="gal-grid"></div>
+
+      <div id="galEmpty" class="tl-empty" hidden>
+        <div style="font-size: 40px">🌱</div>
+        <strong id="galEmptyTitle">Nothing matches</strong>
+        <span id="galEmptyHint">Try different filters or a broader search.</span>
+      </div>
+
+      <div id="galPager" class="gal-pager" hidden>
+        <a id="galPrev" class="tl-btn" href="?">← Previous</a>
+        <span id="galPagerStatus" class="gal-pager-status mono"></span>
+        <a id="galNext" class="tl-btn" href="?">Next →</a>
+      </div>
+    </main>
+
+    <footer class="home-footer">
+      <span>MIT — ToonLab by Call Me Sensei</span>
+      <a href="https://github.com/call-me-sensei-app/toonlab" target="_blank" rel="noreferrer">github.com/call-me-sensei-app/toonlab</a>
+    </footer>
+
+    <script type="module" src="/labs/gallery/main.js"></script>
+  </body>
+</html>

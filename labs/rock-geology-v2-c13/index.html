@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Rock geology v2 · C13 regression proof</title>
+    <style>
+      :root { color-scheme: dark; font-family: Inter, ui-sans-serif, system-ui, sans-serif; }
+      * { box-sizing: border-box; }
+      html, body, #stage { width: 100%; height: 100%; margin: 0; overflow: hidden; }
+      body { background: #101820; }
+      canvas { display: block; width: 100%; height: 100%; }
+      #title, #status, #legend {
+        position: fixed; z-index: 2; border: 1px solid rgba(255,255,255,.15);
+        border-radius: 10px; background: rgba(8,12,17,.82); backdrop-filter: blur(10px);
+      }
+      #title { left: 18px; top: 18px; padding: 11px 14px; }
+      #title strong { display: block; font-size: 15px; }
+      #title span { color: #aebdca; font-size: 11px; letter-spacing: .04em; text-transform: uppercase; }
+      #status { right: 18px; top: 18px; padding: 9px 12px; color: #c8d5df; font-size: 11px; }
+      #legend {
+        left: 18px; right: 18px; bottom: 18px; display: grid; grid-template-columns: repeat(4, 1fr);
+        gap: 8px; padding: 9px;
+      }
+      .legend-item { padding: 8px 10px; border-radius: 7px; background: rgba(255,255,255,.055); }
+      .legend-item strong { display: block; color: #f2f5f7; font-size: 12px; }
+      .legend-item span { color: #aebdca; font-size: 10px; }
+      .safe { border-left: 3px solid #67c892; }
+      .rebake { border-left: 3px solid #e39a52; }
+      body[data-hud="false"] #title, body[data-hud="false"] #status, body[data-hud="false"] #legend { display: none; }
+    </style>
+  </head>
+  <body data-c13-ready="false">
+    <main id="stage" aria-label="C13 hoodoo LOD and scale regression proof"></main>
+    <div id="title"><strong>C13 · Hoodoo regression slice</strong><span id="subtitle">Loading</span></div>
+    <div id="status">Loading admitted GLBs…</div>
+    <div id="legend"></div>
+    <script type="module" src="./main.js"></script>
+  </body>
+</html>

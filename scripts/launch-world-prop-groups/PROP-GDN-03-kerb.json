@@ -1,0 +1,78 @@
+{
+  "partitionBy": "material",
+  "regroup": true,
+  "rowAxis": "y",
+  "note": "Every part carries its own `metres`. The D-018a group recipe's coherent-size claim does not survive measurement: an illustrator drawing a product row gives each object similar VISUAL weight, which is the opposite of drawing to one scale. Sizes below are real-world dimensions, each solved from the axis the scene has to fit (D19-146).",
+  "lodNote": "LOD0 is not decimated. Section 8's 20k-180k band is a HERO prop band; supporting street and garden furniture lands under it once a group's triangles divide across its objects. Reported plainly rather than dressed as a band pass.",
+  "id": "PROP-GDN-03-kerb",
+  "title": "Dressed split granite path edging",
+  "spec": "launch-plan/20-stillwater-garden-scene-brief.md \u00a73 (path edging); doc 21 \u00a73 reuses it as street kerb",
+  "expect": 6,
+  "anchor": {
+    "index": 0,
+    "axis": "longest",
+    "metres": 0.9
+  },
+  "parts": [
+    {
+      "id": "kerb-01",
+      "label": "Split granite kerb bar 1",
+      "slot": "granite",
+      "axis": "longest",
+      "metres": 0.9,
+      "lod0": 0,
+      "lod1": 3000,
+      "lod2": 800
+    },
+    {
+      "id": "kerb-02",
+      "label": "Split granite kerb bar 2",
+      "slot": "granite",
+      "axis": "longest",
+      "metres": 0.9,
+      "lod0": 0,
+      "lod1": 3000,
+      "lod2": 800
+    },
+    {
+      "id": "kerb-03",
+      "label": "Split granite kerb bar 3",
+      "slot": "granite",
+      "axis": "longest",
+      "metres": 0.9,
+      "lod0": 0,
+      "lod1": 3000,
+      "lod2": 800
+    },
+    {
+      "id": "kerb-04",
+      "label": "Split granite kerb bar 4",
+      "slot": "granite",
+      "axis": "longest",
+      "metres": 0.9,
+      "lod0": 0,
+      "lod1": 3000,
+      "lod2": 800
+    },
+    {
+      "id": "kerb-05",
+      "label": "Split granite kerb bar 5",
+      "slot": "granite",
+      "axis": "longest",
+      "metres": 0.9,
+      "lod0": 0,
+      "lod1": 3000,
+      "lod2": 800
+    },
+    {
+      "id": "kerb-06",
+      "label": "Split granite kerb bar 6",
+      "slot": "granite",
+      "axis": "longest",
+      "metres": 0.9,
+      "lod0": 0,
+      "lod1": 3000,
+      "lod2": 800
+    }
+  ]
+}

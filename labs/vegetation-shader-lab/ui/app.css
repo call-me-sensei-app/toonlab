@@ -1,0 +1,100 @@
+/* Vegetation Shader Lab intentionally reuses the production Grass Lab shell.
+   Only the authored schema and validation stage differ. */
+@import '../../grass-lab/ui/app.css';
+
+.vg-family-nav {
+  display: inline-flex;
+  flex: none;
+  gap: 2px;
+  padding: 2px;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-2);
+  background: var(--surface-1);
+}
+
+.vg-family-nav a {
+  padding: 4px 8px;
+  border-radius: var(--radius-1);
+  color: var(--text-tertiary);
+  font: var(--type-caption);
+  text-decoration: none;
+  transition:
+    background var(--motion-fast),
+    color var(--motion-fast);
+}
+
+.vg-family-nav a:hover {
+  color: var(--text-secondary);
+}
+
+.vg-family-nav a[data-active='true'] {
+  background: var(--accent-subtle);
+  color: var(--accent-300);
+}
+
+.vg-preview-fixture {
+  color: var(--preview-300);
+  font: var(--type-caption);
+}
+
+.vg-camera-mode {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--preview-300);
+  font: var(--type-caption);
+}
+
+.vg-camera-mode .tk-segmented button {
+  padding-inline: 7px;
+}
+
+.gr-doc-help {
+  margin: var(--space-1) 0;
+  color: var(--text-muted);
+  font: var(--type-caption);
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+
+.vg-shared-impact {
+  display: grid;
+  gap: 4px;
+  margin: 0 12px 10px;
+  padding: 9px 10px;
+  border: 1px solid color-mix(in srgb, var(--warning-400, #d7a84b) 42%, transparent);
+  border-radius: var(--radius-2);
+  background: color-mix(in srgb, var(--warning-400, #d7a84b) 10%, transparent);
+  color: var(--text-secondary);
+  font: var(--type-caption);
+  line-height: 1.42;
+}
+
+.vg-shared-impact strong {
+  color: var(--warning-300, #e7bd68);
+  font-weight: 600;
+}
+
+.vg-asset-owner {
+  display: grid;
+  gap: 4px;
+  margin: 0 12px 10px;
+  padding: 9px 10px;
+  border: 1px solid var(--preview-border);
+  border-radius: var(--radius-2);
+  background: var(--preview-subtle);
+  color: var(--text-secondary);
+  font: var(--type-caption);
+  line-height: 1.42;
+}
+
+.vg-asset-owner strong {
+  color: var(--preview-300);
+  font-weight: 600;
+}
+
+@media (max-width: 980px) {
+  .vg-family-nav {
+    display: none;
+  }
+}

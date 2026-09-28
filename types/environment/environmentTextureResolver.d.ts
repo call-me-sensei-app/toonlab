@@ -1,0 +1,30 @@
+export function textureKindCandidateUrl(sourceUrl: any, kind: any): any;
+export function textureUrlExists(url: any): Promise<any>;
+export function copyTextureTransform(target: any, source: any): any;
+export function loadEnvironmentTexture(url: any, referenceTexture: any, { colorSpace }?: {
+    colorSpace?: "srgb";
+}): any;
+export function resolveEnvironmentTextureSet(mat: any): Promise<{
+    alphaFromLuminance: boolean;
+    alphaMap: any;
+    aoMap: any;
+    aoMapIntensity: any;
+    baseMap: any;
+    baseMapWasUtility: boolean;
+    emissiveColor: any;
+    emissiveMap: any;
+    lightMap: any;
+    lightMapIntensity: any;
+    normalMap: any;
+    normalScale: any;
+    packedMap: any;
+    resolvedDiffuseMap: boolean;
+    colormapMap: any;
+    colormapRegion: any;
+    triplanarMap: any;
+    untextured: boolean;
+}>;
+export const fallbackEnvironmentWhiteTexture: THREE.DataTexture;
+export const fallbackEnvironmentBlackTexture: THREE.DataTexture;
+export const fallbackEnvironmentNormalTexture: THREE.DataTexture;
+import * as THREE from 'three';

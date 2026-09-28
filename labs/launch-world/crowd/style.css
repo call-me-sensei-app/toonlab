@@ -1,0 +1,17 @@
+* { box-sizing: border-box; }
+html, body { height: 100%; margin: 0; background: #0f1418; color: #e8eef2;
+  font: 13px/1.45 ui-monospace, SFMono-Regular, Menlo, monospace; overflow: hidden; }
+#stage { position: fixed; inset: 0; }
+#stage canvas { display: block; width: 100%; height: 100%; }
+#loading { position: fixed; inset: auto 0 0 0; padding: 14px 18px; background: #0f1418dd;
+  display: flex; gap: 12px; align-items: baseline; }
+#loading[data-error='true'] { color: #ff9a8a; }
+#hud { position: fixed; top: 12px; left: 12px; display: flex; flex-direction: column; gap: 6px; }
+#hud .row { display: flex; gap: 6px; }
+#hud button { background: #1b242c; color: #c9d6de; border: 1px solid #2f3d47; border-radius: 5px;
+  padding: 5px 11px; font: inherit; cursor: pointer; }
+#hud button.active { background: #2f8f92; color: #04191a; border-color: #2f8f92; }
+#readout { position: fixed; top: 12px; right: 12px; margin: 0; padding: 10px 14px;
+  background: #0f1418cc; border: 1px solid #24303a; border-radius: 6px; white-space: pre;
+  font-size: 12px; line-height: 1.5; }
+body[data-ui='0'] #hud, body[data-ui='0'] #readout, body[data-ui='0'] #loading { display: none; }

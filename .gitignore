@@ -1,0 +1,39 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Build output and generated caches
+dist/
+dist-ssr/
+build/
+coverage/
+.cache/
+__pycache__/
+*.py[cod]
+*.tsbuildinfo
+playwright-report/
+test-results/
+
+# Local runtime data and credentials
+.toonlab/
+assets-local/
+.env
+.env.*
+!.env.example
+labs/shared/local*.generated.js
+
+# Logs
+logs/
+*.log
+
+# Editor and operating-system files
+.vscode/*
+!.vscode/extensions.json
+.idea/
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?

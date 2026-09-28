@@ -1,0 +1,300 @@
+{
+  "schema": "toonlab/rock-geology-source-register",
+  "version": 1,
+  "status": "repository-only-draft",
+  "auditedAt": "2026-08-16",
+  "policy": {
+    "default": "independent-implementation-from-method-description",
+    "copiedCodeAllowed": false,
+    "externalAssetsBundled": false,
+    "attributionFileRequiredForAdaptedCode": true
+  },
+  "sources": [
+    {
+      "id": "vibe3d-terrain-2026-08-14",
+      "kind": "source-code",
+      "title": "vibe3d terrain and compiled-topology pipeline",
+      "url": "https://github.com/vibe-stack/vibe3d",
+      "revision": "10bba5dbb0dcac855fbbeb112c1804c5999ca120",
+      "revisionDate": "2026-08-14T21:11:47Z",
+      "license": "MIT",
+      "licenseStatus": "compatible-with-attribution",
+      "use": "methodology-only",
+      "adapt": [
+        "offline authoritative recipe plus disposable compiled cache",
+        "band-limit geometry fields by extraction resolution",
+        "separate geometry-frequency and surface-bake-frequency detail",
+        "world-space texel-density policy",
+        "content identity and compiled artifact claims"
+      ],
+      "reject": [
+        "two-family geology as a general geology system",
+        "post-extraction fin removal as topology proof",
+        "largest-component pruning as a substitute for stability/deposition",
+        "hole filling that may trade closedness for manifoldness",
+        "self-declared topology claims without complete independent audit",
+        "copying the library or its asset recipes"
+      ],
+      "codeCopied": false
+    },
+    {
+      "id": "paris-implicit-terrain-2019",
+      "kind": "paper-and-source-code",
+      "title": "Terrain Amplification with Implicit 3D Features",
+      "url": "https://github.com/aparis69/Implicit-Volumetric-Terrains",
+      "paperUrl": "https://people.cs.uct.ac.za/~jgain/wp-content/papercite-data/pdf/paris2019.pdf",
+      "revision": "2e7bb3ee79b8d8ffabdeb0958a55c6171f2791fe",
+      "revisionDate": "2022-05-20T14:37:18Z",
+      "license": "MIT",
+      "licenseStatus": "compatible-with-attribution",
+      "use": "methodology-only",
+      "adapt": [
+        "implicit geological feature composition",
+        "bounded strata and karst/cave feature concepts",
+        "sea-erosion feature placement",
+        "construction-tree and spatial-acceleration concepts"
+      ],
+      "reject": [
+        "assuming the research reimplementation reproduces every paper result",
+        "the omitted optimized mesher and hoodoo grammar"
+      ],
+      "codeCopied": false
+    },
+    {
+      "id": "paris-implicit-blocks-2020",
+      "kind": "paper-and-source-code",
+      "title": "Modeling Rocky Scenery Using Implicit Blocks",
+      "url": "https://github.com/aparis69/Rock-fracturing",
+      "paperUrl": "https://aparis69.github.io/public_html/projects/paris2020_Blocks.html",
+      "revision": "b91965b3011ed269cbc3a051b00c9b284aaa2e36",
+      "revisionDate": "2022-05-20T14:53:27Z",
+      "license": "MIT",
+      "licenseStatus": "compatible-with-attribution",
+      "use": "methodology-only",
+      "adapt": [
+        "equidimensional rhombohedral polyhedral and tabular block classes",
+        "fracture-constrained graph clustering",
+        "convex half-space block fields",
+        "gradient warp and spatial acceleration"
+      ],
+      "reject": [
+        "hard-coded research constants",
+        "missing implicit replication and aperiodic tiling",
+        "treating visual block assembly as a stability simulation"
+      ],
+      "codeCopied": false
+    },
+    {
+      "id": "lanl-dfnworks-2026-08-01",
+      "kind": "source-code-and-documentation",
+      "title": "LANL dfnWorks / DFNGen",
+      "url": "https://github.com/lanl/dfnWorks",
+      "documentationUrl": "https://dfnworks.lanl.gov/dfngen.html",
+      "revision": "ad811c027dd725083f9ab3bd81145e584efba7d2",
+      "revisionDate": "2026-08-01T14:36:38Z",
+      "license": "LGPL-3.0",
+      "licenseStatus": "concepts-only-no-code-import",
+      "use": "statistical-concepts-only",
+      "adapt": [
+        "finite fracture families",
+        "dip and strike orientation",
+        "von Mises-Fisher orientation dispersion",
+        "lognormal truncated-power-law exponential and constant size distributions",
+        "fracture intensity persistence aperture and accepted-versus-rejected statistics"
+      ],
+      "reject": [
+        "dependency on DFN flow transport or meshing suite",
+        "copying LGPL implementation into the ToonLab compiler"
+      ],
+      "codeCopied": false
+    },
+    {
+      "id": "mateos-mechanical-weathering-2023",
+      "kind": "thesis-and-source-code",
+      "title": "Simulation of Mechanical Weathering for Modeling Rocky Terrains",
+      "url": "https://github.com/dimateos/UPC-MIRI-TFM-erosion",
+      "revision": "f9870d8e6fba584a4bd6882dd4d924e80857cac1",
+      "revisionDate": "2024-08-20T09:25:34Z",
+      "license": "MIT",
+      "licenseStatus": "compatible-with-attribution",
+      "use": "methodology-only",
+      "adapt": [
+        "fracture-cell adjacency graph",
+        "water infiltration propagation absorption and bond damage",
+        "iterative detachment accounting"
+      ],
+      "reject": [
+        "the documented absence of complete stability computation",
+        "Blender add-on architecture and serialization assumptions"
+      ],
+      "codeCopied": false
+    },
+    {
+      "id": "schaefer-manifold-dual-contouring-2007",
+      "kind": "paper",
+      "title": "Manifold Dual Contouring",
+      "url": "https://doi.org/10.1109/TVCG.2007.1012",
+      "revision": "published-paper",
+      "license": "publisher-copyright",
+      "licenseStatus": "paper-reference-independent-implementation",
+      "use": "algorithm-description-only",
+      "adapt": ["topology-preserving dual-contouring candidate and test fixtures"],
+      "reject": ["copying unavailable or unlicensed source"],
+      "codeCopied": false
+    },
+    {
+      "id": "custodio-corrected-mc33-2013",
+      "kind": "paper",
+      "title": "Practical considerations on Marching Cubes 33 topological correctness",
+      "url": "https://www.sci.utah.edu/~etiene/pdf/mc33.pdf",
+      "revision": "published-paper",
+      "license": "publisher-copyright",
+      "licenseStatus": "paper-reference-independent-implementation",
+      "use": "algorithm-description-only",
+      "adapt": ["corrected MC33 candidate and ambiguous-cell fixtures"],
+      "reject": ["assuming classic marching cubes is topologically sufficient"],
+      "codeCopied": false
+    },
+    {
+      "id": "grose-loopstructural-2021",
+      "kind": "open-access-paper",
+      "title": "LoopStructural 1.0: time-aware geological modelling",
+      "url": "https://gmd.copernicus.org/articles/14/3915/2021/",
+      "revision": "GMD-14-3915-2021",
+      "revisionDate": "2021-06-25",
+      "license": "CC-BY-4.0-paper",
+      "licenseStatus": "method-description-independent-implementation",
+      "use": "methodology-only",
+      "adapt": [
+        "implicit scalar fields for stratigraphic coordinates",
+        "ordered time-aware geological feature evaluation",
+        "structural frames for fold and fault coordinate systems",
+        "restoration of younger deformation before evaluating older features"
+      ],
+      "reject": [
+        "copying LoopStructural source",
+        "claiming the compact ToonLab evaluator is a substitute for observational geological modelling"
+      ],
+      "codeCopied": false
+    },
+    {
+      "id": "grose-loopstructural-faults-2021",
+      "kind": "open-access-paper",
+      "title": "Realistic modelling of faults in LoopStructural",
+      "url": "https://gmd.copernicus.org/articles/14/6197/2021/",
+      "revision": "GMD-14-6197-2021",
+      "revisionDate": "2021-10-19",
+      "license": "CC-BY-4.0-paper",
+      "licenseStatus": "method-description-independent-implementation",
+      "use": "methodology-only",
+      "adapt": [
+        "finite fault frames",
+        "bounded displacement profiles",
+        "event-aware fault restoration"
+      ],
+      "reject": [
+        "copying LoopStructural source or interpolation code",
+        "using infinite tiled fault planes"
+      ],
+      "codeCopied": false
+    },
+    {
+      "id": "de-la-varga-gempy-2019",
+      "kind": "open-access-paper",
+      "title": "GemPy 1.0: open-source stochastic geological modeling and inversion",
+      "url": "https://gmd.copernicus.org/articles/12/1/2019/",
+      "revision": "GMD-12-1-2019",
+      "revisionDate": "2019-01-02",
+      "license": "CC-BY-4.0-paper",
+      "licenseStatus": "method-description-independent-implementation",
+      "use": "methodology-cross-check",
+      "adapt": [
+        "implicit potential-field representation of contacts and orientations",
+        "fault and unconformity relationship semantics"
+      ],
+      "reject": [
+        "copying GemPy source",
+        "adding its probabilistic inversion stack to the offline asset compiler"
+      ],
+      "codeCopied": false
+    },
+    {
+      "id": "bgs-rock-classification",
+      "kind": "government-geology-reference",
+      "title": "British Geological Survey Rock Classification Scheme",
+      "url": "https://www.bgs.ac.uk/technologies/bgs-rock-classification-scheme/",
+      "revision": "accessed-2026-08-16",
+      "license": "BGS-terms",
+      "licenseStatus": "terminology-reference-no-media-copy",
+      "use": "classification-and-terminology",
+      "adapt": ["high-level lithology grouping and geological vocabulary"],
+      "reject": ["redistributing BGS diagrams or text without explicit permission"],
+      "codeCopied": false
+    },
+    {
+      "id": "bgs-discontinuities",
+      "kind": "government-geology-reference",
+      "title": "BGS discontinuity classification terms and descriptions",
+      "url": "https://earthwise.bgs.ac.uk/index.php/OR/15/065_Appendix_3_-_Discontinuities_classification_terms_and_descriptions",
+      "revision": "accessed-2026-08-16",
+      "license": "BGS-terms",
+      "licenseStatus": "terminology-reference-no-media-copy",
+      "use": "classification-and-terminology",
+      "adapt": ["spacing persistence aperture roughness infill and weathering vocabulary"],
+      "reject": ["redistributing BGS media"],
+      "codeCopied": false
+    },
+    {
+      "id": "nps-columnar-jointing",
+      "kind": "government-geology-reference",
+      "title": "US National Park Service Columnar Jointing",
+      "url": "https://www.nps.gov/subjects/volcanoes/columnar-jointing.htm",
+      "revision": "accessed-2026-08-16",
+      "license": "US-government-text-mixed-media-rights",
+      "licenseStatus": "factual-reference-no-media-copy",
+      "use": "geological-morphology-reference",
+      "adapt": ["cooling-normal column orientation and polygonal joint morphology"],
+      "reject": ["copying page photography without checking individual credit"],
+      "codeCopied": false
+    },
+    {
+      "id": "epic-nanite-5-8",
+      "kind": "engine-documentation",
+      "title": "Unreal Engine 5.8 Nanite Virtualized Geometry and Technical Details",
+      "url": "https://dev.epicgames.com/documentation/unreal-engine/nanite-virtualized-geometry-in-unreal-engine",
+      "revision": "UE-5.8-accessed-2026-08-16",
+      "license": "Epic-documentation-terms",
+      "licenseStatus": "benchmark-reference-no-copy",
+      "use": "engine-integration-benchmark",
+      "adapt": ["dense source Nanite fallback collision and diagnostic requirements"],
+      "reject": ["redistributing Epic documentation media"],
+      "codeCopied": false
+    },
+    {
+      "id": "epic-fab-megascans-2026",
+      "kind": "asset-catalog-documentation",
+      "title": "Fab and Megascans quality tiers",
+      "url": "https://dev.epicgames.com/documentation/unreal-engine/fab-window-in-unreal-engine",
+      "revision": "UE-5.8-accessed-2026-08-16",
+      "license": "Epic-Fab-terms-per-listing",
+      "licenseStatus": "metadata-only-until-entitlement-confirmed",
+      "use": "private-comparison-index-only",
+      "adapt": ["Raw High Medium Low tier vocabulary and published listing metrics"],
+      "reject": ["bundling thumbnails meshes or textures", "using a listing before entitlement is confirmed"],
+      "codeCopied": false
+    },
+    {
+      "id": "user-mountain-video-2026-08-16",
+      "kind": "user-provided-reference",
+      "title": "Steeply dipping modular bedrock mountain video",
+      "url": "local-user-file:cmqh6t9yt5cqr07ogm1zz77r2.mp4",
+      "revision": "sha256:dbe2f08a83a43d0b7c219c9e3196685a78a1f9ff8dc6d07892102a955f62e868",
+      "license": "user-provided-for-this-task",
+      "licenseStatus": "local-evaluation-only",
+      "use": "formation-shape-reference",
+      "adapt": ["shared strike and dip large slab and wedge modules broken crowns and coherent talus"],
+      "reject": ["shipping or redistributing the video"],
+      "codeCopied": false
+    }
+  ]
+}

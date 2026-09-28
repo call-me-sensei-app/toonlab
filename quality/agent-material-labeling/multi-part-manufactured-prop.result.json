@@ -1,0 +1,243 @@
+{
+  "type": "toonlab/agent-material-labeling-test",
+  "version": 1,
+  "package": {
+    "name": "@call-me-sensei/toonlab",
+    "version": "0.5.0"
+  },
+  "fixture": {
+    "assetId": "agent-authored:camp-lantern:v1",
+    "targetId": "agent-fixture/camp-lantern-001",
+    "domain": "manufactured.surface",
+    "partCount": 7,
+    "parts": [
+      {
+        "partId": "lantern.base",
+        "materialId": "LanternFrameMetal"
+      },
+      {
+        "partId": "lantern.frame-post-left",
+        "materialId": "LanternFrameMetal"
+      },
+      {
+        "partId": "lantern.frame-post-right",
+        "materialId": "LanternFrameMetal"
+      },
+      {
+        "partId": "lantern.roof",
+        "materialId": "LanternFrameMetal"
+      },
+      {
+        "partId": "lantern.lens",
+        "materialId": "LanternLensGlass"
+      },
+      {
+        "partId": "lantern.handle-grip",
+        "materialId": "LanternHandleWood"
+      },
+      {
+        "partId": "lantern.emitter",
+        "materialId": "LanternEmitterCeramic"
+      }
+    ],
+    "distinctMaterialCount": 4,
+    "materialAssignments": {
+      "LanternFrameMetal": {
+        "role": "primaryMass",
+        "urbanMaterial": {
+          "version": 1,
+          "baseMaterial": "metal",
+          "finish": "painted",
+          "renderMode": "opaque",
+          "structuralRole": "primaryMass",
+          "contentFlags": [],
+          "classificationSource": "explicit",
+          "confidence": 1
+        }
+      },
+      "LanternLensGlass": {
+        "role": "window",
+        "urbanMaterial": {
+          "version": 1,
+          "baseMaterial": "glass",
+          "finish": "polished",
+          "renderMode": "transmissive",
+          "structuralRole": "window",
+          "contentFlags": [],
+          "classificationSource": "explicit",
+          "confidence": 1
+        }
+      },
+      "LanternHandleWood": {
+        "role": "fastener",
+        "urbanMaterial": {
+          "version": 1,
+          "baseMaterial": "wood",
+          "finish": "varnished",
+          "renderMode": "opaque",
+          "structuralRole": "fastener",
+          "contentFlags": [],
+          "classificationSource": "explicit",
+          "confidence": 1
+        }
+      },
+      "LanternEmitterCeramic": {
+        "role": "lightEmitter",
+        "urbanMaterial": {
+          "version": 1,
+          "baseMaterial": "ceramic",
+          "finish": "glazed",
+          "renderMode": "opaque",
+          "structuralRole": "lightEmitter",
+          "contentFlags": [
+            "emissive"
+          ],
+          "classificationSource": "explicit",
+          "confidence": 1
+        }
+      }
+    }
+  },
+  "completeAsset": {
+    "strictAudit": {
+      "issueCodes": [
+        "unused-bundle-slot",
+        "unused-bundle-slot",
+        "unused-bundle-slot",
+        "unused-bundle-slot",
+        "unused-bundle-slot",
+        "unused-bundle-slot",
+        "unused-bundle-slot",
+        "unused-bundle-slot",
+        "unused-bundle-slot",
+        "unused-bundle-slot",
+        "unused-bundle-slot",
+        "unused-bundle-slot",
+        "unused-bundle-slot"
+      ],
+      "ok": true,
+      "readyToApply": true,
+      "routeCount": 1,
+      "targetCount": 1,
+      "warningCount": 13
+    },
+    "discoveredMaterialIds": [
+      "LanternEmitterCeramic",
+      "LanternFrameMetal",
+      "LanternHandleWood",
+      "LanternLensGlass"
+    ],
+    "manufacturedClassification": {
+      "explicitCount": 7,
+      "fallbackCount": 0,
+      "inferredCount": 0,
+      "lowConfidenceCount": 0,
+      "materialUseCount": 7,
+      "uniqueMaterialCount": 4
+    },
+    "passed": true
+  },
+  "missingLabelTrial": {
+    "removedMaterialId": "LanternLensGlass",
+    "directStrictApplication": {
+      "rejectionClass": "StyleBundleApplicationError",
+      "issueCodes": [
+        "missing-material-id",
+        "unconsumed-material-assignment"
+      ],
+      "rejectedBeforeMutation": true
+    },
+    "rejectionClass": "StrictScenePreflightError",
+    "rejectedBeforeMutation": true,
+    "strictAudit": {
+      "issueCodes": [
+        "unused-bundle-slot",
+        "unused-bundle-slot",
+        "unused-bundle-slot",
+        "unused-bundle-slot",
+        "unused-bundle-slot",
+        "unused-bundle-slot",
+        "unused-bundle-slot",
+        "unused-bundle-slot",
+        "unused-bundle-slot",
+        "unused-bundle-slot",
+        "unused-bundle-slot",
+        "unused-bundle-slot",
+        "unused-bundle-slot",
+        "missing-material-id",
+        "unconsumed-material-assignment"
+      ],
+      "ok": false,
+      "readyToApply": false,
+      "routeCount": 1,
+      "targetCount": 1,
+      "warningCount": 14
+    },
+    "relevantIssues": [
+      {
+        "code": "missing-material-id",
+        "materialId": null,
+        "message": "Material slot 0 at \"agent-material-labeling-fixture[0]/agent-fixture/camp-lantern[0]/lantern.lens[4]\" has no stable ToonLab material id or name.",
+        "severity": "error"
+      },
+      {
+        "code": "unconsumed-material-assignment",
+        "materialId": "LanternLensGlass",
+        "message": "Material assignment \"LanternLensGlass\" has no matching material below target \"agent-fixture/camp-lantern-001\".",
+        "severity": "warning"
+      }
+    ],
+    "passed": true
+  },
+  "repairTrial": {
+    "repairedMaterialId": "LanternLensGlass",
+    "strictAudit": {
+      "issueCodes": [
+        "unused-bundle-slot",
+        "unused-bundle-slot",
+        "unused-bundle-slot",
+        "unused-bundle-slot",
+        "unused-bundle-slot",
+        "unused-bundle-slot",
+        "unused-bundle-slot",
+        "unused-bundle-slot",
+        "unused-bundle-slot",
+        "unused-bundle-slot",
+        "unused-bundle-slot",
+        "unused-bundle-slot",
+        "unused-bundle-slot"
+      ],
+      "ok": true,
+      "readyToApply": true,
+      "routeCount": 1,
+      "targetCount": 1,
+      "warningCount": 13
+    },
+    "styleApplicationCount": 1,
+    "styleTarget": {
+      "domain": "manufactured.surface",
+      "slot": "manufacturedSurface",
+      "targetId": "agent-fixture/camp-lantern-001"
+    },
+    "exactSourceStateRestoredAfterRevert": true,
+    "passed": true
+  },
+  "overall": {
+    "passed": true,
+    "publicToonLabImportsOnly": true,
+    "strictPreflightRequiredByFixture": true
+  },
+  "skillAssessment": {
+    "clearRequirements": [
+      "Every authored render material needs a stable toonlabMaterialId.",
+      "Every material ID needs a valid role in the versioned material contract.",
+      "Strict workflow audits before atomic bundle application.",
+      "Manufactured materials need durable physical classification independent of style."
+    ],
+    "boundaries": [
+      "Strict apply now reconciles the declared contract against live material slots and rejects a stale declaration before mutation; auditSceneStyleContract remains the richer whole-scene reporting surface.",
+      "The general public semantic-part record is documented as illustrative rather than a published shared schema, so this fixture preserves part identity through stable Three.js node names and the machine-readable fixture inventory instead of inventing an ad hoc ToonLab userData field.",
+      "Full Call Me Sensei contains unrelated populated slots, so an isolated manufactured-prop audit reports unused-bundle-slot warnings; these are non-blocking and readyToApply remains true."
+    ]
+  }
+}

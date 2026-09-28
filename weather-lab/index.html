@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M0 0H100V78L78 100H0Z' fill='%23e8332e'/%3E%3Ctext x='50' y='72' font-size='64' font-weight='900' font-family='Hiragino Sans, Yu Gothic, Noto Sans JP, sans-serif' fill='white' text-anchor='middle'%3E%E3%83%88%3C/text%3E%3C/svg%3E" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Weather Lab — ToonLab</title>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 100%; height: 100%; overflow: hidden; background: #090c12; }
+      #stage { position: fixed; inset: 0; }
+      #stage canvas { display: block; }
+    </style>
+  </head>
+  <body>
+    <div id="stage"></div>
+    <div id="weatherLab">
+      <header class="wl-topbar">
+        <a class="wl-brand" href="/">TOONLAB <span>Weather Lab</span></a>
+        <input id="weatherName" class="wl-name" value="Clear" aria-label="Weather condition name" />
+        <span class="wl-grow"></span>
+        <label class="wl-style">Style <select id="weatherStyle" aria-label="Weather style"></select></label>
+        <label class="wl-transition">Transition <input id="transitionDuration" type="range" min="0" max="15" step="0.5" value="4" /><output id="transitionValue">4.0s</output></label>
+        <button id="lightningTrigger" type="button">⚡ Test strike</button>
+        <button id="importWeather" type="button">Import</button>
+        <button id="saveWeather" type="button">Save local</button>
+        <button id="exportWeather" class="primary" type="button">Export JSON</button>
+        <input id="weatherFile" type="file" accept="application/json,.json" hidden />
+      </header>
+      <aside class="wl-library">
+        <div class="wl-panel-title"><span>CONDITIONS</span><small id="conditionCount"></small></div>
+        <div id="weatherConditions" class="wl-condition-list"></div>
+      </aside>
+      <aside class="wl-inspector">
+        <div class="wl-panel-title"><span>WEATHER SETTINGS</span><small>Condition document</small></div>
+        <nav id="weatherGroups" class="wl-groups" aria-label="Weather setting groups"></nav>
+        <div id="weatherFields" class="wl-fields"></div>
+      </aside>
+      <footer class="wl-status">
+        <span id="weatherStatus">Loading weather stage…</span>
+        <span class="wl-grow"></span>
+        <span id="surfaceStatus">Wet 0% · Snow 0% · Ice 0%</span>
+        <span id="particleStatus">0 particles</span>
+        <span id="rendererStatus">Renderer starting…</span>
+      </footer>
+    </div>
+    <script type="module" src="../labs/weather-lab/main.js"></script>
+  </body>
+</html>

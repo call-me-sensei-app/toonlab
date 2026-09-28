@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="ToonLab Pro launch video §11 — single-load neutral to ToonLab shader wipe with a pixel-identity proof." />
+  <link rel="icon" href="data:," />
+  <link rel="stylesheet" href="/labs/launch-world/wipe/style.css" />
+  <title>ToonLab Pro — §11 shader wipe</title>
+</head>
+<body data-wipe-ready="false">
+  <main id="stage" aria-label="Neutral to ToonLab shader comparison">
+    <div id="loading"><span></span><strong>Preparing the comparison</strong><small id="loadingDetail">Loading…</small></div>
+    <header id="hud">
+      <a href="/" class="brand"><b>TOONLAB</b><span>PRO</span></a>
+      <nav aria-label="Launch shots">
+        <a href="?shot=S02">S02 · character</a>
+        <a href="?shot=S07">S07 · whole scene</a>
+      </nav>
+      <button id="verifyButton" type="button">Run pixel-identity proof</button>
+    </header>
+    <aside id="readout">
+      <b id="shotLabel">—</b>
+      <small id="lensLabel">—</small>
+    </aside>
+  </main>
+  <script type="module" src="/labs/launch-world/wipe/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>ToonLab — crowd population (FILL-006)</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <div id="stage"></div>
+    <div id="loading"><strong>Building the population…</strong><span id="loadingDetail"></span></div>
+    <div id="hud">
+      <div class="row">
+        <button data-shot="lineup" class="active">Line-up</button>
+        <button data-shot="crowd">Crowd</button>
+        <button data-shot="close">Close</button>
+        <button data-shot="garden">Garden figure</button>
+      </div>
+      <div class="row">
+        <button data-count="1">1</button>
+        <button data-count="4">4</button>
+        <button data-count="11">11</button>
+        <button data-count="18" class="active">18</button>
+        <button data-count="36">36</button>
+      </div>
+    </div>
+    <pre id="readout"></pre>
+    <script type="module" src="./main.js"></script>
+  </body>
+</html>

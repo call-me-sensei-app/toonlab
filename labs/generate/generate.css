@@ -1,0 +1,957 @@
+/*
+ * Generate screen — CMS-console layout in the ToonLab v2 language: a sticky
+ * left compose rail of labeled panels (output kind cards with credit prices,
+ * source, prompt, settings, estimated-cost footer + CTA) and the generations
+ * gallery as the main stage with search + kind filters.
+ */
+
+.gen-layout {
+  display: grid;
+  grid-template-columns: 320px minmax(0, 1fr);
+  gap: 22px;
+  align-items: start;
+  margin-top: 18px;
+}
+
+/* ---------- left rail ---------- */
+
+.gen-compose {
+  position: sticky;
+  top: 16px;
+  display: grid;
+  gap: 12px;
+  max-height: calc(100vh - 32px);
+  overflow-y: auto;
+  padding-right: 2px;
+}
+
+.gen-panel {
+  display: grid;
+  gap: 10px;
+  padding: 14px 16px;
+  background: var(--tl-bg-1);
+  border: 1px solid var(--tl-line);
+  border-radius: var(--tl-radius-m);
+}
+
+.gen-panel-label {
+  font-family: var(--tl-font-mono);
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--tl-ink-3);
+}
+.gen-panel-label .hint {
+  text-transform: none;
+  letter-spacing: 0.02em;
+  font-family: var(--tl-font-ui);
+  font-weight: 400;
+}
+
+/* output kind cards — the CMS "model list with prices" */
+.gen-kinds {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+.gen-kind {
+  all: unset;
+  cursor: pointer;
+  display: grid;
+  gap: 3px;
+  padding: 10px 12px;
+  border: 1px solid var(--tl-line-bright);
+  border-radius: var(--tl-radius-s);
+  background: var(--tl-bg-0);
+  transition:
+    border-color var(--tl-dur-1) var(--tl-ease),
+    background var(--tl-dur-1) var(--tl-ease);
+}
+.gen-kind .name {
+  font-family: var(--tl-font-display);
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 0.03em;
+  color: var(--tl-ink-2);
+}
+.gen-kind .price {
+  font-family: var(--tl-font-mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  color: var(--tl-ink-3);
+}
+.gen-kind:hover .name {
+  color: var(--tl-ink-1);
+}
+.gen-kind.active {
+  border-color: var(--tl-accent);
+  background: rgb(232 51 46 / 0.08);
+}
+.gen-kind.active .name {
+  color: var(--tl-ink-1);
+}
+.gen-kind.active .price {
+  color: var(--tl-accent-hot);
+}
+.gen-kind:focus-visible {
+  outline: 2px solid var(--tl-accent);
+  outline-offset: 2px;
+}
+
+/* model picker — stacked rows, name left / credit price right */
+.gen-models {
+  display: grid;
+  gap: 6px;
+}
+.gen-model {
+  all: unset;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 9px 12px;
+  border: 1px solid var(--tl-line-bright);
+  border-radius: var(--tl-radius-s);
+  background: var(--tl-bg-0);
+  transition:
+    border-color var(--tl-dur-1) var(--tl-ease),
+    background var(--tl-dur-1) var(--tl-ease);
+}
+.gen-model .name {
+  font-family: var(--tl-font-display);
+  font-weight: 700;
+  font-size: 12.5px;
+  letter-spacing: 0.03em;
+  color: var(--tl-ink-2);
+}
+.gen-model .price {
+  font-family: var(--tl-font-mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  color: var(--tl-ink-3);
+}
+.gen-model:hover .name {
+  color: var(--tl-ink-1);
+}
+.gen-model.active {
+  border-color: var(--tl-accent);
+  background: rgb(232 51 46 / 0.08);
+}
+.gen-model.active .name {
+  color: var(--tl-ink-1);
+}
+.gen-model.active .price {
+  color: var(--tl-accent-hot);
+}
+.gen-model:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+.gen-model:focus-visible {
+  outline: 2px solid var(--tl-accent);
+  outline-offset: 2px;
+}
+
+/* panel header row: label left, mini action buttons right (Expand / Enhance) */
+.gen-panel-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.gen-panel-actions {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+.gen-mini-btn {
+  all: unset;
+  cursor: pointer;
+  padding: 4px 9px;
+  font-family: var(--tl-font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: var(--tl-ink-2);
+  border: 1px solid var(--tl-line-bright);
+  border-radius: var(--tl-radius-s);
+  background: var(--tl-bg-0);
+  transition:
+    color var(--tl-dur-1) var(--tl-ease),
+    border-color var(--tl-dur-1) var(--tl-ease);
+}
+.gen-mini-btn:hover {
+  color: var(--tl-ink-1);
+  border-color: var(--tl-accent);
+}
+.gen-mini-btn.accent {
+  color: var(--tl-accent-hot);
+  border-color: var(--tl-accent);
+}
+.gen-mini-btn:disabled {
+  cursor: wait;
+  opacity: 0.6;
+}
+
+/* sub-labels inside the settings panel (aspect / resolution / images) */
+.gen-setting-label {
+  font-family: var(--tl-font-mono);
+  font-size: 9.5px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--tl-ink-3);
+}
+
+/* reference thumbnails (compose rail + detail modal) */
+.gen-ref-thumbs {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.gen-ref-thumb {
+  position: relative;
+  width: 52px;
+  height: 52px;
+  border: 1px solid var(--tl-line-bright);
+  border-radius: var(--tl-radius-s);
+  overflow: hidden;
+  background: var(--tl-bg-0);
+  display: grid;
+  place-items: center;
+}
+.gen-ref-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.gen-ref-thumb .ph {
+  font-size: 18px;
+}
+.gen-ref-thumb .x {
+  all: unset;
+  cursor: pointer;
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  width: 16px;
+  height: 16px;
+  display: grid;
+  place-items: center;
+  font-size: 9px;
+  color: var(--tl-ink-1);
+  background: rgb(11 12 15 / 0.85);
+  border: 1px solid var(--tl-line-bright);
+  border-radius: 3px;
+}
+.gen-ref-thumb .x:hover {
+  color: var(--tl-accent-hot);
+  border-color: var(--tl-accent);
+}
+
+/* chip rows (source mode, resolution) */
+.gen-chips {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.gen-chip {
+  all: unset;
+  cursor: pointer;
+  padding: 5px 12px;
+  font-family: var(--tl-font-mono);
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--tl-ink-2);
+  border: 1px solid var(--tl-line-bright);
+  border-radius: var(--tl-radius-s);
+  transition:
+    color var(--tl-dur-1) var(--tl-ease),
+    border-color var(--tl-dur-1) var(--tl-ease),
+    background var(--tl-dur-1) var(--tl-ease);
+}
+.gen-chip:hover {
+  color: var(--tl-ink-1);
+}
+.gen-chip.active {
+  color: var(--tl-accent-hot);
+  border-color: var(--tl-accent);
+  background: rgb(232 51 46 / 0.08);
+}
+.gen-chip:focus-visible {
+  outline: 2px solid var(--tl-accent);
+  outline-offset: 2px;
+}
+
+/* small dashed file target (reference / multiview slots) */
+.gen-file {
+  display: grid;
+  place-items: center;
+  gap: 3px;
+  padding: 14px 10px;
+  text-align: center;
+  cursor: pointer;
+  color: var(--tl-ink-3);
+  font-family: var(--tl-font-mono);
+  font-size: 9.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border: 1px dashed var(--tl-line-bright);
+  border-radius: var(--tl-radius-s);
+  background: var(--tl-bg-0);
+  transition:
+    border-color var(--tl-dur-1) var(--tl-ease),
+    color var(--tl-dur-1) var(--tl-ease);
+  overflow: hidden;
+}
+.gen-file:hover {
+  border-color: var(--tl-accent);
+  color: var(--tl-ink-1);
+}
+.gen-file.filled {
+  border-style: solid;
+  color: var(--tl-success);
+}
+.gen-file .plus {
+  font-size: 15px;
+  color: var(--tl-accent-hot);
+  line-height: 1;
+}
+.gen-views {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+/* estimated-cost footer + CTA */
+.gen-cta {
+  display: grid;
+  gap: 10px;
+  padding: 14px 16px;
+  background: var(--tl-bg-1);
+  border: 1px solid var(--tl-line);
+  border-radius: var(--tl-radius-m);
+}
+.gen-cost {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  font-family: var(--tl-font-mono);
+}
+.gen-cost .label {
+  font-size: 10.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--tl-ink-3);
+}
+.gen-cost .value {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--tl-ink-1);
+}
+.gen-cost .value em {
+  font-style: normal;
+  font-size: 11px;
+  color: var(--tl-ink-3);
+}
+
+/* ---------- gallery main stage ---------- */
+
+.gen-toolbar {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+}
+.gen-toolbar input.tl-input {
+  max-width: 260px;
+  height: 38px;
+}
+.gen-count {
+  margin-left: auto;
+  font-family: var(--tl-font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--tl-ink-3);
+}
+
+.gen-grid {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(auto-fill, minmax(312px, 1fr));
+}
+
+/* per-tile credit badge, CMS-style corner cost */
+.gen-tile-cost {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  padding: 2px 8px;
+  font-family: var(--tl-font-mono);
+  font-size: 9.5px;
+  letter-spacing: 0.08em;
+  color: var(--tl-ink-1);
+  background: rgb(11 12 15 / 0.82);
+  border: 1px solid var(--tl-line-bright);
+  border-radius: var(--tl-radius-s);
+}
+
+@media (max-width: 980px) {
+  .gen-layout {
+    grid-template-columns: 1fr;
+  }
+  .gen-compose {
+    position: static;
+    max-height: none;
+    overflow: visible;
+  }
+}
+
+/* ---------- detail modal (tile click): preview left, details right ---------- */
+
+.gen-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: rgb(6 7 9 / 0.78);
+  backdrop-filter: blur(8px);
+  animation: gen-fade var(--tl-dur-2) var(--tl-ease);
+}
+@keyframes gen-fade {
+  from { opacity: 0; }
+}
+
+/* Full-screen variant of the overlay (asset detail): no inset, no card. */
+.gen-modal--full {
+  padding: 0;
+  place-items: stretch;
+}
+
+.gen-detail {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 400px;
+  width: 100%;
+  height: 100dvh;
+  background: var(--tl-bg-1);
+  overflow: hidden;
+  animation: gen-rise var(--tl-dur-2) var(--tl-ease);
+}
+@keyframes gen-rise {
+  from { opacity: 0; transform: translateY(10px); }
+}
+
+.gen-detail-stage {
+  position: relative;
+  display: grid;
+  place-items: center;
+  background:
+    var(--tl-halftone) 0 0 / 8px 8px,
+    var(--tl-bg-0);
+  border-right: 1px solid var(--tl-line);
+  overflow: hidden;
+}
+.gen-detail-stage img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+.gen-detail-stage .empty {
+  display: grid;
+  gap: 8px;
+  place-items: center;
+  color: var(--tl-ink-3);
+  font-size: 13px;
+  padding: 24px;
+  text-align: center;
+}
+
+.gen-detail-side {
+  display: grid;
+  /* minmax(0, 1fr): without it the report's <pre> min-content width forces
+     the track wider than the 400px column and every row clips at the edge. */
+  grid-template-columns: minmax(0, 1fr);
+  gap: 14px;
+  align-content: start;
+  padding: 20px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+/* Let nested grid/flex wrappers shrink so wide content (code, mono stat
+   rows) scrolls or wraps inside the column instead of blowing it out. */
+.gen-detail-side div {
+  min-width: 0;
+}
+.gen-detail-side .prompt {
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--tl-ink-1);
+}
+.gen-detail-meta {
+  display: grid;
+  gap: 6px;
+  font-family: var(--tl-font-mono);
+  font-size: 11px;
+  color: var(--tl-ink-3);
+}
+.gen-detail-meta b {
+  color: var(--tl-ink-2);
+  font-weight: 600;
+}
+.gen-detail-actions {
+  display: grid;
+  gap: 8px;
+}
+.gen-detail-actions .tl-btn {
+  justify-content: center;
+}
+
+/* live original-vs-shader compare (asset-lab engine in an iframe) */
+.gen-compare-frame {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
+}
+.gen-wipe {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  margin-left: -1px;
+  background: linear-gradient(to bottom, transparent, var(--tl-accent-hot) 12%, var(--tl-accent-hot) 88%, transparent);
+  cursor: ew-resize;
+  z-index: 2;
+  touch-action: none;
+}
+.gen-wipe::before {
+  /* fat invisible hit area */
+  content: "";
+  position: absolute;
+  inset: 0 -14px;
+}
+.gen-wipe .grip {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 30px;
+  height: 30px;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  background: rgb(8 10 16 / 0.85);
+  border: 1px solid var(--tl-accent-hot);
+  color: var(--tl-accent-hot);
+  font-size: 13px;
+  box-shadow: 0 4px 16px rgb(0 0 0 / 0.5);
+}
+.gen-wipe:hover .grip,
+.gen-wipe:focus-visible .grip {
+  background: var(--tl-accent);
+  color: #fff;
+}
+.gen-compare-loading {
+  position: absolute;
+  left: 50%;
+  bottom: 18px;
+  transform: translateX(-50%);
+  max-width: min(560px, calc(100% - 32px));
+  padding: 8px 14px;
+  font-size: 12.5px;
+  text-align: center;
+  color: var(--tl-ink-2);
+  background: rgb(8 10 16 / 0.85);
+  border: 1px solid var(--tl-line-bright);
+  border-radius: var(--tl-radius-s);
+  z-index: 3;
+  pointer-events: none;
+}
+
+.gen-modal-close {
+  all: unset;
+  cursor: pointer;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 30px;
+  height: 30px;
+  display: grid;
+  place-items: center;
+  font-size: 15px;
+  color: var(--tl-ink-1);
+  background: rgb(11 12 15 / 0.82);
+  border: 1px solid var(--tl-line-bright);
+  border-radius: var(--tl-radius-s);
+}
+.gen-modal-close:hover {
+  color: var(--tl-accent-hot);
+  border-color: var(--tl-accent);
+}
+
+@media (max-width: 860px) {
+  .gen-detail {
+    grid-template-columns: 1fr;
+    grid-template-rows: minmax(0, 1fr) auto;
+  }
+  .gen-detail-stage {
+    border-right: none;
+    border-bottom: 1px solid var(--tl-line);
+  }
+}
+
+/* ---------- full-screen prompt editor (Expand) ---------- */
+
+.gen-prompt-editor {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  gap: 12px;
+  width: min(920px, 100%);
+  height: min(78vh, 720px);
+  padding: 18px 20px;
+  background: var(--tl-bg-1);
+  border: 1px solid var(--tl-line-bright);
+  border-radius: var(--tl-radius-m);
+  animation: gen-rise var(--tl-dur-2) var(--tl-ease);
+}
+.gen-prompt-editor-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.gen-prompt-editor-text {
+  resize: none;
+  height: 100%;
+  font-size: 15px;
+  line-height: 1.6;
+}
+.gen-prompt-editor-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+/* close button variant used inside flex headers (not absolutely placed) */
+.gen-modal-close.static {
+  position: static;
+}
+
+/* ---------- reference pickers (characters / past generations) ---------- */
+
+.gen-picker {
+  display: grid;
+  grid-template-rows: auto auto minmax(0, 1fr);
+  gap: 12px;
+  width: min(760px, 100%);
+  max-height: min(84vh, 780px);
+  padding: 18px 20px;
+  background: var(--tl-bg-1);
+  border: 1px solid var(--tl-line-bright);
+  border-radius: var(--tl-radius-m);
+  animation: gen-rise var(--tl-dur-2) var(--tl-ease);
+}
+.gen-picker-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.gen-picker-list {
+  display: grid;
+  gap: 6px;
+  overflow-y: auto;
+  align-content: start;
+}
+.gen-picker-row {
+  all: unset;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 10px;
+  border: 1px solid var(--tl-line);
+  border-radius: var(--tl-radius-s);
+  background: var(--tl-bg-0);
+  transition: border-color var(--tl-dur-1) var(--tl-ease);
+}
+.gen-picker-row:hover {
+  border-color: var(--tl-accent);
+}
+.gen-picker-row img,
+.gen-picker-row .ph {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+  display: grid;
+  place-items: center;
+  background: var(--tl-bg-1);
+  border: 1px solid var(--tl-line-bright);
+}
+.gen-picker-row .name {
+  font-weight: 600;
+  font-size: 13.5px;
+  color: var(--tl-ink-1);
+}
+.gen-picker-row .meta {
+  margin-left: auto;
+  font-family: var(--tl-font-mono);
+  font-size: 10.5px;
+  color: var(--tl-ink-3);
+}
+.gen-picker-grid {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  overflow-y: auto;
+  align-content: start;
+}
+.gen-picker-card {
+  all: unset;
+  cursor: pointer;
+  display: grid;
+  gap: 6px;
+  padding: 8px;
+  border: 1px solid var(--tl-line);
+  border-radius: var(--tl-radius-s);
+  background: var(--tl-bg-0);
+  transition: border-color var(--tl-dur-1) var(--tl-ease);
+}
+.gen-picker-card:hover {
+  border-color: var(--tl-accent);
+}
+.gen-picker-card:disabled {
+  cursor: default;
+  opacity: 0.55;
+}
+.gen-picker-card img {
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  border-radius: 4px;
+  display: block;
+}
+.gen-picker-card .cap {
+  font-size: 11.5px;
+  line-height: 1.35;
+  color: var(--tl-ink-2);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.gen-picker-card .tag {
+  justify-self: start;
+  padding: 2px 7px;
+  font-family: var(--tl-font-mono);
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--tl-ink-3);
+  border: 1px solid var(--tl-line-bright);
+  border-radius: var(--tl-radius-s);
+}
+.gen-picker-card.added .tag {
+  color: var(--tl-success);
+  border-color: var(--tl-success);
+}
+.gen-picker-empty {
+  padding: 24px;
+  text-align: center;
+  font-size: 13px;
+  color: var(--tl-ink-3);
+}
+
+/* OSS-local adapter additions. The shared layout above remains identical to
+   Pro; these rules replace account/credit chrome with local workspace state. */
+.generate-shell {
+  max-width: 1500px;
+}
+.generate-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px;
+  flex-wrap: wrap;
+}
+.gen-local-badges,
+.gen-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.gen-control {
+  display: grid;
+  gap: 7px;
+}
+.gen-help {
+  color: var(--tl-ink-3);
+  font-size: 12px;
+  line-height: 1.45;
+}
+.gen-check {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  color: var(--tl-ink-2);
+  cursor: pointer;
+  font-size: 12.5px;
+}
+.gen-url-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 7px;
+}
+.gen-error {
+  color: var(--tl-danger);
+  font-size: 12.5px;
+  line-height: 1.4;
+}
+.gen-stage {
+  min-width: 0;
+}
+.gen-selection-bar {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+  padding: 12px;
+  margin-bottom: 12px;
+}
+.gen-combine {
+  display: grid;
+  gap: 12px;
+  padding: 16px;
+  margin-bottom: 12px;
+}
+.gen-combine-grid {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+}
+.gen-combine-grid img {
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  border: 1px solid var(--tl-line);
+  border-radius: var(--tl-radius-s);
+}
+.gen-job-card {
+  padding: 0;
+  overflow: hidden;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  cursor: pointer;
+}
+.gen-job-card:focus-visible {
+  outline: 2px solid var(--tl-accent);
+  outline-offset: 2px;
+}
+.gen-job-media {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background: var(--tl-bg-0);
+  border-bottom: 1px solid var(--tl-line);
+}
+.gen-job-media > img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+.gen-job-placeholder {
+  height: 100%;
+  display: grid;
+  place-items: center;
+  padding: 16px;
+  color: var(--tl-ink-3);
+  font-size: 13px;
+  text-align: center;
+}
+.gen-job-status {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+}
+.gen-select {
+  position: absolute;
+  left: 8px;
+  bottom: 8px;
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  padding: 3px 8px;
+  cursor: pointer;
+  color: var(--tl-ink-2);
+  background: rgb(11 12 15 / 0.88);
+  border: 1px solid var(--tl-line);
+  border-radius: var(--tl-radius-s);
+  font-size: 11px;
+}
+.gen-job-body {
+  display: grid;
+  gap: 6px;
+  align-content: start;
+  padding: 12px 14px;
+}
+.gen-job-body strong {
+  font-size: 13.5px;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.gen-job-body .mono {
+  color: var(--tl-ink-3);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.gen-empty-icon {
+  font-size: 40px;
+}
+.gen-picker-image {
+  all: unset;
+  display: grid;
+  gap: 7px;
+  padding: 8px;
+  cursor: pointer;
+  background: var(--tl-bg-0);
+  border: 1px solid var(--tl-line);
+  border-radius: var(--tl-radius-s);
+}
+.gen-picker-image:hover {
+  border-color: var(--tl-accent);
+}
+.gen-picker-image img {
+  width: 100%;
+  aspect-ratio: 1;
+  display: block;
+  object-fit: cover;
+  border-radius: 4px;
+}
+.gen-picker-image span {
+  color: var(--tl-ink-2);
+  font-size: 11.5px;
+  line-height: 1.35;
+}
+.gen-chip:disabled,
+.gen-chip.disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}

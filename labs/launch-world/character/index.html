@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Yua — launch character review</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <div id="stage">
+      <div id="loading"><span id="loadingDetail">Starting…</span></div>
+      <div id="divider"></div>
+      <div id="labels">
+        <span class="tag left">NEUTRAL SOURCE</span>
+        <span class="tag right">TOONLAB</span>
+      </div>
+    </div>
+    <aside id="hud">
+      <h1>Yua · §5 review</h1>
+      <div class="row"><label>Shot</label><select id="shot"></select></div>
+      <div class="row"><label>Clip</label><select id="clip"></select></div>
+      <div class="row"><label>Ground</label><select id="ground"></select></div>
+      <div class="row"><label>Wipe</label><input id="split" max="100" min="0" step="1" type="range" value="50" /></div>
+      <pre id="report"></pre>
+    </aside>
+    <script type="module" src="./main.js"></script>
+  </body>
+</html>

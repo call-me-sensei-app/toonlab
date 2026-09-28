@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://toonlab.dev/schemas/experimental/rock-geology-artifact-manifest.v1.json",
+  "title": "ToonLab repository-only rock artifact manifest v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "version", "status", "compilerVersion", "recipe", "qualification", "outputs", "manifestContentId"],
+  "properties": {
+    "schema": { "const": "toonlab/rock-geology-artifact-manifest" },
+    "version": { "const": 1 },
+    "status": { "enum": ["planned", "complete"] },
+    "compilerVersion": { "type": "string", "minLength": 1 },
+    "recipe": {
+      "type": "object", "additionalProperties": false,
+      "required": ["id", "contentId", "formationId", "lithology", "qualityTier", "targetDimensionsMetres", "generatedDimensionsMetres", "lengthUnit"],
+      "properties": {
+        "id": { "type": "string" },
+        "contentId": { "$ref": "#/$defs/contentId" },
+        "formationId": { "type": "string" },
+        "lithology": { "type": "string" },
+        "qualityTier": { "enum": ["draft", "production", "hero"] },
+        "targetDimensionsMetres": { "$ref": "#/$defs/dimensions" },
+        "generatedDimensionsMetres": { "oneOf": [{ "type": "null" }, { "$ref": "#/$defs/dimensions" }] },
+        "lengthUnit": { "const": "metre" }
+      }
+    },
+    "qualification": {
+      "type": "object", "additionalProperties": false,
+      "required": ["physicalityClaim", "neutralRealismStatus", "topologyStatus", "bakeStatus", "runtimeScaleEnvelope", "maximumRuntimeAxisRatio", "outsideEnvelopeAction"],
+      "properties": {
+        "physicalityClaim": { "enum": ["geology-constrained", "non-physical-art-directed"] },
+        "neutralRealismStatus": { "type": "string" },
+        "topologyStatus": { "type": "string" },
+        "bakeStatus": { "type": "string" },
+        "runtimeScaleEnvelope": { "type": "array", "minItems": 2, "maxItems": 2, "items": { "type": "number" } },
+        "maximumRuntimeAxisRatio": { "type": "number", "exclusiveMinimum": 0 },
+        "outsideEnvelopeAction": { "const": "recompile-and-rebake" }
+      }
+    },
+    "outputs": {
+      "type": "array", "minItems": 15, "maxItems": 15,
+      "items": { "$ref": "#/$defs/artifact" }
+    },
+    "manifestContentId": { "$ref": "#/$defs/contentId" }
+  },
+  "$defs": {
+    "contentId": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "dimensions": { "type": "array", "minItems": 3, "maxItems": 3, "items": { "type": "number", "exclusiveMinimum": 0 } },
+    "artifact": {
+      "type": "object", "additionalProperties": false,
+      "required": ["role", "stageId", "mediaType", "sourceStageContentId", "status", "contentId", "relativePath", "byteLength"],
+      "properties": {
+        "role": { "type": "string" },
+        "stageId": { "type": "string" },
+        "mediaType": { "type": "string" },
+        "sourceStageContentId": { "$ref": "#/$defs/contentId" },
+        "status": { "enum": ["planned", "generated"] },
+        "contentId": { "oneOf": [{ "type": "null" }, { "$ref": "#/$defs/contentId" }] },
+        "relativePath": { "type": ["null", "string"] },
+        "byteLength": { "type": ["null", "integer"], "minimum": 1 }
+      }
+    }
+  }
+}

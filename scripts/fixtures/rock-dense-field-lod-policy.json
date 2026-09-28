@@ -1,0 +1,42 @@
+{
+  "schema": "toonlab/rock-dense-field-lod-policy",
+  "version": 1,
+  "selectionBasis": "projected-object-diameter-pixels",
+  "pixelThresholds": [240, 110, 48, 16, 6],
+  "cullBelowPixels": 5,
+  "shadowLastLevel": 2,
+  "requiredVisualLevels": ["LOD0", "LOD1", "LOD2", "LOD3", "LOD4"],
+  "veryFar": {
+    "silhouetteOnly": true,
+    "castShadow": false,
+    "preserve": ["outerSilhouette", "primaryMass", "groundContact", "broadBaseColor"],
+    "remove": ["cracks", "strataRelief", "cavities", "secondaryLedges", "normalMap", "heightMap", "aoMap", "uniqueRoughness"]
+  },
+  "classes": {
+    "ordinary": {"LOD3Ceiling": 1200, "LOD4Ceiling": 350},
+    "formation": {"LOD3Ceiling": 1800, "LOD4Ceiling": 600},
+    "landmark": {"LOD3Ceiling": 2500, "LOD4Ceiling": 800}
+  },
+  "profiles": {
+    "caprock-hoodoo": {"class": "formation", "LOD3": 1400, "LOD4": 400},
+    "jointed-tor": {"class": "landmark", "LOD3": 2500, "LOD4": 800},
+    "rounded-clast": {"class": "ordinary", "LOD3": 700, "LOD4": 180},
+    "jointed-block": {"class": "ordinary", "LOD3": 650, "LOD4": 160},
+    "river-worn": {"class": "ordinary", "LOD3": 600, "LOD4": 150},
+    "bedded-slab": {"class": "ordinary", "LOD3": 500, "LOD4": 120},
+    "jointed-outcrop": {"class": "formation", "LOD3": 1400, "LOD4": 400},
+    "bedded-outcrop": {"class": "formation", "LOD3": 1400, "LOD4": 400},
+    "resistant-ledge": {"class": "formation", "LOD3": 1200, "LOD4": 350},
+    "residual-pillar": {"class": "formation", "LOD3": 1800, "LOD4": 550},
+    "sea-stack": {"class": "landmark", "LOD3": 2200, "LOD4": 700},
+    "volcanic-neck": {"class": "landmark", "LOD3": 2200, "LOD4": 700},
+    "bedded-arch": {"class": "formation", "LOD3": 1800, "LOD4": 600},
+    "jointed-angular-clast": {"class": "ordinary", "LOD3": 650, "LOD4": 160},
+    "sea-stump": {"class": "landmark", "LOD3": 2000, "LOD4": 650},
+    "glacial-erratic": {"class": "ordinary", "LOD3": 700, "LOD4": 180},
+    "bedded-fin": {"class": "formation", "LOD3": 1600, "LOD4": 500},
+    "jointed-monolith": {"class": "landmark", "LOD3": 2200, "LOD4": 700},
+    "bedded-overhang": {"class": "formation", "LOD3": 1700, "LOD4": 550},
+    "bedded-cliff": {"class": "formation", "LOD3": 1800, "LOD4": 600}
+  }
+}

@@ -1,0 +1,112 @@
+:root {
+  color-scheme: dark;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+html,
+body,
+#stage {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+}
+
+body { background: #cfd9e5; }
+
+canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.label {
+  position: absolute;
+  z-index: 3;
+  top: 28px;
+  padding: 9px 14px;
+  border: 1px solid rgba(255, 255, 255, 0.52);
+  border-radius: 999px;
+  background: rgba(14, 21, 31, 0.72);
+  box-shadow: 0 8px 26px rgba(14, 21, 31, 0.16);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 750;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  backdrop-filter: blur(12px);
+}
+
+.label-neutral { left: 28px; }
+.label-toon { right: 28px; }
+
+#divider {
+  position: absolute;
+  z-index: 2;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 2px;
+  transform: translateX(-1px);
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: 0 0 0 1px rgba(19, 29, 42, 0.18), 0 0 22px rgba(255, 255, 255, 0.42);
+  pointer-events: none;
+}
+
+#divider span {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 38px;
+  height: 38px;
+  transform: translate(-50%, -50%);
+  border: 2px solid #fff;
+  border-radius: 50%;
+  background: rgba(22, 31, 43, 0.82);
+  box-shadow: 0 8px 24px rgba(14, 21, 31, 0.28);
+}
+
+#divider span::before,
+#divider span::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  width: 8px;
+  height: 8px;
+  border-top: 2px solid #fff;
+  border-left: 2px solid #fff;
+}
+
+#divider span::before { left: 9px; transform: translateY(-50%) rotate(-45deg); }
+#divider span::after { right: 9px; transform: translateY(-50%) rotate(135deg); }
+
+#split {
+  position: absolute;
+  z-index: 4;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  cursor: ew-resize;
+  opacity: 0;
+}
+
+#status {
+  position: absolute;
+  z-index: 5;
+  left: 50%;
+  bottom: 28px;
+  transform: translateX(-50%);
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: rgba(14, 21, 31, 0.78);
+  color: #fff;
+  font-size: 12px;
+}
+
+body[data-ready="true"] #status { display: none; }
+body[data-labels="false"] .label { display: none; }
+body[data-divider="false"] #divider { display: none; }
+body[data-interactive="false"] #split { pointer-events: none; }

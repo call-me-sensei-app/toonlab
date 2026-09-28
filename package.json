@@ -1,0 +1,457 @@
+{
+  "name": "@call-me-sensei/toonlab",
+  "version": "0.5.0",
+  "description": "Anime-style game toolkit for Three.js with cel shading, vegetation, rocks, water, sky, clouds, procedural textures, and portable Lab artifacts",
+  "license": "MIT",
+  "author": "Hyperbond Studio PTE. LTD. (Call Me Sensei)",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/call-me-sensei-app/toonlab.git"
+  },
+  "homepage": "https://toonlab.io/docs",
+  "bugs": {
+    "url": "https://github.com/call-me-sensei-app/toonlab/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "keywords": [
+    "three",
+    "threejs",
+    "toon",
+    "cel-shading",
+    "anime",
+    "anime-game",
+    "anime-environment",
+    "cel-shader",
+    "shader",
+    "lighting",
+    "water",
+    "procedural-textures",
+    "game-starter"
+  ],
+  "type": "module",
+  "imports": {
+    "#toonlab-mannequin-asset-url": {
+      "browser": "./src/character/mannequinAssetUrl.browser.js",
+      "default": "./src/character/mannequinAssetUrl.node.js"
+    }
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "bin": {
+    "toonlab": "cli/toonlab.mjs",
+    "toonlab-mcp": "mcp/server.mjs"
+  },
+  "main": "./src/index.js",
+  "module": "./src/index.js",
+  "types": "./types/index.d.ts",
+  "files": [
+    "src/index.js",
+    "src/version.js",
+    "src/asset-policy",
+    "src/agents",
+    "src/assetlib",
+    "src/character",
+    "src/cloud",
+    "src/catalog/manifest.js",
+    "src/catalog/officialCatalogProvider.js",
+    "src/catalog/officialCatalogAssetRuntime.js",
+    "src/catalog/officialCatalog.js",
+    "src/catalog/officialCatalogLod.js",
+    "src/catalog/officialCatalogPlacement.js",
+    "src/catalog/officialCatalogRockPackage.js",
+    "src/core",
+    "src/environment",
+    "src/ground-shader",
+    "src/lighting",
+    "src/loaders",
+    "src/post",
+    "src/renderer",
+    "src/react",
+    "src/runtime",
+    "src/rock-shader",
+    "src/rockgen",
+    "src/shaders-tsl",
+    "src/sky",
+    "src/styles",
+    "src/texgen",
+    "src/toon",
+    "src/vegetation",
+    "src/water",
+    "src/worldCollision.js",
+    "src/collisionMetadata.js",
+    "types",
+    "mcp",
+    "cli/toonlab.mjs",
+    "database",
+    "agents/references/anime-art-direction.md",
+    "agents/references/asset-sourcing-policy.md",
+    "agents/references/custom-gap-report.md",
+    "agents/references/mcp-asset-discovery.md",
+    "agents/references/runtime-entry-points.md",
+    "agents/references/style-bundles.md",
+    "agents/README.md",
+    "agents/PROMPTS.md",
+    "agents/claude/CLAUDE.md",
+    "agents/codex/AGENTS.md",
+    "agents/cursor/toonlab.mdc",
+    "agents/skills/claude/asset-sourcing",
+    "agents/skills/claude/environment",
+    "agents/skills/claude/game-dev",
+    "agents/skills/claude/post-processing",
+    "agents/skills/claude/rock-ground-shaders",
+    "agents/skills/claude/rockgen",
+    "agents/skills/claude/scene-style-application",
+    "agents/skills/claude/style-presets",
+    "agents/skills/claude/toon-shading",
+    "agents/skills/claude/vegetation-sky",
+    "agents/skills/claude/visual-verification",
+    "agents/skills/claude/water",
+    "agents/skills/codex/asset-sourcing",
+    "agents/skills/codex/environment",
+    "agents/skills/codex/game-dev",
+    "agents/skills/codex/post-processing",
+    "agents/skills/codex/rock-ground-shaders",
+    "agents/skills/codex/rockgen",
+    "agents/skills/codex/scene-style-application",
+    "agents/skills/codex/style-presets",
+    "agents/skills/codex/toon-shading",
+    "agents/skills/codex/vegetation-sky",
+    "agents/skills/codex/visual-verification",
+    "agents/skills/codex/water",
+    "scripts/setup-local.mjs",
+    "scripts/generate-catalog-seed.mjs",
+    "compose.yaml",
+    "NPM-LIBRARY.md",
+    "README.md",
+    "LICENSE",
+    "agents/references/game-lifecycle.md",
+    "agents/examples/game-foundation.mjs",
+    "agents/skills/codex/lighting",
+    "agents/skills/claude/lighting"
+  ],
+  "exports": {
+    ".": {
+      "types": "./types/index.d.ts",
+      "default": "./src/index.js"
+    },
+    "./toon": {
+      "types": "./types/toon/index.d.ts",
+      "default": "./src/toon/index.js"
+    },
+    "./environment": {
+      "types": "./types/environment/index.d.ts",
+      "default": "./src/environment/index.js"
+    },
+    "./water": {
+      "types": "./types/water/index.d.ts",
+      "default": "./src/water/index.js"
+    },
+    "./vegetation": {
+      "types": "./types/vegetation/index.d.ts",
+      "default": "./src/vegetation/index.js"
+    },
+    "./vegetation-shaders": {
+      "types": "./types/vegetation/vegetationShaders.d.ts",
+      "default": "./src/vegetation/vegetationShaders.js"
+    },
+    "./grass-palettes": {
+      "types": "./types/vegetation/grassPalettes.d.ts",
+      "default": "./src/vegetation/grassPalettes.js"
+    },
+    "./styles": {
+      "types": "./types/styles/index.d.ts",
+      "default": "./src/styles/index.js"
+    },
+    "./asset-policy": {
+      "types": "./types/asset-policy/index.d.ts",
+      "default": "./src/asset-policy/index.js"
+    },
+    "./scene-operations": {
+      "types": "./types/agents/index.d.ts",
+      "default": "./src/agents/index.js"
+    },
+    "./sky": {
+      "types": "./types/sky/index.d.ts",
+      "default": "./src/sky/index.js"
+    },
+    "./cloud": {
+      "types": "./types/cloud/index.d.ts",
+      "default": "./src/cloud/index.js"
+    },
+    "./post": {
+      "types": "./types/post/index.d.ts",
+      "default": "./src/post/index.js"
+    },
+    "./rock-shader": {
+      "types": "./types/rock-shader/index.d.ts",
+      "default": "./src/rock-shader/index.js"
+    },
+    "./ground-shader": {
+      "types": "./types/ground-shader/index.d.ts",
+      "default": "./src/ground-shader/index.js"
+    },
+    "./lighting": {
+      "types": "./types/lighting/index.d.ts",
+      "default": "./src/lighting/index.js"
+    },
+    "./rockgen": {
+      "types": "./types/rockgen/index.d.ts",
+      "default": "./src/rockgen/index.js"
+    },
+    "./texgen": {
+      "types": "./types/texgen/index.d.ts",
+      "default": "./src/texgen/index.js"
+    },
+    "./assetlib": {
+      "types": "./types/assetlib/index.d.ts",
+      "default": "./src/assetlib/index.js"
+    },
+    "./official-catalog": {
+      "types": "./types/catalog/officialCatalog.d.ts",
+      "default": "./src/catalog/officialCatalog.js"
+    },
+    "./character": {
+      "types": "./types/character/index.d.ts",
+      "default": "./src/character/index.js"
+    },
+    "./renderer": {
+      "types": "./types/renderer/index.d.ts",
+      "default": "./src/renderer/index.js"
+    },
+    "./react": {
+      "types": "./types/react/index.d.ts",
+      "default": "./src/react/index.js"
+    },
+    "./runtime": {
+      "types": "./types/runtime/index.d.ts",
+      "default": "./src/runtime/index.js"
+    },
+    "./world-collision": {
+      "types": "./types/worldCollision.d.ts",
+      "default": "./src/worldCollision.js"
+    },
+    "./loaders": {
+      "types": "./types/loaders/index.d.ts",
+      "default": "./src/loaders/index.js"
+    },
+    "./toon-settings": {
+      "types": "./types/toon/toonSettings.d.ts",
+      "default": "./src/toon/toonSettings.js"
+    },
+    "./water-settings": {
+      "types": "./types/water/waterSettings.d.ts",
+      "default": "./src/water/waterSettings.js"
+    },
+    "./grass": {
+      "types": "./types/vegetation/grass.d.ts",
+      "default": "./src/vegetation/grass.js"
+    },
+    "./post-processing": {
+      "types": "./types/post/postProcessing.d.ts",
+      "default": "./src/post/postProcessing.js"
+    },
+    "./agents/*": "./agents/*"
+  },
+  "scripts": {
+    "assets:characters": "node scripts/generate-local-character-assets.mjs",
+    "assets:environments": "node scripts/generate-local-environment-assets.mjs",
+    "assets:plateau-landmarks": "node scripts/extract-plateau-landmarks.mjs",
+    "assets:starmap": "node scripts/generate-procedural-starmap.mjs",
+    "assets:local": "npm run assets:characters && npm run assets:environments",
+    "verify:scene-depth-pass": "node scripts/verify-scene-depth-color-pass.mjs",
+    "dev": "vite",
+    "mcp": "node mcp/server.mjs",
+    "setup": "node scripts/setup-local.mjs",
+    "update": "node scripts/setup-local.mjs --update",
+    "db:migrate": "node database/apply-sql.mjs migrate",
+    "db:seed": "node database/apply-sql.mjs seed",
+    "catalog:seed:generate": "node scripts/generate-catalog-seed.mjs",
+    "build": "vite build",
+    "types:build": "node scripts/build-types.mjs",
+    "verify:types": "npm run types:build && node scripts/verify-packaged-types.mjs",
+    "baseline:compare": "node scripts/compare-baselines.mjs",
+    "preview": "vite preview",
+    "baseline:capture": "node scripts/baseline-capture.mjs",
+    "verify:golden-matrix": "node scripts/verify-golden-fixture-matrix.mjs",
+    "verify:golden-harness": "node scripts/verify-golden-harness.mjs",
+    "verify:launch-dx": "node scripts/verify-launch-dx.mjs",
+    "verify:launch-packed": "node scripts/verify-launch-packed-consumers.mjs",
+    "prepare:level-d-review": "node scripts/prepare-level-d-review.mjs",
+    "golden:capture": "node scripts/capture-golden-fixtures.mjs",
+    "golden:compare": "node scripts/compare-golden-captures.mjs",
+    "verify:rockgen": "node scripts/verify-rockgen.mjs",
+    "verify:rock-dense-field-lod": "node scripts/verify-rock-dense-field-lod.mjs && node scripts/verify-official-catalog-lod.mjs",
+    "verify:rock-generation-lab": "node scripts/verify-rock-tool-behavior.mjs",
+    "verify:rock-c7-library": "node scripts/verify-rock-c7-surface-library.mjs",
+    "verify:rock-lab-lifecycle": "node scripts/verify-rock-lab-lifecycle.mjs",
+    "verify:rock-shader": "node scripts/verify-rock-shader.mjs",
+    "verify:rock-regions": "node scripts/verify-rock-regions.mjs",
+    "verify:rock-region-compiler": "node scripts/verify-rock-region-compiler.mjs",
+    "verify:rock-region-migrations": "node scripts/verify-rock-region-schema-migrations.mjs",
+    "verify:rock-regions-package": "node scripts/verify-packaged-rock-regions.mjs",
+    "verify:rock-regions-clean-consumer": "node scripts/verify-rock-region-clean-consumer.mjs",
+    "verify:rock-semantic-materials": "node scripts/verify-rock-semantic-materials.mjs",
+    "verify:rock-geology-v2-ontology": "node scripts/verify-rock-geology-v2-ontology.mjs",
+    "verify:rock-geology-v2-morphology": "node scripts/verify-rock-geology-v2-morphology.mjs",
+    "verify:rock-geology-v2-inspirations": "node scripts/verify-rock-geology-v2-inspirations.mjs",
+    "verify:rock-geology-v2-canonical-pilot": "node scripts/verify-rock-geology-v2-canonical-pilot.mjs",
+    "capture:rock-geology-v2-canonical-pilot": "node scripts/capture-rock-geology-v2-canonical-pilot.mjs",
+    "verify:ground-shader": "node scripts/verify-ground-shader.mjs",
+    "verify:pathgen": "node scripts/verify-pathgen.mjs",
+    "visual:check": "node scripts/visual-check.mjs",
+    "sky:capture": "node scripts/capture-sky-presets.mjs",
+    "sky:smoke": "SKY_CAPTURE_LAB=sky-smoke node scripts/capture-sky-presets.mjs",
+    "verify:propgen": "node scripts/verify-propgen.mjs",
+    "verify:buildinggen": "node scripts/verify-buildinggen.mjs",
+    "verify:villagegen": "node scripts/verify-villagegen.mjs",
+    "verify:fauna": "node scripts/verify-fauna.mjs",
+    "verify:ambientfx": "node scripts/verify-ambientfx.mjs",
+    "verify:vfxgen": "node scripts/verify-vfxgen.mjs",
+    "verify:water-experiments": "node scripts/verify-water-experiments.mjs",
+    "verify:water": "node scripts/verify-watergen.mjs && node scripts/verify-water-physics.mjs && node scripts/verify-water-dynamics.mjs && node scripts/verify-water-beach-swash.mjs",
+    "verify:texgen": "node scripts/verify-texgen.mjs",
+    "verify:landscape": "node scripts/verify-landscape.mjs",
+    "verify:lighting": "node scripts/verify-lighting.mjs",
+    "verify:lighting-lab": "node scripts/verify-lighting-lab.mjs",
+    "verify:live-labs": "node scripts/verify-live-labs.mjs",
+    "verify:lab-editor-headers": "node scripts/verify-lab-editor-headers.mjs",
+    "verify:localization": "node scripts/verify-localization.mjs",
+    "verify:lab-asset-provenance": "node scripts/verify-lab-asset-provenance.mjs",
+    "verify:lab-preview": "node scripts/verify-lab-preview.mjs",
+    "verify:library-preview": "node scripts/verify-library-preview-coverage.mjs",
+    "verify:public-labs": "node scripts/verify-public-lab-authoring.mjs && node scripts/verify-lab-audit-regressions.mjs && node scripts/verify-lab-editing-regressions.mjs",
+    "verify:vegetation-labs": "node scripts/verify-vegetation-lab-readiness.mjs && node scripts/verify-vegetation-preview-runtime.mjs",
+    "verify:water-lab": "node scripts/verify-water-lab-contract.mjs && node scripts/verify-water-experiments.mjs",
+    "verify:weather": "node scripts/verify-weather.mjs",
+    "verify:climate": "node scripts/verify-climate.mjs",
+    "verify:atmospheric-condition-lab": "node scripts/verify-atmospheric-condition-lab.mjs",
+    "verify:sky": "node scripts/verify-sky.mjs",
+    "verify:volumetric-sky": "node scripts/verify-volumetric-sky.mjs",
+    "verify:cloud-shader": "node scripts/verify-cloud-shader.mjs",
+    "verify:sky-cloud-lab": "node scripts/verify-sky-cloud-lab.mjs",
+    "verify:environment-cycle": "node scripts/verify-environment-cycle.mjs",
+    "verify:manufactured-materials": "node scripts/verify-manufactured-materials.mjs",
+    "verify:material-labeling:agent": "node quality/agent-material-labeling/multi-part-manufactured-prop.mjs",
+    "verify:material-labeling:mcp": "node quality/mcp-material-labeling/verify-mcp-material-labeling.mjs",
+    "verify:ground-field": "node scripts/verify-ground-field.mjs",
+    "verify:grass": "node scripts/verify-grass-palettes.mjs",
+    "verify:grass-package": "node scripts/verify-packaged-grass.mjs",
+    "verify:character-package": "node scripts/verify-packaged-character.mjs",
+    "verify:toon-shading": "node scripts/verify-toon-character-shading.mjs",
+    "verify:provenance": "node scripts/verify-provenance.mjs",
+    "verify:ground-stabilizer": "node scripts/verify-ground-stabilizer.mjs",
+    "verify:locomotion-state": "node scripts/verify-locomotion-state-machine.mjs",
+    "verify:water-interaction": "node scripts/verify-water-interaction-controller.mjs",
+    "verify:walkable-character": "node scripts/verify-walkable-character-runtime.mjs && node scripts/verify-packaged-walkable-character.mjs",
+    "verify:playground-walkable": "node scripts/verify-playground-walkable-runtime.mjs",
+    "verify:renderer-configuration": "node scripts/verify-renderer-configuration.mjs && node scripts/verify-packaged-renderer-configuration.mjs",
+    "verify:scene-scheduler": "node scripts/verify-scene-update-scheduler.mjs && node scripts/verify-packaged-scene-update-scheduler.mjs",
+    "verify:scene-surface": "node scripts/verify-scene-surface-runtime.mjs",
+    "verify:scene-collision": "node scripts/verify-scene-collision-runtime.mjs",
+    "verify:shared-shadow-receivers": "node scripts/verify-shared-shadow-receivers.mjs",
+    "verify:scene-quality": "node scripts/verify-scene-quality-profiles.mjs && node scripts/verify-packaged-scene-quality-profiles.mjs",
+    "verify:quality-integration": "node scripts/verify-quality-budget-integration.mjs && node scripts/verify-packaged-quality-budget-integration.mjs",
+    "verify:vegetation-shader": "node scripts/verify-vegetation-shader.mjs",
+    "verify:lab-styles": "node scripts/verify-lab-style-boundaries.mjs",
+    "verify:branch-tree": "node scripts/verify-branch-tree.mjs",
+    "verify:tree-doodle": "node scripts/verify-tree-doodle.mjs",
+    "verify:tree-woody": "node scripts/verify-tree-woody-engine.mjs",
+    "verify:tree-baseline-coverage": "node scripts/verify-woody-baseline-coverage.mjs",
+    "audit:tree-baseline": "node scripts/analyze-woody-baseline-relationships.mjs",
+    "verify:tree-species": "node scripts/verify-tree-species.mjs",
+    "verify:tree-species-references": "node scripts/verify-tree-species-references.mjs",
+    "verify:skills": "node scripts/verify-agent-skills.mjs",
+    "verify:docs": "node scripts/verify-package-documentation.mjs && node scripts/generate-settings-reference.mjs --check && node scripts/verify-documentation-examples.mjs",
+    "verify:api": "node scripts/verify-public-api.mjs",
+    "verify:package": "node scripts/verify-package-boundary.mjs",
+    "verify:repository": "node scripts/verify-repository.mjs",
+    "verify:style-contract": "node scripts/verify-style-contract.mjs",
+    "verify:style-labels-package": "node scripts/verify-packaged-style-labels.mjs",
+    "verify:collision-package": "node scripts/verify-packaged-world-collision.mjs",
+    "verify:official-catalog": "node scripts/verify-official-catalog-provider.mjs && node scripts/verify-official-catalog-rock-package.mjs && node scripts/verify-official-catalog-runtime.mjs && node scripts/verify-official-catalog-lod.mjs && node scripts/verify-official-catalog-placement.mjs && node scripts/verify-playground-official-catalog.mjs && node scripts/verify-packaged-official-catalog.mjs",
+    "verify:system-style": "node scripts/verify-system-style-policy.mjs",
+    "verify:release": "npm run verify:repository && npm run verify:system-style && npm run verify:style-contract && npm run verify:style-labels-package && npm run verify:collision-package && npm run verify:scene-collision && npm run verify:official-catalog && npm run verify:public-labs && npm run verify:live-labs && npm run verify:natural-rock-surfaces && npm run verify:rock-shader && npm run verify:rock-generation-lab && npm run verify:rock-lab-lifecycle && npm run verify:ground-shader && npm run verify:manufactured-materials && npm run verify:material-labeling:agent && npm run verify:material-labeling:mcp && npm run verify:water-lab && npm run verify:water && npm run verify:vegetation-labs && npm run verify:texgen && npm run verify:cloud-shader && npm run verify:sky-cloud-lab && npm run verify:world-quality && npm run verify:scatter && npm run verify:branch-tree && npm run verify:grass-package && npm run verify:character-package && npm run verify:toon-shading && npm run verify:locomotion-state && npm run verify:ground-stabilizer && npm run verify:water-interaction && npm run verify:walkable-character && npm run verify:playground-walkable && npm run verify:renderer-configuration && npm run verify:scene-scheduler && npm run verify:scene-surface && npm run verify:shared-shadow-receivers && npm run verify:scene-quality && npm run verify:quality-integration && npm run verify:lab-asset-provenance && npm run verify:api && npm run verify:types && npm run verify:mcp && npm run verify:skills && npm run verify:docs && npm run verify:local-database && npm run verify:package",
+    "verify:generation": "node scripts/verify-generation.mjs",
+    "verify:post": "node scripts/verify-post.mjs",
+    "verify:camera": "node scripts/verify-camera.mjs",
+    "verify:motion": "node scripts/verify-motion.mjs",
+    "verify:biome": "node scripts/verify-biome.mjs",
+    "verify:soundscape": "node scripts/verify-soundscape.mjs",
+    "verify:game-feel": "node scripts/verify-game-feel.mjs",
+    "verify:world-quality": "node scripts/verify-world-quality.mjs",
+    "verify:all": "npm run verify:repository && npm run verify:system-style && npm run verify:generation && npm run verify:post && npm run verify:camera && npm run verify:motion && npm run verify:biome && npm run verify:soundscape && npm run verify:game-feel && npm run verify:world-quality && npm run verify:rock-shader && npm run verify:ground-shader && npm run verify:rockgen && npm run verify:rock-generation-lab && npm run verify:pathgen && npm run verify:propgen && npm run verify:buildinggen && npm run verify:villagegen && npm run verify:fauna && npm run verify:ambientfx && npm run verify:vfxgen && npm run verify:water && npm run verify:landscape && npm run verify:lighting && npm run verify:lighting-lab && npm run verify:live-labs && npm run verify:lab-preview && npm run verify:weather && npm run verify:climate && npm run verify:atmospheric-condition-lab && npm run verify:sky && npm run verify:cloud-shader && npm run verify:sky-cloud-lab && npm run verify:environment-cycle && npm run verify:manufactured-materials && npm run verify:ground-field && npm run verify:grass && npm run verify:grass-package && npm run verify:character-package && npm run verify:vegetation-shader && npm run verify:lab-styles && npm run verify:scatter && npm run verify:branch-tree && npm run verify:collision-package && npm run verify:scene-collision && npm run verify:official-catalog && npm run verify:api && npm run verify:package && npm run verify:catalog && npm run verify:assetlib && npm run verify:mcp && npm run verify:local-generation",
+    "verify:catalog": "node scripts/verify-catalog.mjs",
+    "verify:assetlib": "node scripts/verify-assetlib.mjs",
+    "verify:mcp": "node scripts/sync-mcp-tree-contract.mjs --check && node scripts/verify-mcp.mjs && node scripts/verify-packaged-mcp.mjs",
+    "verify:local-database": "node scripts/verify-local-database.mjs && node scripts/verify-catalog-seed-reuse.mjs",
+    "verify:creation-revisions": "node scripts/verify-creation-revisions.mjs",
+    "verify:gallery-database": "node scripts/verify-official-gallery-database.mjs",
+    "verify:local-generation": "node scripts/verify-local-generation.mjs && node scripts/verify-fal-patina.mjs",
+    "thumbs:prop": "node scripts/generate-prop-thumbs.mjs",
+    "thumbs:building": "node scripts/generate-building-thumbs.mjs",
+    "thumbs:catalog": "node scripts/generate-catalog-thumbs.mjs",
+    "thumbs:home": "node scripts/generate-home-shots.mjs",
+    "prepublishOnly": "npm run verify:release",
+    "verify:scatter": "node scripts/verify-scatter.mjs",
+    "verify:natural-rock-surfaces": "node scripts/verify-natural-rock-surfaces.mjs && node scripts/verify-natural-rock-replay.mjs"
+  },
+  "dependencies": {
+    "3d-tiles-renderer": "^0.5.0",
+    "pg": "^8.22.0"
+  },
+  "peerDependencies": {
+    "@dimforge/rapier3d-compat": "^0.19.0",
+    "@pixiv/three-vrm": "^3.5.4",
+    "@react-three/fiber": "^9.0.0",
+    "react": "^19.0.0",
+    "three": "^0.185.1",
+    "three-mesh-bvh": "0.9.14",
+    "three-stdlib": "^2.36.1"
+  },
+  "peerDependenciesMeta": {
+    "@react-three/fiber": {
+      "optional": true
+    },
+    "@dimforge/rapier3d-compat": {
+      "optional": true
+    },
+    "@pixiv/three-vrm": {
+      "optional": true
+    },
+    "three-mesh-bvh": {
+      "optional": true
+    },
+    "three-stdlib": {
+      "optional": true
+    },
+    "react": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@dimforge/rapier3d-compat": "^0.19.2",
+    "@pixiv/three-vrm": "^3.5.4",
+    "@react-three/drei": "^10.7.7",
+    "@react-three/fiber": "^9.6.1",
+    "@react-three/rapier": "^2.2.0",
+    "@vitejs/plugin-react": "^4.7.0",
+    "draco3d": "^1.5.7",
+    "ecctrl": "^1.0.97",
+    "lucide-react": "^1.23.0",
+    "marked": "^18.0.6",
+    "playwright": "^1.60.0",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7",
+    "three": "^0.185.1",
+    "three-mesh-bvh": "0.9.14",
+    "three-stdlib": "^2.36.1",
+    "typescript": "^5.9.3",
+    "vite": "^5.0.0",
+    "manifold-3d": "3.5.1",
+    "meshoptimizer": "1.1.1",
+    "three-bvh-csg": "0.0.18"
+  }
+}

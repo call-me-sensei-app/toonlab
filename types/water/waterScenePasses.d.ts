@@ -1,0 +1,70 @@
+export class WaterScenePasses {
+    constructor({ sceneColor, reflection, depthScale, maxPasses, sceneColorScale, reflectionScale, clipBias, }?: {
+        sceneColor?: boolean;
+        reflection?: boolean;
+        depthScale?: number;
+        maxPasses?: number;
+        sceneColorScale?: number;
+        reflectionScale?: number;
+        clipBias?: number;
+    });
+    requestedSceneColor: boolean;
+    requestedReflection: boolean;
+    sceneColorEnabled: boolean;
+    reflectionEnabled: boolean;
+    depthScale: any;
+    sceneColorScale: number;
+    reflectionScale: number;
+    maxPasses: number;
+    clipBias: number;
+    grabTarget: THREE.WebGLRenderTarget<THREE.Texture<unknown, THREE.TextureEventMap>>;
+    reflectionTarget: THREE.WebGLRenderTarget<THREE.Texture<unknown, THREE.TextureEventMap>>;
+    transmissionCamera: THREE.PerspectiveCamera;
+    reflectionCamera: THREE.PerspectiveCamera;
+    reflectionMatrix: THREE.Matrix4;
+    reflectionValid: boolean;
+    grabValid: boolean;
+    depthValid: boolean;
+    lastFrameStats: {
+        passes: any[];
+        sceneRenders: number;
+    };
+    depthTarget: THREE.WebGLRenderTarget<THREE.Texture<unknown, THREE.TextureEventMap>>;
+    depthMaterialCache: WeakMap<object, any>;
+    depthSwapCache: WeakMap<object, any>;
+    depthMaterialRestores: any[];
+    depthVisibilityRestores: any[];
+    scratch: {
+        drawingBufferSize: THREE.Vector2;
+        cameraPosition: THREE.Vector3;
+        cameraDirection: THREE.Vector3;
+        cameraQuaternion: THREE.Quaternion;
+        target: THREE.Vector3;
+        plane: THREE.Plane;
+        clipPlane: THREE.Vector4;
+        q: THREE.Vector4;
+        waterWorldPosition: THREE.Vector3;
+        clearColor: THREE.Color;
+    };
+    get stats(): any;
+    recordSceneRender(passKind: any): void;
+    setQualityBudget({ depthScale, maxPasses, reflectionScale, sceneColorScale, }?: {
+        depthScale?: any;
+        maxPasses?: number;
+        reflectionScale?: number;
+        sceneColorScale?: number;
+    }): any;
+    ensureGrabTarget(renderer: any): void;
+    ensureReflectionTarget(renderer: any): void;
+    depthMaterialFor(material: any): any;
+    renderDepthPass(renderer: any, scene: any, camera: any): void;
+    renderGrabPass(renderer: any, scene: any, camera: any, waterMesh: any): void;
+    applyWaterClipPlane(renderer: any, camera: any, waterY: any, side?: number): void;
+    updateTransmissionCamera(renderer: any, camera: any, waterY: any): THREE.PerspectiveCamera;
+    updateReflectionCamera(renderer: any, camera: any, waterY: any): boolean;
+    renderReflectionPass(renderer: any, scene: any, camera: any, waterMesh: any): void;
+    render(renderer: any, scene: any, camera: any, waterMesh: any): void;
+    bindToMaterial(material: any): void;
+    dispose(): void;
+}
+import * as THREE from 'three';

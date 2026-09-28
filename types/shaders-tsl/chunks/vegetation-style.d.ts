@@ -1,0 +1,60 @@
+/** Uniform contract shared by every vegetation material role. */
+export function createVegetationStyleUniforms(profile?: {}, role?: any): {
+    uSnowCover: import("three/webgpu").UniformNode<"float", number>;
+    uSnowRetention: import("three/webgpu").UniformNode<"float", number>;
+    uSkyIntensity: import("three/webgpu").UniformNode<"float", number>;
+    uSunIntensity: import("three/webgpu").UniformNode<"float", number>;
+    uStyleLightingRimPower: import("three/webgpu").UniformNode<"float", number>;
+    uStyleLightingRimStrength: import("three/webgpu").UniformNode<"float", number>;
+    uStyleLightingShadowTint: import("three/webgpu").UniformNode<"color", THREE.Color>;
+    uStyleLightingShadowTintStrength: import("three/webgpu").UniformNode<"float", number>;
+    uStyleLightingSkyFillStrength: import("three/webgpu").UniformNode<"float", number>;
+    uStyleLightingSunTintStrength: import("three/webgpu").UniformNode<"float", number>;
+    uStyleWeatherResponseSnowEdgeSoftness: import("three/webgpu").UniformNode<"float", number>;
+    uStyleWeatherResponseSnowShadowStrength: import("three/webgpu").UniformNode<"float", number>;
+    uStyleWeatherResponseSnowTint: import("three/webgpu").UniformNode<"color", THREE.Color>;
+    uStyleWeatherResponseWetDarkening: import("three/webgpu").UniformNode<"float", number>;
+    uStyleWeatherResponseWetDesaturation: import("three/webgpu").UniformNode<"float", number>;
+    uStyleWeatherResponseWetHighlightStrength: import("three/webgpu").UniformNode<"float", number>;
+    uWetness: import("three/webgpu").UniformNode<"float", number>;
+    uWetnessResponse: import("three/webgpu").UniformNode<"float", number>;
+};
+export function vegetationBand(wrap: any, threshold: any, softness: any): import("three/webgpu").Node<"float">;
+export function vegetationVisibility(sceneShadow: any, cloudShadow: any, sceneShadowResponse: any, cloudShadowResponse?: number): import("three/webgpu").Node<"float">;
+/** Common thin-surface lighting. Family shaders can layer role bands on top. */
+export function shadeVegetationSurface({ baseColor, bandShadowColor, bandOverride, bandSoftness, bandThreshold, cloudShadow, u, diffuseWrap, normal, normalUpBias, materialShadowColor, sceneShadow, sceneShadowResponse, cloudShadowResponse, shadowFloor, skyColor, sunColor, sunDirection, rimStrength, transmissionMultiplier, transmissionPower, transmissionShadowFloor, transmissionStrength, twoSidedLighting, skyFillStrength, worldPosition, }: {
+    baseColor: any;
+    bandShadowColor?: any;
+    bandOverride?: any;
+    bandSoftness: any;
+    bandThreshold: any;
+    cloudShadow: any;
+    u: any;
+    diffuseWrap?: any;
+    normal: any;
+    normalUpBias?: any;
+    materialShadowColor?: any;
+    sceneShadow: any;
+    sceneShadowResponse: any;
+    cloudShadowResponse?: number;
+    shadowFloor: any;
+    skyColor: any;
+    sunColor: any;
+    sunDirection: any;
+    rimStrength?: any;
+    transmissionMultiplier?: number;
+    transmissionPower?: any;
+    transmissionShadowFloor?: any;
+    transmissionStrength?: any;
+    twoSidedLighting?: any;
+    skyFillStrength?: any;
+    worldPosition: any;
+}): {
+    band: any;
+    color: any;
+    normal: import("three/webgpu").Node<"vec3">;
+    visibility: import("three/webgpu").VarNode<"float", import("three/webgpu").Node<"float">>;
+    viewDirection: import("three/webgpu").Node<"vec3">;
+};
+export function tagVegetationRole(material: any, role: any, variant: any): any;
+import * as THREE from 'three';

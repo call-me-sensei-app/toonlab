@@ -1,0 +1,32 @@
+{
+  "assets": {
+    "coast-sand-01": {
+      "author": "Rob Tuytel",
+      "catalogUrl": "https://toonlab.io/asset/polyhaven:coast_sand_01",
+      "files": {
+        "albedo": "polyhaven/coast-sand-01-diff-1k.jpg",
+        "arm": "polyhaven/coast-sand-01-arm-1k.jpg",
+        "normalOpenGL": "polyhaven/coast-sand-01-nor-gl-1k.jpg"
+      },
+      "kind": "texture",
+      "label": "Coast Sand 01",
+      "license": "CC0-1.0",
+      "source": "Poly Haven",
+      "sourceUrl": "https://polyhaven.com/a/coast_sand_01"
+    },
+    "fern-1": {
+      "author": "Quaternius",
+      "catalogUrl": "https://toonlab.io/asset/quaternius:fern-1",
+      "files": {
+        "model": "quaternius/fern-1.glb"
+      },
+      "kind": "model",
+      "label": "Fern 1 — Quaternius",
+      "license": "CC0-1.0",
+      "source": "Quaternius",
+      "sourceUrl": "https://quaternius.com"
+    }
+  },
+  "note": "CC0 Water Lab dressing selected from ToonLab's own gallery catalog.",
+  "version": 1
+}

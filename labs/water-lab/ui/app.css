@@ -1,0 +1,286 @@
+/* Water Lab layout chrome (wl- prefix). Controls come from the shared
+   kit (tk-); only layout and lab-specific widgets live here. */
+
+#app { position: fixed; inset: 0; pointer-events: none; z-index: 10; }
+body[data-hide-hud='true'] #app { display: none; }
+
+.wl-root {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  grid-template-rows: var(--topbar-h) 1fr var(--statusbar-h);
+  grid-template-columns: var(--rail-w) 1fr auto;
+  grid-template-areas:
+    'topbar topbar topbar'
+    'rail viewport inspector'
+    'status status status';
+  color: var(--text-primary);
+  font: var(--type-body);
+  pointer-events: none;
+}
+
+/* --- topbar ------------------------------------------------------------ */
+.wl-topbar {
+  grid-area: topbar;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 0 var(--space-3);
+  background: var(--bg-app);
+  border-bottom: 1px solid var(--border-subtle);
+  pointer-events: auto;
+}
+/* Brand lockup + lab name come from the kit (.tk-brand, LabChrome.jsx). */
+.wl-topbar .tk-brand {
+  padding-right: var(--space-2);
+  margin-right: var(--space-1);
+}
+.wl-title {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: 30px;
+  padding: var(--space-1) var(--space-2);
+  border: none;
+  border-radius: var(--radius-2);
+  background: none;
+  color: var(--text-primary);
+  font: var(--type-title);
+  cursor: pointer;
+  min-width: 0;
+  max-width: min(34vw, 360px);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.wl-title:hover { background: var(--surface-3); }
+.wl-dirty { color: var(--accent-400); font-size: 8px; }
+.wl-topbar-spacer { flex: 1; }
+
+/* --- workflow rail ------------------------------------------------------ */
+.wl-rail {
+  grid-area: rail;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-1);
+  overflow-y: auto;
+  padding: var(--space-2) 0;
+  background: var(--surface-1);
+  border-right: 1px solid var(--border-subtle);
+  pointer-events: auto;
+}
+.wl-rail-stage {
+  position: relative;
+  display: flex;
+  flex: 0 0 auto;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  width: 52px;
+  padding: var(--space-2) 0;
+  border: none;
+  border-radius: var(--radius-2);
+  background: none;
+  color: var(--text-tertiary);
+  font: var(--type-caption);
+  cursor: pointer;
+}
+.wl-rail-stage:hover { background: var(--surface-3); color: var(--text-secondary); }
+.wl-rail-stage[data-active='true'] {
+  background: var(--accent-subtle);
+  color: var(--accent-300);
+}
+.wl-rail-stage[data-active='true']::before {
+  content: '';
+  position: absolute;
+  top: 18%;
+  bottom: 18%;
+  left: -6px;
+  width: 3px;
+  border-radius: var(--radius-full);
+  background: var(--accent-400);
+}
+.wl-rail-camera[data-mode-active='true'] {
+  background: var(--accent-subtle);
+  color: var(--accent-300);
+  outline: 1px solid rgba(143, 198, 255, 0.35);
+}
+.wl-rail-camera[data-mode-active='true']::before { display: none; }
+.wl-rail-divider {
+  flex: 0 0 auto;
+  width: 38px;
+  height: 1px;
+  margin: var(--space-1) 0;
+  background: var(--border-subtle);
+}
+
+/* --- inspector ----------------------------------------------------------- */
+.wl-inspector {
+  grid-area: inspector;
+  width: var(--inspector-w);
+  overflow-y: auto;
+  padding: var(--space-3) var(--space-3) var(--space-7);
+  background: var(--surface-1);
+  border-left: 1px solid var(--border-subtle);
+  pointer-events: auto;
+}
+.wl-inspector-header { margin: var(--space-1); font: var(--type-title); }
+.wl-inspector-caption { margin: 0 var(--space-1) var(--space-3); color: var(--text-tertiary); font: var(--type-caption); overflow-wrap: anywhere; }
+.wl-info {
+  display: inline-grid;
+  place-items: center;
+  width: 15px;
+  height: 15px;
+  margin-left: var(--space-1);
+  border: 1px solid var(--border-strong);
+  border-radius: 50%;
+  color: var(--text-secondary);
+  font-size: 10px;
+  font-style: normal;
+  cursor: help;
+}
+.wl-preset-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin: 0 var(--space-1) var(--space-3);
+}
+.wl-preset-row .tk-select { flex: 1; }
+
+/* --- document menu ---------------------------------------------------------- */
+.wl-doc-menu { display: flex; flex-direction: column; gap: var(--space-2); }
+.wl-save-row { display: flex; gap: var(--space-2); }
+.wl-save-row .tk-textfield { flex: 1; }
+.wl-doc-menu .tk-search-select { width: 100%; }
+
+/* --- floating camera and stage-toys bars ---------------------------------- */
+.wl-previewbar-select { width: 150px; }
+.wl-previewbar-select--debug { width: 120px; }
+
+.wl-camerabar {
+  position: fixed;
+  top: calc(var(--topbar-h) + 10px);
+  left: calc((100vw + var(--rail-w) - var(--inspector-w)) / 2);
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  box-sizing: border-box;
+  max-width: calc(100vw - var(--rail-w) - var(--inspector-w) - (2 * var(--space-3)));
+  min-height: 34px;
+  padding: var(--space-1) var(--space-3);
+  border: 1px solid var(--preview-border);
+  border-radius: var(--radius-3);
+  background: var(--surface-overlay);
+  backdrop-filter: var(--blur-overlay);
+  box-shadow: var(--shadow-2);
+  color: var(--text-secondary);
+  font: var(--type-caption);
+  pointer-events: auto;
+  z-index: var(--z-hud);
+  overflow: hidden;
+}
+.wl-camerabar-hint {
+  min-width: 0;
+  overflow: hidden;
+  color: var(--text-tertiary);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.wl-stagebar,
+.tk-previewbar {
+  position: fixed;
+  bottom: calc(var(--statusbar-h) + var(--space-3));
+  left: calc((100vw + var(--rail-w) - var(--inspector-w)) / 2);
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  box-sizing: border-box;
+  max-width: calc(100vw - var(--rail-w) - var(--inspector-w) - (2 * var(--space-3)));
+  padding: var(--space-2);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-3);
+  background: var(--surface-overlay);
+  backdrop-filter: var(--blur-overlay);
+  box-shadow: var(--shadow-2);
+  pointer-events: auto;
+  z-index: var(--z-hud);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.wl-stagebar::-webkit-scrollbar,
+.tk-previewbar::-webkit-scrollbar { display: none; }
+.wl-stagebar > *,
+.tk-previewbar > * { flex: 0 0 auto; }
+.wl-rain { display: inline-flex; align-items: center; gap: var(--space-1); color: var(--text-secondary); font: var(--type-caption); }
+.wl-stagebar-hint { padding: 0 var(--space-2); color: var(--text-tertiary); font: var(--type-caption); white-space: nowrap; }
+
+/* --- status bar ----------------------------------------------------------------- */
+.wl-status {
+  grid-area: status;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 0 var(--space-3);
+  background: var(--bg-app);
+  border-top: 1px solid var(--border-subtle);
+  color: var(--text-secondary);
+  font: var(--type-caption);
+  pointer-events: auto;
+}
+.wl-status-spacer { flex: 1; }
+.wl-status-meta { color: var(--text-tertiary); }
+
+@media (max-width: 920px) {
+  .wl-camerabar-hint { display: none; }
+  .wl-title { max-width: 20vw; }
+  .wl-topbar .tk-renderer-backend { display: none; }
+}
+
+@media (max-width: 720px) {
+  .wl-root {
+    grid-template-columns: var(--rail-w) 1fr;
+    grid-template-areas:
+      'topbar topbar'
+      'rail viewport'
+      'status status';
+  }
+  .wl-inspector {
+    position: fixed;
+    top: var(--topbar-h);
+    right: 0;
+    bottom: var(--statusbar-h);
+    width: min(var(--inspector-w), calc(100vw - var(--rail-w)));
+    z-index: var(--z-drawer);
+  }
+  .wl-camerabar,
+  .tk-previewbar {
+    left: calc((100vw + var(--rail-w)) / 2);
+    max-width: calc(100vw - var(--rail-w) - (2 * var(--space-3)));
+  }
+  .wl-topbar .tk-brand-word,
+  .wl-topbar .tk-brand-lab,
+  .wl-title,
+  .wl-topbar .tk-renderer { display: none; }
+}
+
+/* The additional reference/step controls must not hide interaction tools. */
+.tk-previewbar {
+  flex-wrap: wrap;
+  width: calc(100vw - var(--rail-w) - var(--inspector-w) - (2 * var(--space-3)));
+  overflow: visible;
+}
+@media (max-width: 720px) {
+  .tk-previewbar { width: calc(100vw - var(--rail-w) - (2 * var(--space-3))); }
+}
+
+.wl-study-settings {padding:0 16px 20px;font-size:12px;line-height:1.65;color:var(--text-secondary);}
+.wl-study-field {margin:20px 0;}
+.wl-study-field label {display:flex;justify-content:space-between;gap:8px;margin-bottom:10px;color:var(--text-primary);font-size:12px;}
+.wl-study-field output {color:var(--text-tertiary);font-variant-numeric:tabular-nums;}
+.wl-study-settings details {margin-top:24px;border-top:1px solid var(--border-subtle);padding-top:16px;font-size:11px;}
+
+.wl-fluid-timeline{display:flex;align-items:center;gap:7px;font-size:11px;min-width:100px}.wl-fluid-timeline input{width:110px;accent-color:#75b8d8}

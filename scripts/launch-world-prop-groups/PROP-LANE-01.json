@@ -1,0 +1,135 @@
+{
+  "id": "PROP-LANE-01",
+  "title": "Stillwater Lane street systems",
+  "spec": "launch-plan/21-stillwater-lane-street-addendum.md \u00a73, \u00a74 (ground detail, human-scale construction)",
+  "partitionBy": "material",
+  "regroup": true,
+  "rowAxis": "y",
+  "expect": 8,
+  "anchor": {
+    "index": 0,
+    "axis": "z",
+    "metres": 5.0
+  },
+  "note": "Every part carries its own `metres`, because the group anchor alone put the manhole at 2.5 m across and the bollard at 1.56 m \u2014 see the per-object scale note in author-prop-group.py. Sizes below are real Japanese street dimensions, and each is solved from the axis that the scene actually has to fit: height for anything a person stands beside, footprint for anything set into the ground.",
+  "parts": [
+    {
+      "id": "signal-pole",
+      "label": "Traffic signal pole with mast arm",
+      "slot": "cityMetal",
+      "axis": "z",
+      "metres": 5.0,
+      "lod0": 0,
+      "lod1": 4000,
+      "lod2": 1200,
+      "slotIndices": [
+        0,
+        1,
+        2,
+        4
+      ]
+    },
+    {
+      "id": "wall-lamp",
+      "label": "Wall-mounted street lamp on mounting pier",
+      "slot": "cityStone",
+      "axis": "z",
+      "metres": 3.4,
+      "note": "Arrives with the pier it was drawn against. Kept rather than cropped \u2014 doc 21 \u00a72 puts wall-mounted utility along the boundary wall, and the pier buries into a wall face at placement.",
+      "lod0": 0,
+      "lod1": 9000,
+      "lod2": 2400,
+      "slotIndices": [
+        3,
+        5
+      ]
+    },
+    {
+      "id": "guard-rail",
+      "label": "Painted steel pedestrian guard rail",
+      "slot": "cityMetal",
+      "axis": "z",
+      "metres": 1.1,
+      "note": "Solved from height, not length: 1.1 m is doc 21 \u00a74's rail band and is the dimension read at human scale. Length follows at ~1.6 m and the run is built by repeating the panel.",
+      "lod0": 0,
+      "lod1": 3200,
+      "lod2": 900,
+      "slotIndices": [
+        6
+      ]
+    },
+    {
+      "id": "bollard",
+      "label": "Concrete bollard with reflector band",
+      "slot": "cityStone",
+      "axis": "z",
+      "metres": 0.9,
+      "lod0": 0,
+      "lod1": 2000,
+      "lod2": 600,
+      "slotIndices": [
+        7,
+        8
+      ]
+    },
+    {
+      "id": "drain-grates",
+      "label": "Cast iron drain grates in concrete pad",
+      "slot": "cityMetal",
+      "axis": "x",
+      "metres": 1.2,
+      "note": "Solved from footprint. A ground-set object is fitted to the paving, and its thickness is a consequence rather than a target.",
+      "lod0": 0,
+      "lod1": 6000,
+      "lod2": 1600,
+      "slotIndices": [
+        9,
+        10
+      ]
+    },
+    {
+      "id": "manhole",
+      "label": "Cast iron manhole cover in concrete pad",
+      "slot": "cityMetal",
+      "axis": "x",
+      "metres": 0.9,
+      "lod0": 0,
+      "lod1": 4500,
+      "lod2": 1200,
+      "slotIndices": [
+        11
+      ]
+    },
+    {
+      "id": "utility-cabinet",
+      "label": "Louvred utility cabinet on plinth",
+      "slot": "cityMetal",
+      "axis": "z",
+      "metres": 1.35,
+      "lod0": 0,
+      "lod1": 5000,
+      "lod2": 1400,
+      "slotIndices": [
+        12,
+        13
+      ]
+    },
+    {
+      "id": "standpipe",
+      "label": "Standpipe with valve wheel on plinth",
+      "slot": "cityMetal",
+      "axis": "z",
+      "metres": 1.0,
+      "lod0": 0,
+      "lod1": 3600,
+      "lod2": 1000,
+      "slotIndices": [
+        14,
+        15,
+        16
+      ]
+    }
+  ],
+  "lodNote": "LOD0 is deliberately NOT decimated. Section 8's 20k-180k props band was written for HERO props; a 0.9 m bollard and a 0.6 m manhole cover are supporting street furniture and arrive at 7k-47k once the group's 152,954 triangles are divided across eight objects. Decimating them further to hit a floor written for something else would throw away silhouette for nothing. The set TOTAL is 152,954 at LOD0, which is one hero prop's worth of triangles for eight placeable objects \u2014 reported plainly rather than dressed as a band pass.",
+  "slotNote": "Slot indices are into the 17 `model_segment` material slots, sorted along rowAxis. Declared rather than inferred: automatic largest-gap regrouping handed the traffic signal head and mast arm to the wall lamp, because the arm reaches sideways and its slot centroid sat nearer the lamp's than its own pole's. Verified against launch-plan/review/captures/props/PROP-LANE-01/contact-sheet.png. Slot 4 (the three-aspect signal head) reads as if it belongs to the wall pier because Tripo placed it 1.8 m along the row from the pole \u2014 which is where a MAST-ARM head belongs. It is assigned to the signal pole, and the apparent conflict is a row-overlap artefact rather than a partition error."
+}

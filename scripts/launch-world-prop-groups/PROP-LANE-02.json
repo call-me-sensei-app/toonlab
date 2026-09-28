@@ -1,0 +1,134 @@
+{
+  "partitionBy": "material",
+  "regroup": true,
+  "rowAxis": "y",
+  "note": "Every part carries its own `metres`. The D-018a group recipe's coherent-size claim does not survive measurement: an illustrator drawing a product row gives each object similar VISUAL weight, which is the opposite of drawing to one scale. Sizes below are real-world dimensions, each solved from the axis the scene has to fit (D19-146).",
+  "lodNote": "LOD0 is not decimated. Section 8's 20k-180k band is a HERO prop band; supporting street and garden furniture lands under it once a group's triangles divide across its objects. Reported plainly rather than dressed as a band pass.",
+  "id": "PROP-LANE-02",
+  "title": "Stillwater Lane street life",
+  "spec": "launch-plan/21-stillwater-lane-street-addendum.md \u00a73 (street life, vending machine blank)",
+  "expect": 8,
+  "anchor": {
+    "index": 0,
+    "axis": "z",
+    "metres": 1.95
+  },
+  "parts": [
+    {
+      "id": "vending-machine",
+      "label": "Drinks vending machine, blank front",
+      "slot": "cityMetal",
+      "axis": "z",
+      "metres": 1.95,
+      "lod0": 0,
+      "lod1": 9000,
+      "lod2": 2400,
+      "note": "Front and display strip are BLANK by construction \u2014 doc 21 \u00a73 prohibits readable text and brand marks. Original non-textual art, if wanted, comes from the 18-entry signage atlas (launch-plan/review/signage-standdown.md), never from a generated atlas.",
+      "slotIndices": [
+        0
+      ]
+    },
+    {
+      "id": "bicycle",
+      "label": "City bicycle with basket",
+      "slot": "cityMetal",
+      "axis": "y",
+      "metres": 1.75,
+      "lod0": 0,
+      "lod1": 6000,
+      "lod2": 1600,
+      "slotIndices": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "status": "rejected",
+      "rejectReason": "Thin open tubular structure. Frame tubes, forks, spokes and rack collapse into a fused blob at 1K image-to-3D \u2014 the model is not a bicycle at any distance. Not shipped."
+    },
+    {
+      "id": "crates",
+      "label": "Stacked plastic crates",
+      "slot": "cityMetal",
+      "axis": "z",
+      "metres": 0.9,
+      "lod0": 0,
+      "lod1": 5000,
+      "lod2": 1400,
+      "slotIndices": [
+        6
+      ]
+    },
+    {
+      "id": "barrel",
+      "label": "Steel drum barrel",
+      "slot": "cityMetal",
+      "axis": "z",
+      "metres": 0.88,
+      "lod0": 0,
+      "lod1": 4000,
+      "lod2": 1100,
+      "slotIndices": [
+        7,
+        8
+      ]
+    },
+    {
+      "id": "cones",
+      "label": "Traffic cones, pair",
+      "slot": "cityMetal",
+      "axis": "z",
+      "metres": 0.7,
+      "lod0": 0,
+      "lod1": 3000,
+      "lod2": 900,
+      "slotIndices": [
+        9
+      ]
+    },
+    {
+      "id": "barrier",
+      "label": "Folding steel barrier",
+      "slot": "cityMetal",
+      "axis": "z",
+      "metres": 1.0,
+      "lod0": 0,
+      "lod1": 5000,
+      "lod2": 1400,
+      "slotIndices": [
+        10
+      ],
+      "status": "rejected",
+      "rejectReason": "Same failure class: the folding lattice's crossing bars weld into a tangle of noodles. Reads passably beyond ~8 m and fails completely at doc 21 \u00a74's close camera. Not shipped."
+    },
+    {
+      "id": "waste-bin",
+      "label": "Lidded waste bin",
+      "slot": "cityMetal",
+      "axis": "z",
+      "metres": 0.95,
+      "lod0": 0,
+      "lod1": 4000,
+      "lod2": 1100,
+      "slotIndices": [
+        11
+      ]
+    },
+    {
+      "id": "street-planter",
+      "label": "Glazed street planter pot",
+      "slot": "gardenCeramic",
+      "axis": "z",
+      "metres": 0.55,
+      "lod0": 0,
+      "lod1": 7000,
+      "lod2": 1900,
+      "slotIndices": [
+        12
+      ],
+      "note": "The generated shrub (segment slot 13, 27,481 tris) is deliberately DROPPED. Foliage from image-to-3D is a blobby mass, and vegetation is a first-party ToonLab system rather than a gap \u2014 the pot ships empty and the scene owner plants it from the tree/flower systems."
+    }
+  ],
+  "rejectNote": "Two of eight are rejected on a shared cause, and it is a NEW rule rather than a restatement of D-016b. D-016b predicted rear coherence from volume complexity. These two failures are not about complexity or about the rear: a bicycle and a folding barrier are THIN OPEN STRUCTURES whose members are thinner than the generator's effective voxel, so they weld together everywhere, front included. Compact closed volumes at the same triangle count came out clean in the same generation. Do not send open lattice or tubular frames through image-to-3D."
+}

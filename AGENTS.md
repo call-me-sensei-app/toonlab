@@ -214,3 +214,122 @@ near/far, lit/shadowed, shoreline or LOD states where those systems are used.
 Database migrations and official catalog seed batches are append-only after
 release. New official catalog metadata must use the next numbered seed and
 immutable public R2 URLs. Never edit an applied migration or seed.
+
+
+## Human-Maintainable And Performance-Conscious Code
+
+- Optimize all code for performance, clear organization, and human readability. A human maintainer
+  must be able to understand, debug, test, and change the repository without AI assistance or access
+  to an agent's conversation history.
+- Prefer descriptive names, explicit contracts and side effects, cohesive modules with one clear
+  responsibility, straightforward control flow, and the repository's established conventions. Keep
+  UI, domain logic, persistence, and external integrations separated where applicable; do not
+  accumulate unrelated behavior in large screens, handlers, or services.
+- Document non-obvious intent, invariants, tradeoffs, configuration, and operational steps in
+  maintained repository files. Comments should explain why, not narrate obvious code. Avoid clever
+  compression, unexplained magic values, hidden coupling, duplicated business rules, and speculative
+  abstractions.
+- Assess relevant CPU/GPU work, memory, startup and bundle cost, rendering, network/database round
+  trips, payload size, concurrency, and resource cleanup. Bound work and data; avoid N+1 operations,
+  unnecessary eager loading, repeated computation, and unbounded queues. Preserve correctness,
+  authorization, and failure semantics when optimizing.
+- Measure material performance changes against a representative baseline where practical. Report the
+  workload, environment, method, and results; never invent benchmark numbers or claim a speedup from
+  code inspection alone. If measurement is unavailable, identify the expected effect as a hypothesis
+  and state the verification gap.
+- Keep changes focused and reviewable. Add tests proportional to the behavior and risk, update
+  affected documentation, and leave reproducible setup, verification, and troubleshooting
+  instructions. Do not trade understandable code for an unmeasured micro-optimization or use
+  readability as a reason to ignore a demonstrated bottleneck.
+
+## Evidence-Based Pre-Change Impact And Risk Assessment
+
+- Before making changes, investigate the relevant code, instructions, contracts, and current
+  behavior using read-only methods, then present the developer with the proposed change, objectives,
+  impact assessment, and verification plan. Assess suggestions and bug fixes before recommending
+  implementation, not only after writing code.
+- Analyze the affected flow extensively enough to establish its boundaries: inputs and writers,
+  callers and consumers, state transitions, side effects, dependencies, alternative insertion
+  points, and direct, indirect, or delayed effects. Evaluate API/event contracts, stored data and
+  migrations, queries/indexes, cache invalidation, concurrency/idempotency, security/privacy,
+  compatibility, performance/scale, failures/retries, observability, testing, rollout, and rollback
+  when applicable. Explain exclusions rather than filling a checklist with irrelevant claims.
+- Distinguish verified facts, reasoned inferences, assumptions, and unknowns. Cite concrete code
+  paths, contracts, measurements, or observed behavior where available. Do not invent hazards,
+  failure modes, likelihoods, severity, or affected systems to make the assessment sound
+  comprehensive.
+- For each credible risk, describe its trigger, affected scope/blast radius, likelihood and severity
+  with their evidence or uncertainty, mitigation, detection/verification, rollback or contingency,
+  and residual risk. Use qualitative estimates when numerical likelihood is unsupported; explicitly
+  identify estimates as judgments.
+- Some changes genuinely have no material risk within the reviewed scope. In that case, state "No
+  material risk identified within the examined scope," explain the evidence and boundaries, and
+  identify any unexamined areas. Do not manufacture a risk or confuse missing investigation with
+  verified safety; do not promise absolute zero risk.
+- Scale the detail to the actual impact without skipping the analysis. Reassess when scope,
+  dependencies, evidence, or the proposed behavior changes. Follow every existing
+  developer-confirmation, owner-approval, and release gate; this assessment does not replace or
+  weaken them. Pause for consequential unresolved decisions or required approvals before the
+  affected action.
+
+## Objective Confidence On A 0–100% Scale
+
+- Before implementing a proposed change or bug fix, report confidence that it will satisfy each
+  material developer objective on a 0–100% scale, where 100% is the maximum. Explain the basis:
+  understood current behavior or reproduced root cause, applicable contracts, acceptance criteria,
+  test coverage, and remaining assumptions or verification gaps.
+- Treat the score as a scoped engineering judgment, not a calibrated statistical probability or a
+  guarantee. Separate confidence in the diagnosis, proposed solution, and verified outcome when
+  their evidence differs. Seek the highest justified confidence through investigation and
+  validation; never inflate a score to meet a requested threshold.
+- Reserve 100% for a precisely bounded claim established by sufficient direct verification with no
+  unresolved assumptions material to that claim. State the verified scope and conditions. Passing
+  tests alone does not prove every future production case, absence of regressions, performance at
+  untested scale, or compliance by future coding agents.
+- When confidence is lower, explain what is uncertain, what evidence would raise it, and whether
+  further investigation, a safer alternative, or a developer decision is needed. Do not present an
+  unverified fix as certain or silently proceed through a required approval because the score is
+  high.
+- After implementation, reassess confidence against the actual diff and validation results. Report
+  what passed, failed, was skipped, or could not be verified, with reproducible commands and
+  limitations. Reduce confidence when contradictory evidence appears; do not carry an initial score
+  forward without reassessment.
+
+## Coding-Agent-Friendly Features And Changes
+
+- Consider coding-agent usability in every change when applicable. New features must be designed for
+  efficient, reliable use and maintenance by coding agents as well as humans. Include agent
+  usability in the acceptance criteria; if no agent-facing interaction is relevant, explain why
+  rather than adding unnecessary infrastructure.
+- Keep entry points, ownership boundaries, schemas/types, configuration, and supported workflows
+  discoverable in the repository. Provide concise, current documentation and examples, stable
+  contracts and identifiers, deterministic setup, and reproducible lint/typecheck/test commands
+  using established tooling.
+- For workflows that agents need to operate, prefer the project's existing authenticated API, CLI,
+  or MCP surface over UI-only automation. Support validated structured inputs, machine-readable
+  results/errors, and explicit status; long-running work should expose durable operation IDs and
+  progress/cancellation where appropriate. Non-interactive operation must not bypass required human
+  confirmation.
+- Reuse the same domain services, validation, authorization, ownership, revision,
+  feature-availability, quotas, and safety boundaries across human and agent interfaces. Do not
+  duplicate business logic, expose secrets, grant broader agent privileges, or create a second
+  unsafe path. Preserve existing MCP parity requirements.
+- Make behavior testable in isolation and failures diagnosable without private chat context. Keep
+  interfaces and modules focused, document compatibility changes, and maintain applicable
+  instructions alongside the feature. Optimize agent navigation and context size without sacrificing
+  human readability or fragmenting code unnecessarily.
+
+## Existing Approvals And Final Handoff
+
+- These requirements supplement existing project rules; they do not remove, replace, or relax any
+  required approval from Jack, the developer, infrastructure owners, or other designated reviewers.
+  Identify protected logic before implementation, remind the developer of the applicable approval,
+  and wait for it. A task request, confidence score, successful test, or agent-accessible tool is
+  not a substitute for a required approval.
+- Preserve all existing architectural, security, data-access, material, UI, rollout/Test Group, and
+  release protections. If instructions conflict or a requested design would violate one, explain the
+  conflict and obtain the required decision instead of silently choosing a weaker rule.
+- In the handoff, summarize the changes, objective-by-objective confidence and supporting evidence,
+  actual impact and residual risks (or the scoped no-material-risk finding), verification outcomes
+  and gaps, applicable rollout/Test Group decision, and any outstanding approvals or operational
+  steps. Never claim a test, deployment, approval, or objective was completed when it was not.

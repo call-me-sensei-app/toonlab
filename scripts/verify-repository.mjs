@@ -9,13 +9,16 @@ const files = execFileSync('git', ['ls-files', '-z'], { cwd: root, encoding: 'ut
 
 // Check the Git index: .gitignore alone cannot remove already tracked files.
 const rootFiles = new Set([
-  '.env.example', '.gitignore', 'AGENTS.md', 'ATTRIBUTION.md', 'LICENSE',
-  'NPM-LIBRARY.md', 'README.md', 'compose.yaml', 'index.html', 'package.json',
-  'package-lock.json', 'pnpm-lock.yaml', 'pnpm-workspace.yaml', 'vite.config.js',
+  '.env.example', '.gitignore', 'AGENTS.md', 'ATTRIBUTION.md', 'CLAUDE.md',
+  'GEMINI.md', 'LICENSE', 'NPM-LIBRARY.md', 'README.md', 'compose.yaml',
+  'index.html', 'package.json', 'package-lock.json', 'pnpm-lock.yaml',
+  'pnpm-workspace.yaml', 'vite.config.js',
 ]);
 const hiddenFiles = new Set(['.env.example', '.gitignore', '.npmignore']);
 const forbidden = files.filter((path) => {
   if (!path.includes('/') && !rootFiles.has(path)) return true;
+  // Cursor reads agent rules only from .cursor/rules; nothing else under .cursor is public.
+  if (/^\.cursor\/rules\/[\w.-]+\.mdc$/.test(path)) return false;
   return path.split('/').some((part) => part.startsWith('.')
     && part !== '.github' && !hiddenFiles.has(part));
 });

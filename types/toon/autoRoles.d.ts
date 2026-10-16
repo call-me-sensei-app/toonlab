@@ -29,6 +29,8 @@ export function inferAutoRoleWeights(root: any, { headBone, isEligible, skinTole
     forwardInferred?: undefined;
     head?: undefined;
     maskedMeshes?: undefined;
+    maskDegenerateTriangles?: undefined;
+    maskRepartitionedTexels?: undefined;
     method?: undefined;
     skinReference?: undefined;
     skinSplit?: undefined;
@@ -59,6 +61,8 @@ export function inferAutoRoleWeights(root: any, { headBone, isEligible, skinTole
         radiusY: number;
     };
     maskedMeshes: number;
+    maskDegenerateTriangles: number;
+    maskRepartitionedTexels: number;
     method: string;
     referenceSkinFraction: number;
     skinReference: any[];

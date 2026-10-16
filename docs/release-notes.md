@@ -1,4 +1,56 @@
-# ToonLab 0.5.0 release notes
+# ToonLab 0.5.1 release notes
+
+This patch fixes character toon shading found while shading generated and
+hand-built chibis in the Tokyo Story Map (2026-10-13). It adds one settings
+field group, `outline.depthPush`, which is off by default; no API or settings
+field was removed and preset documents stay at schema version 2.
+
+Characters whose materials name a face keep their 0.5.0 look unless they opt
+into the new depth push. Characters shaded through automatic roles (one
+atlased material, no named face) render differently: faces are no longer
+washed out and skin-coloured hair is shaded as hair. Re-check those
+characters after upgrading.
+
+- **Outline depth push per role** — `outline.depthPush.{cloth, hair, skin,
+  metal}` (default 0, off) pushes a role's hull lines back in depth so inner
+  edges of layered parts stop inking across the body; faces keep
+  `faceDepthPush`.
+- **Automatic roles: weights are a partition.** Face texels were also
+  weighted as fully skin, so the shader summed the skin and face parameters
+  (terminator, tone, rim, outline width) and faces looked washed out. Skin
+  is now the skin-coloured share that is not face.
+- **Automatic roles: skin-coloured hair.** Brown hair framing a chibi face
+  could become the skin reference (lightness 0.42 instead of about 0.8), so
+  hair was shaded as skin. A two-group lightness split of the cheek band now
+  separates them when the crown matches the darker group. Hair as light as
+  the skin (ash, silver, platinum) is not split and keeps the 0.5.0 skin
+  reference.
+- **Automatic roles: band skin share.** A cheek band whose median colour is
+  not skin (glasses, a lock of hair) still counts when at least 35 % of it is
+  skin-coloured.
+- **Rest-pose facing.** A rigged model that declares no
+  `root.userData.toonForward` and whose +Z analysis finds no skin in the
+  cheek band is retried from the side its bright skin faces. When that
+  succeeds, the axis is written to the root with a `rest-forward-inferred`
+  warning, so later bakes and head tracking use the same frame. A +Z
+  analysis that succeeds is never overridden: light warm hair can outweigh
+  the face in the estimate. A side-facing rig whose +Z cheek band still holds
+  skin is therefore analysed from +Z, as in 0.5.0; declaring the forward
+  remains the contract.
+
+Known gaps that remain open: on heavily fragmented atlases the per-texel role
+mask can disagree with the per-vertex weights, bangs below the brow inside the
+face oval are weighted as face, and the head-above-neck extension can take a
+dark collar into the hair. None is visible at gameplay distance in the Tokyo
+Story Map.
+
+Known visible gap: on some low-poly generated faces (2 of the 12
+automatic-role characters in the Tokyo Story Map), the shadowed half of the
+face shows pale angular patches in close-ups. Only the shadow tone varies
+there; role weights, textures and lighting are uniform. 0.5.0's washed-out
+faces hid it. The cause is not yet confirmed.
+
+# Previous release: 0.5.0
 
 0.5.0 rebuilds character toon shading around the look of modern anime games
 (Genshin Impact, Honkai: Star Rail). The toon settings schema is new, so code

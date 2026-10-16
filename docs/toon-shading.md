@@ -163,7 +163,28 @@ is one clean shadow shape that sweeps across the face as the light moves.
   already paints one (`face.eyeWhiteShade`).
 
 Models whose materials name no face (one atlased material from a generator)
-get per-vertex face, skin and hair weights from `autoRoles`.
+get per-vertex face, skin and hair weights from `autoRoles`:
+
+- The weights partition the surface (skin + face + hair ≤ 1; the rest is the
+  material's own role). The shader blends each role's full parameters by
+  them, so a face texel is face only, never also skin.
+- The skin tone is sampled from the cheek band. When brown, auburn or blond
+  hair framing the face (skin-coloured by hue) splits the band's
+  skin-coloured texels into two lightness groups and the crown matches the
+  darker group, that group is hair and only the lighter group counts as skin.
+  Hair as light as the skin or lighter (ash, silver, platinum) is not split.
+- Everything is analysed in the rest pose, in the character frame. Declare
+  the rest-pose facing with `root.userData.toonForward` (e.g. `[-1, 0, 0]`
+  for a rig that faces -X at rest and is turned forward by its animations).
+  A rigged model that declares nothing is analysed facing +Z. Only when that
+  analysis finds no skin in the cheek band is the facing estimated from the
+  head's bright skin; if the retry from that side succeeds, the axis is
+  written to `toonForward` with a `rest-forward-inferred` warning in the
+  conversion report. A side-facing rig whose +Z cheek band still holds skin
+  (a cheek, the neck) is analysed from +Z, as in 0.5.0, so declare it.
+- The result (`report` entry `auto-roles-applied`) carries the face frame,
+  head frame, skin reference, band skin share and any skin/hair split for
+  diagnosis; view the weights with the `roles` debug output.
 
 ## Cast shadows and render passes
 

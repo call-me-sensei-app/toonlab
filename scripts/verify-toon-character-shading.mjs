@@ -348,6 +348,11 @@ check('automatic roles find the face on an unrigged single-material character', 
   }
   assert.ok(frontFace > 20, `front of the head is face (${frontFace})`);
   assert.equal(bodyFace, 0, 'the body is never face');
+  // A partition: the shader blends role parameters by these weights.
+  for (let i = 0; i < weights.count; i += 1) {
+    const sum = weights.getX(i) + weights.getY(i) + weights.getZ(i);
+    assert.ok(sum <= 1 + 3 / 255, `role weights sum to at most 1 (vertex ${i}: ${sum})`);
+  }
   assert.ok(root.userData.toonHeadEstimate.center[1] > 1.4);
 });
 
@@ -405,6 +410,173 @@ check('automatic roles use the rig when the head is a rigid attachment', () => {
   assert.ok(front > 20, `front of the rigid head is face (${front})`);
   const propWeights = prop.geometry.attributes[AUTO_ROLE_ATTRIBUTE];
   for (let i = 0; i < propWeights.count; i += 1) assert.ok(propWeights.getY(i) < 0.5, 'the prop is never face');
+});
+
+// Paints a mesh from a palette by position: `paint(x, y, z)` returns a palette
+// index, stored in the vertex's UV into a one-row texture of the palette.
+function paintByPosition(mesh, palette, paint) {
+  const data = new Uint8Array(palette.length * 4);
+  palette.forEach((rgb, i) => data.set([...rgb, 255], i * 4));
+  const texture = new THREE.DataTexture(data, palette.length, 1);
+  texture.needsUpdate = true;
+  const position = mesh.geometry.attributes.position;
+  const uv = mesh.geometry.attributes.uv;
+  for (let i = 0; i < position.count; i += 1) {
+    uv.setXY(i, (paint(position.getX(i), position.getY(i), position.getZ(i)) + 0.5) / palette.length, 0.5);
+  }
+  mesh.material.map = texture;
+  mesh.material.color.setRGB(1, 1, 1);
+}
+
+const SKIN_RGB = [240, 200, 180];
+const BROWN_HAIR_RGB = [112, 76, 71];
+const CLOTH_RGB = [60, 60, 80];
+const INK_RGB = [40, 40, 45];
+const HEAD_Y = 1.52;
+
+check('automatic roles: skin-coloured brown hair framing the face is hair, not skin', () => {
+  const { mesh, root } = syntheticCharacter();
+  // Brown hair on the crown, the back and locks framing the face (|x| > 0.03,
+  // through the cheek band); skin on the front of the face; cloth below.
+  paintByPosition(mesh, [SKIN_RGB, BROWN_HAIR_RGB, CLOTH_RGB], (x, y, z) => {
+    if (y < 1.42) return 2;
+    if (y > HEAD_Y + 0.04 || z < 0 || Math.abs(x) > 0.03) return 1;
+    return 0;
+  });
+  const result = inferAutoRoleWeights(root);
+  assert.equal(result.applied, true, result.reason);
+  assert.equal(result.skinSplit?.hair, 'darker', 'the band splits into skin and darker hair');
+  const weights = mesh.geometry.attributes[AUTO_ROLE_ATTRIBUTE];
+  const position = mesh.geometry.attributes.position;
+  let locks = 0;
+  for (let i = 0; i < position.count; i += 1) {
+    const x = position.getX(i);
+    const y = position.getY(i);
+    if (y < 1.45 || y > HEAD_Y || position.getZ(i) < 0.05 || Math.abs(x) < 0.05) continue;
+    locks += 1;
+    assert.ok(weights.getX(i) < 0.5 && weights.getZ(i) > 0.5, `a lock at x ${x.toFixed(3)} is hair (skin ${weights.getX(i)}, hair ${weights.getZ(i)})`);
+  }
+  assert.ok(locks > 4, `locks sampled (${locks})`);
+});
+
+check('a rest pose facing -X without a declared forward is analysed from its face', () => {
+  // A forward is inferred only when the +Z analysis finds no skin in the cheek band, so this rig's body (and neck)
+  // is cloth-coloured; with a skin-coloured neck the +Z analysis passes and the rig keeps +Z (asserted below).
+  const build = ({ skinBody = false } = {}) => {
+    const { mesh: body, root } = syntheticCharacter();
+    if (!skinBody) body.material.color.setRGB(0.25, 0.25, 0.3);
+    const hips = new THREE.Bone();
+    const neck = new THREE.Bone();
+    const head = new THREE.Bone();
+    neck.position.y = 1.36;
+    head.position.y = 0.06;
+    hips.add(neck);
+    neck.add(head);
+    root.add(hips);
+    root.remove(body);
+    hips.add(body);
+    // Dense enough that the face outweighs the neck vertices the head extension brings into the cheek band.
+    const headMesh = new THREE.Mesh(new THREE.SphereGeometry(0.11, 64, 48), body.material.clone());
+    headMesh.position.y = 0.1;
+    head.add(headMesh);
+    // Skin on the -X side of the head (the face), dark hair everywhere else.
+    paintByPosition(headMesh, [SKIN_RGB, INK_RGB], (x, y) => (x < -0.05 && y < 0.05 ? 0 : 1));
+    return { head, headMesh, root };
+  };
+  const { head, headMesh, root } = build();
+  const result = inferAutoRoleWeights(root, { headBone: head });
+  assert.equal(result.applied, true, result.reason);
+  assert.deepEqual(result.forwardInferred?.forward, [-1, 0, 0]);
+  assert.deepEqual(root.userData.toonForward, [-1, 0, 0], 'written for the later bakes and head tracking');
+  const weights = headMesh.geometry.attributes[AUTO_ROLE_ATTRIBUTE];
+  const position = headMesh.geometry.attributes.position;
+  let front = 0;
+  for (let i = 0; i < position.count; i += 1) {
+    if (position.getX(i) < -0.07 && position.getY(i) < 0.03 && weights.getY(i) > 0.5) front += 1;
+    if (position.getZ(i) > 0.08 && position.getX(i) > -0.02) assert.ok(weights.getY(i) < 0.5, 'the +Z side of the head is not face');
+  }
+  assert.ok(front > 20, `the -X face is face (${front})`);
+
+  const declared = build();
+  declared.root.userData.toonForward = [0, 0, 1];
+  const kept = inferAutoRoleWeights(declared.root, { headBone: declared.head });
+  assert.equal(kept.forwardInferred ?? null, null, 'a declared forward is never overridden');
+  assert.deepEqual(declared.root.userData.toonForward, [0, 0, 1]);
+
+  // Known limit: skin in the +Z cheek band (here the neck) passes the +Z analysis, so nothing is inferred and such a
+  // rig must declare root.userData.toonForward.
+  const skinNeck = build({ skinBody: true });
+  const plusZ = inferAutoRoleWeights(skinNeck.root, { headBone: skinNeck.head });
+  assert.equal(plusZ.applied, true, plusZ.reason);
+  assert.equal(plusZ.forwardInferred, null);
+  assert.equal(skinNeck.root.userData.toonForward, undefined);
+});
+
+const ASH_HAIR_RGB = [205, 195, 186];
+const LIP_RGB = [150, 90, 80];
+
+check('light skin-coloured hair keeps a +Z face: no inferred forward, no inverted skin/hair split', () => {
+  // A +Z-facing rig with ash-grey hair (skin-coloured by hue and as light as the skin, like the Tokyo Story Map's
+  // Yuxi). The hair is a dense shell over the back of the head, so the head's bright skin-coloured vertices mostly
+  // face -Z; the cheek band holds the skin and darker lips.
+  const build = () => {
+    const { mesh: body, root } = syntheticCharacter();
+    // The neck (drawn into the cheek band by the head extension) has the face's skin tone.
+    body.material.color.setRGB(...SKIN_RGB.map((channel) => channel / 255));
+    const hips = new THREE.Bone();
+    const neck = new THREE.Bone();
+    const head = new THREE.Bone();
+    neck.position.y = 1.36;
+    head.position.y = 0.06;
+    hips.add(neck);
+    neck.add(head);
+    root.add(hips);
+    root.remove(body);
+    hips.add(body);
+    const headMesh = new THREE.Mesh(new THREE.SphereGeometry(0.11, 64, 48), body.material.clone());
+    headMesh.position.y = 0.1;
+    paintByPosition(headMesh, [SKIN_RGB, ASH_HAIR_RGB, LIP_RGB], (x, y, z) => {
+      if (z < 0.03 || y > 0.05) return 1;
+      return Math.abs(x) < 0.03 && y > -0.07 && y < -0.04 ? 2 : 0;
+    });
+    // Back hemisphere (z <= 0) only.
+    const hairMesh = new THREE.Mesh(new THREE.SphereGeometry(0.118, 96, 64, Math.PI, Math.PI), body.material.clone());
+    hairMesh.position.y = 0.1;
+    paintByPosition(hairMesh, [ASH_HAIR_RGB], () => 0);
+    head.add(headMesh, hairMesh);
+    return { head, hairMesh, headMesh, root };
+  };
+  const assertFaceAndHair = ({ hairMesh, headMesh }, label) => {
+    const headWeights = headMesh.geometry.attributes[AUTO_ROLE_ATTRIBUTE];
+    const headPosition = headMesh.geometry.attributes.position;
+    let cheeks = 0;
+    for (let i = 0; i < headPosition.count; i += 1) {
+      const y = headPosition.getY(i);
+      if (headPosition.getZ(i) < 0.08 || y < -0.035 || y > 0.03) continue;
+      cheeks += 1;
+      assert.ok(headWeights.getY(i) > 0.5, `${label}: the skin of the face is face (vertex ${i}: face ${headWeights.getY(i)})`);
+    }
+    assert.ok(cheeks > 10, `${label}: face vertices sampled (${cheeks})`);
+    const hairWeights = hairMesh.geometry.attributes[AUTO_ROLE_ATTRIBUTE];
+    for (let i = 0; i < hairWeights.count; i += 1) {
+      assert.ok(hairWeights.getY(i) < 0.1 && hairWeights.getZ(i) > 0.5, `${label}: the back of the head is hair (vertex ${i})`);
+    }
+  };
+
+  const undeclared = build();
+  const result = inferAutoRoleWeights(undeclared.root, { headBone: undeclared.head });
+  assert.equal(result.applied, true, result.reason);
+  assert.equal(result.forwardInferred, null, 'the +Z analysis succeeds, so no forward is inferred');
+  assert.equal(undeclared.root.userData.toonForward, undefined, 'nothing is written to the root');
+  assert.equal(result.skinSplit, null, 'hair as light as the skin is not split from it');
+  assertFaceAndHair(undeclared, 'undeclared');
+
+  const declared = build();
+  declared.root.userData.toonForward = [0, 0, 1];
+  const kept = inferAutoRoleWeights(declared.root, { headBone: declared.head });
+  assert.equal(kept.applied, true, kept.reason);
+  assert.equal(kept.skinSplit, null, 'a lighter group matching the crown is never taken as the hair');
+  assertFaceAndHair(declared, 'declared +Z');
 });
 
 check('automatic roles run through applyToonShader, report, and blend role parameters', () => {
@@ -644,6 +816,30 @@ check('outline hulls: back faces, role widths, face push, source edge flags', ()
   assert.equal(off.hull.material.visible, false, 'a retune keeps it off');
   applyToonSettingsToMaterial(off.model, createToonSettings({ outline: { honourSourceOff: false }, preset: 'call_me_sensei' }));
   assert.equal(off.hull.material.visible, true, 'honourSourceOff can be turned off live');
+});
+
+check('outline depth push: per role, off by default, faces keep faceDepthPush', () => {
+  const build = (outline) => {
+    const root = new THREE.Group();
+    // Skin-coloured, or the name-only face role is demoted to cloth.
+    const face = new THREE.Mesh(new THREE.SphereGeometry(0.1, 16, 12), new THREE.MeshStandardMaterial({ color: new THREE.Color(0.98, 0.9, 0.85), name: 'Face' }));
+    const cloth = new THREE.Mesh(new THREE.SphereGeometry(0.1, 8, 6), new THREE.MeshStandardMaterial({ name: 'Jacket' }));
+    const hair = new THREE.Mesh(new THREE.SphereGeometry(0.1, 8, 6), new THREE.MeshStandardMaterial({ name: 'Hair' }));
+    root.add(face, cloth, hair);
+    applyToonShader(root, { autoRoles: { mode: 'off' }, preset: 'call_me_sensei', outline });
+    const hullOf = (mesh) => mesh.children.find((child) => child.userData.isToonOutline);
+    return { root, face: hullOf(face), cloth: hullOf(cloth), hair: hullOf(hair) };
+  };
+  const plain = build(undefined);
+  assert.equal(uniformOf(plain.cloth.material, 'outlineDepthPush'), 0, 'off by default: existing looks are unchanged');
+  assert.equal(uniformOf(plain.hair.material, 'outlineDepthPush'), 0);
+  const pushed = build({ depthPush: { cloth: 0.015, hair: 0.012 } });
+  assert.ok(near(uniformOf(pushed.cloth.material, 'outlineDepthPush'), 0.015));
+  assert.ok(near(uniformOf(pushed.hair.material, 'outlineDepthPush'), 0.012));
+  assert.equal(uniformOf(pushed.face.material, 'outlineDepthPush'), 0, 'faces use faceDepthPush, not the role push');
+  assert.ok(near(uniformOf(pushed.face.material, 'outlineFaceDepthPush'), 0.02));
+  applyToonSettingsToMaterial(pushed.root, createToonSettings({ preset: 'call_me_sensei', outline: { depthPush: { cloth: 0.03 } } }));
+  assert.ok(near(uniformOf(pushed.cloth.material, 'outlineDepthPush'), 0.03), 'retunes live');
 });
 
 // ---------------------------------------------------------------- settings

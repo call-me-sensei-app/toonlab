@@ -42,6 +42,7 @@ export const ROLE_PARAMETER_NAMES = Object.freeze([
   'specularThreshold',
   'specularSoftness',
   'outlineWidth',
+  'outlineDepthPush',
   'ink',
   'inkSaturation',
   'outlineLightingMix',
@@ -101,6 +102,8 @@ function roleParameters(settings, role, { hasSpecularMask = false, paintedEyeHig
     outlineMaxBrightness: Math.max(lighting.min, lighting.max),
     outlineMinBrightness: lighting.min,
     outlineWidth: outline.enabled ? outline.width[role] : 0,
+    // Faces (and eyes) use faceDepthPush, applied by face weight in the hull shader.
+    outlineDepthPush: inkRole === 'face' ? 0 : outline.depthPush[inkRole] ?? 0,
     rimIntensity: rim.enabled ? rim.intensity[rimRole] : 0,
     rimSilhouette: role === 'hair' ? rim.silhouette.hair : role === 'eye' ? 0 : rim.silhouette.body,
     sceneShadowStrength: sceneShadow,

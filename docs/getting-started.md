@@ -6,7 +6,7 @@ needed systems. For an existing game, preserve its architecture while applying
 the requested treatment. The package does not automatically author a finished
 world.
 
-Before integrating a scene, read [What ToonLab 0.5.0 can and cannot
+Before integrating a scene, read [What ToonLab 0.5.1 can and cannot
 do](capability-status.md). It defines the supported first-pass contract, which
 responsibilities the Call Me Sensei bundle owns, what the host must provide,
 how imported-material uncertainty is handled, and which checks must pass before

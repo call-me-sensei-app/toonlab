@@ -1,6 +1,6 @@
 {
   "name": "@call-me-sensei/toonlab",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "Anime-style game toolkit for Three.js with cel shading, vegetation, rocks, water, sky, clouds, procedural textures, and portable Lab artifacts",
   "license": "MIT",
   "author": "Hyperbond Studio PTE. LTD. (Call Me Sensei)",

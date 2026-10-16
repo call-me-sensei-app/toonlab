@@ -1168,12 +1168,17 @@ function runAutoRoles(root, toonSettings, materialRoleOverrides, modelFacts, rep
     report.add('warn', 'no-face-role', 'No material is recognised as a face and automatic roles are off; the face is shaded with the body terminator.');
     return null;
   }
+  const declaredForward = Array.isArray(root.userData?.toonForward);
   const result = inferAutoRoleWeights(root, {
     headBone: findHeadBone(root),
     isEligible: (mat) => !(mat?.isMToonMaterial && mat.isOutline) &&
       AUTO_ROLE_ELIGIBLE.has(classifyMaterialRole(mat, materialRoleOverrides).role),
     skinTolerance: toonSettings.autoRoles.skinTolerance,
   });
+  if (!declaredForward && Array.isArray(root.userData?.toonForward)) {
+    const forward = root.userData.toonForward;
+    report.add('warn', 'rest-forward-inferred', `The model declares no forward and its +Z analysis found no skin in the cheek band; its rest pose faces [${forward.join(', ')}] (inferred from the face) and that was written to root.userData.toonForward. Declare it on the model to make this explicit.`, { forward });
+  }
   if (result.applied) {
     report.add('info', 'auto-roles-applied', `No material is named as a face; inferred face, skin and hair per vertex (${result.method}).`, result);
   } else {

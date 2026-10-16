@@ -362,6 +362,85 @@ function measureFaceFrame(meshes, headnessAt, isSkinToned, center, radiusX) {
 const TEXEL_MASK_MAX_HEAD_VERTICES = 20000;
 const TEXEL_MASK_SIZE = 1024;
 const TEXEL_MASK_PADDING = 4;
+// Texel coverage while baking: written by one triangle, or by several.
+const TEXEL_COVERED = 1;
+const TEXEL_OVERLAPPED = 2;
+// A UV-degenerate triangle maps far more of the texture than its surface
+// warrants. Image-to-3D models can carry a few spread over much of the atlas:
+// the Tokyo Story Map traffic riders' hands map a few square millimetres over
+// up to 40 % of it (TSM-SHADE-12), across face islands and the gaps around
+// them. Their UV density (texture area per surface area) ran from 6 to 82 000
+// times their mesh's median on 2026-10-16; every other triangle of the 10
+// generated characters measured stayed within 3.5 times it. The few below
+// this limit cover little of the atlas, and restoreOverlapPartition keeps
+// their overlaps a partition.
+const TEXEL_MASK_DEGENERATE_DENSITY = 8;
+
+// UV density of each triangle: its texture-space area per unit of surface
+// area (root space). Infinite for a zero-area surface with a UV footprint.
+function triangleUvDensities(points, uv, index, triangleCount) {
+  const densities = new Float64Array(triangleCount);
+  for (let t = 0; t < triangleCount; t += 1) {
+    const a = index ? index.getX(t * 3) : t * 3;
+    const b = index ? index.getX(t * 3 + 1) : t * 3 + 1;
+    const c = index ? index.getX(t * 3 + 2) : t * 3 + 2;
+    const uvArea = Math.abs((uv.getX(b) - uv.getX(a)) * (uv.getY(c) - uv.getY(a))
+      - (uv.getX(c) - uv.getX(a)) * (uv.getY(b) - uv.getY(a))) / 2;
+    const e1 = [0, 1, 2].map((k) => points[b * 3 + k] - points[a * 3 + k]);
+    const e2 = [0, 1, 2].map((k) => points[c * 3 + k] - points[a * 3 + k]);
+    const surface = Math.hypot(e1[1] * e2[2] - e1[2] * e2[1], e1[2] * e2[0] - e1[0] * e2[2], e1[0] * e2[1] - e1[1] * e2[0]) / 2;
+    densities[t] = surface > 0 ? uvArea / surface : uvArea > 0 ? Infinity : 0;
+  }
+  return densities;
+}
+
+// The per-role maximum over overlapping triangles can break the partition
+// the shader relies on (characterMaterial.js createBlend gives each role its
+// full parameters by weight): a face texel that another triangle also maps
+// became face plus skin and was shaded with both roles' tones summed. The
+// partition is restored the way `classify` builds it: the face weight is kept
+// and skin and hair share the remainder in their merged proportion. Texels
+// written once are left as they are. Returns the number of texels changed.
+function restoreOverlapPartition(data, covered) {
+  let changed = 0;
+  for (let i = 0; i < covered.length; i += 1) {
+    if (covered[i] !== TEXEL_OVERLAPPED) continue;
+    const skin = data[i * 4];
+    const face = data[i * 4 + 1];
+    const hair = data[i * 4 + 2];
+    if (skin + face + hair <= 255) continue;
+    const remainder = (255 - face) / (skin + hair);
+    data[i * 4] = Math.floor(skin * remainder);
+    data[i * 4 + 2] = Math.floor(hair * remainder);
+    changed += 1;
+  }
+  return changed;
+}
+
+// Pads past UV island borders so bilinear sampling at seams reads the island.
+function padIslands(data, covered, size) {
+  for (let pass = 0; pass < TEXEL_MASK_PADDING; pass += 1) {
+    const grow = [];
+    for (let y = 0; y < size; y += 1) {
+      for (let x = 0; x < size; x += 1) {
+        const i = y * size + x;
+        if (covered[i]) continue;
+        for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) {
+          const xx = x + dx;
+          const yy = y + dy;
+          if (xx < 0 || yy < 0 || xx >= size || yy >= size || !covered[yy * size + xx]) continue;
+          grow.push([i, yy * size + xx]);
+          break;
+        }
+      }
+    }
+    if (!grow.length) break;
+    for (const [i, from] of grow) {
+      data.copyWithin(i * 4, from * 4, from * 4 + 4);
+      covered[i] = TEXEL_COVERED;
+    }
+  }
+}
 
 function bakeTexelRoleMask(entry, headnessAt, classify) {
   const { mesh, normals, points } = entry;
@@ -383,7 +462,8 @@ function bakeTexelRoleMask(entry, headnessAt, classify) {
   const headness = new Float32Array(uv.count);
   for (let i = 0; i < uv.count; i += 1) headness[i] = headnessAt(entry, i);
 
-  for (let t = 0; t < triangleCount; t += 1) {
+  // `accepts(texelIndex)` limits which texels the triangle may write.
+  const bakeTriangle = (t, accepts) => {
     const a = index ? index.getX(t * 3) : t * 3;
     const b = index ? index.getX(t * 3 + 1) : t * 3 + 1;
     const c = index ? index.getX(t * 3 + 2) : t * 3 + 2;
@@ -394,6 +474,8 @@ function bakeTexelRoleMask(entry, headnessAt, classify) {
     const uc = uv.getX(c);
     const vc = uv.getY(c);
     rasterizeTriangle(ua * size, va * size, ub * size, vb * size, uc * size, vc * size, size, size, (x, y, w0, w1, w2) => {
+      const texelIndex = y * size + x;
+      if (!accepts(texelIndex)) return;
       const lerp = (array, k) => array[a * 3 + k] * w0 + array[b * 3 + k] * w1 + array[c * 3 + k] * w2;
       sampleTexturePixel(pixels, texture, ua * w0 + ub * w1 + uc * w2, va * w0 + vb * w1 + vc * w2, rgba);
       const roles = classify(
@@ -404,37 +486,32 @@ function bakeTexelRoleMask(entry, headnessAt, classify) {
         headness[a] * w0 + headness[b] * w1 + headness[c] * w2,
         rgba,
       );
-      const texelIndex = y * size + x;
-      // Overlapping UVs (mirrored halves) keep the strongest evidence.
+      // Overlapping UVs (mirrored halves) keep the strongest evidence per
+      // role; restoreOverlapPartition then restores the partition.
       for (let k = 0; k < 3; k += 1) {
         data[texelIndex * 4 + k] = Math.max(data[texelIndex * 4 + k], Math.round(roles[k] * 255));
       }
       data[texelIndex * 4 + 3] = 255;
-      covered[texelIndex] = 1;
+      covered[texelIndex] = covered[texelIndex] ? TEXEL_OVERLAPPED : TEXEL_COVERED;
     });
-  }
+  };
 
-  // Pad past UV island borders so bilinear sampling at seams reads the island.
-  for (let pass = 0; pass < TEXEL_MASK_PADDING; pass += 1) {
-    const grow = [];
-    for (let y = 0; y < size; y += 1) {
-      for (let x = 0; x < size; x += 1) {
-        const i = y * size + x;
-        if (covered[i]) continue;
-        for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) {
-          const xx = x + dx;
-          const yy = y + dy;
-          if (xx < 0 || yy < 0 || xx >= size || yy >= size || !covered[yy * size + xx]) continue;
-          grow.push([i, yy * size + xx]);
-          break;
-        }
-      }
-    }
-    if (!grow.length) break;
-    for (const [i, from] of grow) {
-      data.copyWithin(i * 4, from * 4, from * 4 + 4);
-      covered[i] = 1;
-    }
+  // Regular triangles first, then their padding. UV-degenerate triangles come
+  // last and only fill texels nothing else covers, so they neither change a
+  // texel a regular triangle maps nor stop the padding around its island.
+  const densities = triangleUvDensities(points, uv, index, triangleCount);
+  const degenerateAbove = medianPositiveFinite(densities) * TEXEL_MASK_DEGENERATE_DENSITY;
+  const degenerate = [];
+  for (let t = 0; t < triangleCount; t += 1) {
+    if (densities[t] > degenerateAbove) degenerate.push(t);
+    else bakeTriangle(t, () => true);
+  }
+  let repartitionedTexels = restoreOverlapPartition(data, covered);
+  padIslands(data, covered, size);
+  if (degenerate.length) {
+    const claimed = covered.slice();
+    for (const t of degenerate) bakeTriangle(t, (texelIndex) => !claimed[texelIndex]);
+    repartitionedTexels += restoreOverlapPartition(data, covered);
   }
 
   const mask = new THREE.DataTexture(data, size, size, THREE.RGBAFormat);
@@ -444,7 +521,16 @@ function bakeTexelRoleMask(entry, headnessAt, classify) {
   mask.generateMipmaps = false;
   mask.name = 'toonAutoRoleMask';
   mask.needsUpdate = true;
-  return mask;
+  return { degenerateTriangles: degenerate.length, mask, repartitionedTexels };
+}
+
+// Median of the positive, finite values (Infinity when there are none).
+function medianPositiveFinite(values) {
+  const kept = [];
+  for (const value of values) if (value > 0 && Number.isFinite(value)) kept.push(value);
+  if (!kept.length) return Infinity;
+  kept.sort((x, y) => x - y);
+  return kept[Math.floor(kept.length / 2)];
 }
 
 // Neck height from the silhouette profile: scan down from the top, record the
@@ -741,12 +827,16 @@ function analyseRoles(root, targets, headBone, headBones, skinTolerance, forward
   }
 
   let maskedMeshes = 0;
+  let maskRepartitionedTexels = 0;
+  let maskDegenerateTriangles = 0;
   if (headCount < TEXEL_MASK_MAX_HEAD_VERTICES) {
     for (const entry of meshes) {
-      const mask = bakeTexelRoleMask(entry, headnessAt, classify);
-      if (!mask) continue;
-      entry.mesh.geometry.userData.toonAutoRoleMask = mask;
+      const baked = bakeTexelRoleMask(entry, headnessAt, classify);
+      if (!baked) continue;
+      entry.mesh.geometry.userData.toonAutoRoleMask = baked.mask;
       maskedMeshes += 1;
+      maskRepartitionedTexels += baked.repartitionedTexels;
+      maskDegenerateTriangles += baked.degenerateTriangles;
     }
   }
 
@@ -767,6 +857,12 @@ function analyseRoles(root, targets, headBone, headBones, skinTolerance, forward
     forwardInferred,
     head: { center: center.toArray(), radiusX, radiusY },
     maskedMeshes,
+    // Mask diagnostics: UV-degenerate triangles baked last, and texels where
+    // overlapping UVs broke the role partition and it was restored. On unique,
+    // evenly mapped UVs the first is 0 and the second a few texels on shared
+    // triangle edges (0-41 on six generated characters, 2026-10-16).
+    maskDegenerateTriangles,
+    maskRepartitionedTexels,
     method: rigged ? 'skin-weights' : 'silhouette',
     referenceSkinFraction: bandSkin.length / sampled,
     skinReference,

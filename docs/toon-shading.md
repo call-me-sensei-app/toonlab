@@ -182,9 +182,20 @@ get per-vertex face, skin and hair weights from `autoRoles`:
   written to `toonForward` with a `rest-forward-inferred` warning in the
   conversion report. A side-facing rig whose +Z cheek band still holds skin
   (a cheek, the neck) is analysed from +Z, as in 0.5.0, so declare it.
+- A low-poly head (under 20 000 head vertices) also gets the same
+  classification baked per texel into a role mask on the mesh's UVs, which
+  the shader uses instead of the vertex weights. Where triangles share
+  texels the mask keeps the stronger evidence per role and then restores the
+  partition (the face weight is kept; skin and hair share the rest). A
+  UV-degenerate triangle, mapping more than 8 times the mesh's median texture
+  area per surface area (generated models can carry a few, spread over much
+  of the atlas), is baked last and only into texels no other triangle or
+  island padding covers, so it cannot change a face it overlaps.
 - The result (`report` entry `auto-roles-applied`) carries the face frame,
   head frame, skin reference, band skin share and any skin/hair split for
-  diagnosis; view the weights with the `roles` debug output.
+  diagnosis, and for the mask `maskDegenerateTriangles` (0 on evenly mapped
+  UVs) and `maskRepartitionedTexels` (a few texels on shared triangle edges
+  unless UVs overlap); view the weights with the `roles` debug output.
 
 ## Cast shadows and render passes
 

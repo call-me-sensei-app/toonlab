@@ -579,6 +579,75 @@ check('light skin-coloured hair keeps a +Z face: no inferred forward, no inverte
   assertFaceAndHair(declared, 'declared +Z');
 });
 
+check('a UV-degenerate triangle leaves the role mask of the islands it overlaps unchanged', () => {
+  // TSM-SHADE-12: generated models can carry triangles of a few square millimetres whose UVs span much of the atlas
+  // (the Tokyo Story Map traffic riders' hands). The per-texel role mask merged them into the face islands by
+  // per-role maximum, so face texels became face plus skin and the shader summed both roles' tones (pale patches on
+  // the shadow side of the face), and they covered the gaps the island padding needs. Built without and with such a
+  // triangle (hidden inside the body, its UVs over the whole head island and the gap beside it), the masks must
+  // match wherever an island or its padding lies, and stay a partition.
+  const HEAD_VERTICES = new THREE.SphereGeometry(0.11, 32, 24).toNonIndexed().attributes.position.count;
+  const bake = ({ degenerate }) => {
+    const { mesh, root } = syntheticCharacter();
+    const source = mesh.geometry.attributes;
+    const count = source.position.count + (degenerate ? 3 : 0);
+    const positions = new Float32Array(count * 3);
+    const normals = new Float32Array(count * 3);
+    const uvs = new Float32Array(count * 2);
+    positions.set(source.position.array);
+    normals.set(source.normal.array);
+    // Unique islands: the head in u 0-0.45, the body and neck in u 0.55-1.
+    const headStart = source.position.count - HEAD_VERTICES;
+    for (let i = 0; i < source.position.count; i += 1) {
+      const u = source.uv.getX(i);
+      uvs[i * 2] = i >= headStart ? u * 0.45 : 0.55 + u * 0.45;
+      uvs[i * 2 + 1] = source.uv.getY(i);
+    }
+    if (degenerate) {
+      const at = source.position.count;
+      positions.set([0.1, 0.6, 0.1, 0.104, 0.6, 0.1, 0.1, 0.604, 0.1], at * 3);
+      normals.set([0, 0, 1, 0, 0, 1, 0, 0, 1], at * 3);
+      uvs.set([0, 0, 0.5, 0, 0, 1], at * 2);
+    }
+    const geometry = new THREE.BufferGeometry();
+    geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+    geometry.setAttribute('normal', new THREE.BufferAttribute(normals, 3));
+    geometry.setAttribute('uv', new THREE.BufferAttribute(uvs, 2));
+    mesh.geometry = geometry;
+    const pixels = new Uint8Array(4 * 4 * 4);
+    for (let i = 0; i < 16; i += 1) pixels.set([...SKIN_RGB, 255], i * 4);
+    mesh.material.map = new THREE.DataTexture(pixels, 4, 4);
+    mesh.material.map.needsUpdate = true;
+    mesh.material.color.setRGB(1, 1, 1);
+    const result = inferAutoRoleWeights(root);
+    assert.equal(result.applied, true, result.reason);
+    assert.equal(result.maskedMeshes, 1, 'the low-poly head gets a texel mask');
+    return { mask: geometry.userData.toonAutoRoleMask.image.data, result };
+  };
+  const clean = bake({ degenerate: false });
+  const withDegenerate = bake({ degenerate: true });
+
+  let faceTexels = 0;
+  let changed = 0;
+  let filled = 0;
+  let largestSum = 0;
+  for (let i = 0; i < clean.mask.length; i += 4) {
+    largestSum = Math.max(largestSum, withDegenerate.mask[i] + withDegenerate.mask[i + 1] + withDegenerate.mask[i + 2]);
+    if (clean.mask[i + 3] === 0) {
+      if (withDegenerate.mask[i + 3] === 255) filled += 1;
+      continue;
+    }
+    if (clean.mask[i + 1] > 230) faceTexels += 1;
+    if ([0, 1, 2, 3].some((k) => withDegenerate.mask[i + k] !== clean.mask[i + k])) changed += 1;
+  }
+  // Rounding to bytes may add up to 2/255.
+  assert.ok(largestSum <= 255 + 2, `the mask is a partition (largest skin + face + hair ${largestSum}/255)`);
+  assert.ok(faceTexels > 1000, `the head island holds face texels (${faceTexels})`);
+  assert.equal(changed, 0, `island and padding texels unchanged by the degenerate triangle (${changed} changed)`);
+  assert.ok(filled > 1000, `the degenerate triangle still fills texels nothing else covers (${filled})`);
+  assert.equal(withDegenerate.result.maskDegenerateTriangles, clean.result.maskDegenerateTriangles + 1, 'the spread triangle is recognised as UV-degenerate');
+});
+
 check('automatic roles run through applyToonShader, report, and blend role parameters', () => {
   const { mesh, root } = syntheticCharacter();
   const result = applyToonShader(root, { preset: 'call_me_sensei' });

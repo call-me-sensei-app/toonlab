@@ -43,6 +43,8 @@ export function applyToonShader(root: any, options?: {}): {
             radiusY: number;
         };
         maskedMeshes: number;
+        maskDegenerateTriangles: number;
+        maskRepartitionedTexels: number;
         method: string;
         referenceSkinFraction: number;
         skinReference: any[];

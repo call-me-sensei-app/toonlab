@@ -30,7 +30,7 @@ the **Portable** column makes that ownership explicit.
 
 ## Character toon shading
 
-Module: `@call-me-sensei/toonlab/toon` — 14 groups, 245 fields.
+Module: `@call-me-sensei/toonlab/toon` — 14 groups, 249 fields.
 
 Settings are nested per group; dotted keys are nested objects: `createToonSettings({ preset: 'call_me_sensei', rim: { intensity: { hair: 0.3 } } })`. Colours are `[r, g, b]` 0–1; shadow tones, band colours, tints and inks are display-space (sRGB) multipliers. Texture fields are runtime-only.
 
@@ -272,6 +272,10 @@ Inverted-hull ink outlines: widths, ink colour and screen-space behaviour.
 | `lighting.metal.min` | number | `0` | 0 – 1 | Yes | Minimum line brightness on metal. |
 | `lighting.metal.max` | number | `1` | 0 – 1 | Yes | Maximum line brightness on metal. |
 | `faceDepthPush` | number | `0.02` | 0 – 0.2 | Yes | Push face hull lines back in depth (metres) so they show only on the silhouette, not across nose and eyelids. |
+| `depthPush.cloth` | number | `0` | 0 – 0.2 | Yes | Push cloth hull lines back in depth (metres): inner edges of layered clothing stop inking across the body; silhouettes stay. |
+| `depthPush.hair` | number | `0` | 0 – 0.2 | Yes | Push hair hull lines back in depth (metres): edges of overlapping locks stop inking; the hair silhouette stays. |
+| `depthPush.skin` | number | `0` | 0 – 0.2 | Yes | Push body-skin hull lines back in depth (metres). |
+| `depthPush.metal` | number | `0` | 0 – 0.2 | Yes | Push metal hull lines back in depth (metres). |
 | `honourSourceOff` | boolean | `true` | — | Yes | Respect a source material's "no outline" (MMD edge flag off). |
 | `widthMap` | texture | — | — | No — local/runtime | Per-texel width multiplier (also `userData.toonOutlineWidthMap`, MToon outline width texture). |
 | `widthMapChannel` | select | `0` | `0` \| `1` \| `2` \| `3` | Yes | Width map channel. |

@@ -561,7 +561,9 @@ function vertexBlend(u, features) {
 
 // View-space displacement of the hull: outward along the (baked smooth)
 // geometry normal by the role's width, corrected to a constant on-screen
-// width, and pushed back along the view ray on faces.
+// width, and pushed back along the view ray by the role's depth push (faces:
+// faceDepthPush by face weight), so inner edges of layered parts fail the
+// depth test against the surface behind them and only silhouettes ink.
 function outlineViewOffset(u, features) {
   return (positionViewBase) => {
     const blend = vertexBlend(u, features);
@@ -586,7 +588,7 @@ function outlineViewOffset(u, features) {
     }
     width = min(width, u.outlineMaxWidth);
     const away = select(orthographic, vec3(0, 0, -1), normalize(positionViewBase));
-    return normalView.mul(width).add(away.mul(u.outlineFaceDepthPush.mul(faceWeight)));
+    return normalView.mul(width).add(away.mul(blend('outlineDepthPush').add(u.outlineFaceDepthPush.mul(faceWeight))));
   };
 }
 

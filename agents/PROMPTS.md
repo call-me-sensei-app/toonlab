@@ -1,7 +1,7 @@
 # ToonLab agent prompts
 
 These prompts are included with the npm package. They use only the supported
-0.5.0 runtime, agent skills, and MCP workflows.
+0.5.1 runtime, agent skills, and MCP workflows.
 
 ## New playable game
 

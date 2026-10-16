@@ -62,6 +62,12 @@ export const OUTLINE_FIELDS: Readonly<{
         }>;
     }>;
     faceDepthPush: import("./fieldSchema.js").SettingField;
+    depthPush: Readonly<{
+        cloth: import("./fieldSchema.js").SettingField;
+        hair: import("./fieldSchema.js").SettingField;
+        skin: import("./fieldSchema.js").SettingField;
+        metal: import("./fieldSchema.js").SettingField;
+    }>;
     honourSourceOff: import("./fieldSchema.js").SettingField;
     widthMap: import("./fieldSchema.js").SettingField;
     widthMapChannel: import("./fieldSchema.js").SettingField;

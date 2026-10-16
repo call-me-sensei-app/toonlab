@@ -56,6 +56,15 @@ export const OUTLINE_FIELDS = Object.freeze({
     metal: lightingRole(0.2, 'metal'),
   }),
   faceDepthPush: numberField(0.02, 0, 0.2, 'Push face hull lines back in depth (metres) so they show only on the silhouette, not across nose and eyelids.'),
+  // The same push for the other roles. Layered parts (a jacket over a shirt, sleeves, separate hair locks) each
+  // carry their own hull, so without it every inner edge inks a full-width line across the body; pushed back,
+  // a part's hull only shows where the part stands clear of what is behind it (its silhouette).
+  depthPush: Object.freeze({
+    cloth: numberField(0, 0, 0.2, 'Push cloth hull lines back in depth (metres): inner edges of layered clothing stop inking across the body; silhouettes stay.'),
+    hair: numberField(0, 0, 0.2, 'Push hair hull lines back in depth (metres): edges of overlapping locks stop inking; the hair silhouette stays.'),
+    skin: numberField(0, 0, 0.2, 'Push body-skin hull lines back in depth (metres).'),
+    metal: numberField(0, 0, 0.2, 'Push metal hull lines back in depth (metres).'),
+  }),
   honourSourceOff: booleanField(true, 'Respect a source material\'s "no outline" (MMD edge flag off).'),
   widthMap: textureField('Per-texel width multiplier (also `userData.toonOutlineWidthMap`, MToon outline width texture).'),
   widthMapChannel: selectField(0, [0, 1, 2, 3], 'Width map channel.', { numeric: true, optionLabels: { 0: 'Red', 1: 'Green', 2: 'Blue', 3: 'Alpha' } }),

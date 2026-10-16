@@ -19,32 +19,6 @@ export function findPrimarySkinnedMesh(root: any): any;
 export function applyToonShader(root: any, options?: {}): {
     autoRoles: {
         applied: boolean;
-        reason: string;
-        medianRgb?: undefined;
-        referenceSkinFraction?: undefined;
-        counts?: undefined;
-        headVertexCount?: undefined;
-        meshes?: undefined;
-        faceFrame?: undefined;
-        maskedMeshes?: undefined;
-        method?: undefined;
-        skinReference?: undefined;
-        skinTolerance?: undefined;
-    } | {
-        applied: boolean;
-        medianRgb: any[];
-        reason: string;
-        referenceSkinFraction: number;
-        counts?: undefined;
-        headVertexCount?: undefined;
-        meshes?: undefined;
-        faceFrame?: undefined;
-        maskedMeshes?: undefined;
-        method?: undefined;
-        skinReference?: undefined;
-        skinTolerance?: undefined;
-    } | {
-        applied: boolean;
         counts: {
             face: number;
             hair: number;
@@ -58,13 +32,31 @@ export function applyToonShader(root: any, options?: {}): {
             x: number;
             y: number;
         };
+        forwardInferred: {
+            forward: number[];
+            samples: number;
+            strength: number;
+        };
+        head: {
+            center: THREE.Vector3Tuple;
+            radiusX: number;
+            radiusY: number;
+        };
         maskedMeshes: number;
         method: string;
+        referenceSkinFraction: number;
         skinReference: any[];
+        skinSplit: {
+            boundary: number;
+            groups: any[];
+            hair: string;
+        };
         skinTolerance: number;
         reason?: undefined;
         medianRgb?: undefined;
-        referenceSkinFraction?: undefined;
+    } | {
+        applied: boolean;
+        reason: string;
     };
     convertedMeshCount: number;
     debugOutputMode: {
@@ -114,6 +106,7 @@ export const TOON_DEBUG_OUTPUT_MODES: Readonly<{
 }>;
 /** Debug view name → label. */
 export const TOON_DEBUG_OUTPUT_LABELS: any;
+import * as THREE from 'three';
 export { alphaTestForMaterial, createAlphaSettings, DEFAULT_ALPHA_SETTINGS, resolveAlphaForMaterial, sourceOpacity, usesAlphaBlend, usesAlphaCutout } from "./settings/alphaSettings.js";
 export { BASE_TEXTURE_MATERIAL_COLOR_MODES, BASE_TEXTURE_SATURATION_MODES, createBaseTextureSettings, DEFAULT_BASE_TEXTURE_SETTINGS } from "./settings/baseTextureSettings.js";
 export { createFurSettings, DEFAULT_FUR_SETTINGS, materialUsesFur } from "./settings/furSettings.js";

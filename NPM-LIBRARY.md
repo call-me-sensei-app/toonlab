@@ -1,7 +1,7 @@
 # ToonLab npm library guide
 
 This guide is included in `@call-me-sensei/toonlab`. It is the package-first
-reference for version 0.5.0 and does not require access to the source
+reference for version 0.5.1 and does not require access to the source
 repository.
 
 ## Install
@@ -143,7 +143,7 @@ surface detail, not displacement that replaces a geometric high-to-low bake.
 
 ## Load Nature Reference Rocks
 
-Version 0.5.0 understands both the original `rock-0001`–`rock-0480`
+Version 0.5.1 understands both the original `rock-0001`–`rock-0480`
 identities and the Nature Reference Rocks catalog. Acquiring an asset
 directly returns its realistic PBR GLB. The one-call placement path additionally
 loads that asset's reviewed geology maps and `call_me_sensei` material settings
@@ -229,7 +229,7 @@ it uses the disk workspace passed through `--workspace`; no account is needed.
       "command": "npx",
       "args": [
         "-y",
-        "--package=@call-me-sensei/toonlab@0.5.0",
+        "--package=@call-me-sensei/toonlab@0.5.1",
         "toonlab-mcp",
         "--workspace",
         "/absolute/path/to/your-game/.toonlab"

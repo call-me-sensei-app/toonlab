@@ -2,7 +2,7 @@
 
 This document is the rendering-style contract for ToonLab projects.
 
-For the versioned end-to-end product boundary, read [What ToonLab 0.5.0 can
+For the versioned end-to-end product boundary, read [What ToonLab 0.5.1 can
 and cannot do](capability-status.md). A bundle coordinates supported rendering
 systems after a scene satisfies the target/material labeling contract. It does
 not design the level or safely classify every arbitrary imported material.

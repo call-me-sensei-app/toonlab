@@ -165,12 +165,30 @@ function importedSpecifiers(source) {
   return specifiers;
 }
 
+// Node-only runtime that a packaged CLI command imports. The CLI files are
+// not package exports, so their sources are listed here explicitly (and each
+// is checked to be imported by its command below).
+const packagedCliRuntimeRoots = Object.freeze({
+  'cli/autoRoles.mjs': ['src/toon/autoRolesGlb.node.js'],
+});
+
 async function collectPublishedRuntimeClosure() {
   const entries = new Set(
     packageRuntimeTargets
       .filter((target) => target.startsWith('./src/'))
       .map((target) => target.slice(2)),
   );
+  for (const [command, roots] of Object.entries(packagedCliRuntimeRoots)) {
+    assert.ok(packageJson.files.includes(command), `npm files whitelist must include the CLI command ${command}`);
+    const commandSource = await readFile(resolve(rootPath, command), 'utf8');
+    for (const runtimeRoot of roots) {
+      assert.ok(
+        importedSpecifiers(commandSource).has(`../${runtimeRoot}`),
+        `${command} must import its packaged runtime ${runtimeRoot}`,
+      );
+      entries.add(runtimeRoot);
+    }
+  }
   for (const target of [packageJson.main, packageJson.module]) {
     if (typeof target === 'string' && target.startsWith('./src/')) {
       entries.add(target.slice(2));

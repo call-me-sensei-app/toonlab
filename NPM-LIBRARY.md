@@ -1,7 +1,7 @@
 # ToonLab npm library guide
 
 This guide is included in `@call-me-sensei/toonlab`. It is the package-first
-reference for version 0.5.1 and does not require access to the source
+reference for version 0.5.2 and does not require access to the source
 repository.
 
 ## Install
@@ -143,7 +143,7 @@ surface detail, not displacement that replaces a geometric high-to-low bake.
 
 ## Load Nature Reference Rocks
 
-Version 0.5.1 understands both the original `rock-0001`–`rock-0480`
+Version 0.5.2 understands both the original `rock-0001`–`rock-0480`
 identities and the Nature Reference Rocks catalog. Acquiring an asset
 directly returns its realistic PBR GLB. The one-call placement path additionally
 loads that asset's reviewed geology maps and `call_me_sensei` material settings
@@ -229,7 +229,7 @@ it uses the disk workspace passed through `--workspace`; no account is needed.
       "command": "npx",
       "args": [
         "-y",
-        "--package=@call-me-sensei/toonlab@0.5.1",
+        "--package=@call-me-sensei/toonlab@0.5.2",
         "toonlab-mcp",
         "--workspace",
         "/absolute/path/to/your-game/.toonlab"
@@ -273,6 +273,35 @@ npx toonlab audit --input scene.json --bundle call-me-sensei --mode strict --pre
 Supported operations are `inspect`, `audit`, `plan`, `apply`, and `verify`.
 Use `--out` to write a report. `apply --write-manifest` is the only operation
 that replaces the input file and should be used only after reviewing the plan.
+
+### Precomputed character roles
+
+Characters whose materials name no face (one atlased material, as image-to-3D
+generators export) get automatic face, skin and hair roles, which read the
+base-colour texture on the CPU when `applyToonShader` runs. Precompute them to
+skip that work and to ship GPU-compressed (KTX2/Basis) base colours:
+
+```bash
+npm install --save-dev sharp
+npx toonlab auto-roles npc.glb --options toon-options.json --mask-size 512
+```
+
+This writes `npc.toonroles.json` and `npc.toonroles.0.png` next to the model.
+`toon-options.json` holds the `applyToonShader` options the app converts with;
+`--forward x,y,z` declares the rest-pose facing if the app sets
+`root.userData.toonForward`. Run it on the GLB with its source images, then
+compress the base colour. At runtime:
+
+```js
+import { applyToonShader, loadAutoRoles } from '@call-me-sensei/toonlab/toon';
+
+const data = await loadAutoRoles('/npc/npc.toonroles.json');
+applyToonShader(npcRoot, { ...toonOptions, autoRoles: { mode: 'precomputed', data } });
+```
+
+In `precomputed` mode no texture pixel is read and the result equals the live
+conversion. A record exported from a different model is refused with an
+`auto-roles-precomputed-mismatch` report warning.
 
 ## Documentation without the source repository
 

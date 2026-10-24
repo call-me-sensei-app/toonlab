@@ -2,7 +2,8 @@
  * Resolves the authored shading inputs of one source material against the
  * resolved toon settings.
  */
-export function resolveSourceShading(mat: any, { settings }?: {
+export function resolveSourceShading(mat: any, { mmdRampTone, settings }?: {
+    mmdRampTone?: (measure: any) => any;
     settings?: any;
 }): {
     faceShadowMap: any;
@@ -10,7 +11,7 @@ export function resolveSourceShading(mat: any, { settings }?: {
     lightingMap: any;
     matcapMap: any;
     mmdToonFile: string;
-    mmdTone: number[];
+    mmdTone: any;
     outlineOff: boolean;
     outlineWidthMap: any;
     parameterOverrides: {

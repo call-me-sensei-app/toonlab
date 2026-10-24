@@ -13,6 +13,14 @@ import {
 import { syncToonSceneLights } from '../shaders-tsl/character/sceneLights.js';
 import { measureAlphaCoverage } from './alphaCoverage.js';
 import { inferAutoRoleWeights } from './autoRoles.js';
+import {
+  applyAutoRolesRecord,
+  collectAutoRolesRecord,
+  createTextureEvidence,
+  describeAutoRolesMismatch,
+  differingAutoRolesInputs,
+  listConvertibleMeshes,
+} from './autoRolesData.js';
 import { hasBakedDetail, hasBakedFaceUv, hasBakedOcclusion } from './bakeAttribute.js';
 import {
   characterRoleKey,
@@ -24,6 +32,7 @@ import { characterForward, findHeadBone } from './headBone.js';
 import { bakeLocalOcclusion } from './occlusionBake.js';
 import { measureSkinEvidence } from './skinEvidence.js';
 import { resolveSourceShading } from './sourceShading.js';
+import { withoutTexturePixelReads } from './texturePixels.js';
 import {
   ALPHA_COVERAGE_MODES,
   createAlphaSettings,
@@ -35,6 +44,7 @@ import {
   resolveBaseMapSaturation,
   resolveBaseMaterialColor,
 } from './settings/baseTextureSettings.js';
+import { AUTO_ROLE_MODES } from './settings/autoRolesSettings.js';
 import { materialUsesFur } from './settings/furSettings.js';
 import { collectMaterialMapTextures, resolveMaterialMaps } from './settings/mapsSettings.js';
 import { STICKER_BLEND_MODE_VALUES } from './settings/stickerSettings.js';
@@ -72,6 +82,15 @@ export {
 } from './settings/baseTextureSettings.js';
 
 export { createFurSettings, DEFAULT_FUR_SETTINGS, materialUsesFur } from './settings/furSettings.js';
+
+export {
+  AUTO_ROLES_DATA_FORMAT,
+  AUTO_ROLES_DATA_VERSION,
+  downsampleRoleMask,
+  loadAutoRoles,
+  parseAutoRoles,
+  serializeAutoRoles,
+} from './autoRolesData.js';
 
 export {
   createStickerSettings,
@@ -525,7 +544,7 @@ const FACIAL_FEATURE_PATTERN = /brow|lash|eyeline|eye_line|mouth|teeth|tooth|ton
 // Features that anime rendering draws over the bangs (alpha.featuresOverHairDepth).
 const OVER_HAIR_FEATURE_PATTERN = /brow|lash|eyeline|eye_line|眉|睫|まつ|まゆ|二重/i;
 
-function demoteNonSkinColoredRoles(root, materialRoleOverrides, nextOverrides) {
+function demoteNonSkinColoredRoles(root, materialRoleOverrides, nextOverrides, evidence) {
   const checked = new Set();
   root.traverse((obj) => {
     if (!obj.isMesh || !obj.material || obj.userData?.isToonOutline) return;
@@ -537,16 +556,17 @@ function demoteNonSkinColoredRoles(root, materialRoleOverrides, nextOverrides) {
       const roleInfo = classifyMaterialRole(mat, materialRoleOverrides);
       if (roleInfo.source !== 'heuristic' || !(roleInfo.role === 'skin' || roleInfo.role === 'face')) return;
       if (roleInfo.role === 'face' && FACIAL_FEATURE_PATTERN.test(mat.name ?? '')) return;
-      const evidence = measureSkinEvidence(mat, obj.geometry, { materialIndex: materials.length > 1 ? slotIndex : null });
-      if (!evidence || evidence.fraction >= SKIN_EVIDENCE_MIN_FRACTION) return;
+      const skin = evidence.skinEvidence(obj, mat, materials.length > 1 ? slotIndex : null);
+      if (!skin || skin.fraction >= SKIN_EVIDENCE_MIN_FRACTION) return;
       nextOverrides.byUuid.set(mat.uuid, 'default');
       nextOverrides.sourcesByUuid.set(mat.uuid, 'inferred:not-skin-colored');
-      nextOverrides.demotions.push({ from: roleInfo.role, material: mat.name || '(unnamed)', skinFraction: evidence.fraction });
+      nextOverrides.demotions.push({ from: roleInfo.role, material: mat.name || '(unnamed)', skinFraction: skin.fraction });
     });
   });
 }
 
 function createInferredMaterialRoleOverrides(root, materialRoleOverrides, {
+  evidence,
   inferAnonymousGltfAtlases = true,
   inferPackedTriplets = true,
   verifySkinColor = true,
@@ -605,7 +625,7 @@ function createInferredMaterialRoleOverrides(root, materialRoleOverrides, {
   }
 
   if (verifySkinColor) {
-    demoteNonSkinColoredRoles(root, materialRoleOverrides, nextOverrides);
+    demoteNonSkinColoredRoles(root, materialRoleOverrides, nextOverrides, evidence);
   }
 
   return nextOverrides;
@@ -761,7 +781,11 @@ function createCharacterMaterialFromSource(mat, {
   const isSkin = role === 'skin';
   const alpha = resolveAlphaForMaterial(settings.alpha, mat, roleInfo, slot?.alphaCoverage);
   const maps = resolveMaterialMaps(settings.maps, mat);
-  const source = resolveSourceShading(mat, { settings });
+  const source = resolveSourceShading(mat, {
+    // Debug and standalone conversions have no slot and measure directly.
+    mmdRampTone: (measure) => (slot?.evidence ? slot.evidence.mmdRampTone(slot.mesh, mat, slot.materialIndex, measure) : measure()),
+    settings,
+  });
   const geometry = slot?.geometry;
   const geometryAttributes = geometry?.attributes ?? {};
 
@@ -1109,12 +1133,16 @@ function stripImporterOutlineSlots(mesh) {
 
 // Per-slot conversion context: the evidence measured on the surface this
 // material actually draws.
-function createMaterialSlot(mesh, mat, materialIndex, alphaSettings, modelFacts = {}) {
-  const measureAlpha = alphaSettings.enabled &&
+function slotMeasuresAlpha(mat, alphaSettings) {
+  return Boolean(alphaSettings.enabled &&
     alphaSettings.coverageMode === ALPHA_COVERAGE_MODES.auto &&
-    usableTexture(mat?.map);
+    usableTexture(mat?.map));
+}
+
+function createMaterialSlot(mesh, mat, materialIndex, alphaSettings, modelFacts, evidence) {
   return {
-    alphaCoverage: measureAlpha ? measureAlphaCoverage(mat.map, mesh.geometry, { materialIndex }) : null,
+    alphaCoverage: slotMeasuresAlpha(mat, alphaSettings) ? evidence.alphaCoverage(mesh, mat, materialIndex) : null,
+    evidence,
     geometry: mesh.geometry,
     materialIndex,
     mesh,
@@ -1162,9 +1190,58 @@ function createConversionReport() {
 
 const AUTO_ROLE_ELIGIBLE = new Set(['default', 'costume', 'skin']);
 
-function runAutoRoles(root, toonSettings, materialRoleOverrides, modelFacts, report) {
+// The conversion inputs an automatic-role result depends on, recorded with a
+// precomputed record so a runtime that converts differently is warned. Only
+// the role overrides naming this model's materials count, so one options file
+// can serve a whole roster.
+function autoRolesInputs(root, toonSettings) {
+  const names = new Set();
+  root.traverse((obj) => {
+    if (obj.isMesh) for (const mat of toMaterialArray(obj.material)) names.add(mat?.name ?? '');
+  });
+  const materialRoles = toonSettings.materialRoles && typeof toonSettings.materialRoles === 'object'
+    ? Object.fromEntries(Object.entries(toonSettings.materialRoles)
+      .filter(([name, role]) => typeof role === 'string' && names.has(name))
+      .sort(([a], [b]) => a.localeCompare(b)))
+    : {};
+  return {
+    alphaCoverageMode: toonSettings.alpha.enabled ? toonSettings.alpha.coverageMode : 'off',
+    declaredForward: Array.isArray(root.userData?.toonForward) ? [...root.userData.toonForward] : null,
+    materialRoles,
+    skinTolerance: toonSettings.autoRoles.skinTolerance,
+  };
+}
+
+function runPrecomputedAutoRoles(root, toonSettings, conversion, report) {
+  const { autoRolesData, meshes } = conversion;
+  if (!autoRolesData) {
+    report.add('warn', 'auto-roles-precomputed-missing', 'Automatic roles are set to precomputed but no `autoRoles.data` was given; no roles were applied and no texture was read. The face is shaded with the body terminator.');
+    return null;
+  }
+  const differing = differingAutoRolesInputs(autoRolesData.inputs, autoRolesInputs(root, toonSettings));
+  const result = applyAutoRolesRecord(root, autoRolesData, meshes);
+  if (result.reason === 'precomputed-mismatch') {
+    report.add('warn', 'auto-roles-precomputed-mismatch', `The precomputed automatic roles do not belong to this model (${result.mismatch}); no roles were applied. Re-export them from the model you load.`, result);
+    return result;
+  }
+  if (differing.length) {
+    report.add('warn', 'auto-roles-precomputed-inputs-differ', `The precomputed automatic roles were exported with different ${differing.join(', ')} than this conversion uses; re-export them with the runtime's options.`, { inputs: differing });
+  }
+  if (autoRolesData.forwardInferred && autoRolesData.forward) {
+    report.add('warn', 'rest-forward-inferred', `The model declares no forward; the precomputed analysis inferred its rest pose faces [${autoRolesData.forward.join(', ')}], written to root.userData.toonForward. Declare it on the model to make this explicit.`, { forward: autoRolesData.forward });
+  }
+  if (result.applied) {
+    report.add('info', 'auto-roles-applied', `No material is named as a face; applied precomputed face, skin and hair roles (${result.method}).`, result);
+  } else {
+    report.add('warn', 'auto-roles-skipped', `No material is named as a face and the precomputed analysis found insufficient evidence (${result.reason}); the face is shaded with the body terminator.`, result);
+  }
+  return result;
+}
+
+function runAutoRoles(root, toonSettings, materialRoleOverrides, modelFacts, report, conversion) {
   if (modelFacts.hasNamedFace) return null;
-  if (toonSettings.autoRoles.mode !== 'auto') {
+  if (toonSettings.autoRoles.mode === AUTO_ROLE_MODES.precomputed) return runPrecomputedAutoRoles(root, toonSettings, conversion, report);
+  if (toonSettings.autoRoles.mode !== AUTO_ROLE_MODES.auto) {
     report.add('warn', 'no-face-role', 'No material is recognised as a face and automatic roles are off; the face is shaded with the body terminator.');
     return null;
   }
@@ -1191,7 +1268,7 @@ function now() {
   return typeof performance !== 'undefined' ? performance.now() : Date.now();
 }
 
-function runAutoFaceShadow(root, settings, materialRoleOverrides, report) {
+function runAutoFaceShadow(root, settings, materialRoleOverrides, report, evidence) {
   const face = settings.face;
   if (!face.enabled || !face.map.auto || face.map.texture) return null;
   const started = now();
@@ -1204,6 +1281,7 @@ function runAutoFaceShadow(root, settings, materialRoleOverrides, report) {
       !FACIAL_FEATURE_PATTERN.test(mat.name ?? ''),
     // Faces found by automatic roles: the face-weighted vertices.
     isWeightEligible: (mat) => !(mat.isMToonMaterial && mat.isOutline) && !mat.userData?.toonFaceShadowMap,
+    noseDrawn: evidence.noseDrawn,
   });
   if (!result) return null;
   const ms = Math.round(now() - started);
@@ -1234,10 +1312,10 @@ function runAutoOcclusion(root, settings, report) {
   return result;
 }
 
-function runAutoDetails(root, settings, materialRoleOverrides, report) {
+function runAutoDetails(root, settings, materialRoleOverrides, report, evidence) {
   const roleOf = (mat) => classifyMaterialRole(mat, materialRoleOverrides).role;
   if (settings.face.enabled && settings.face.eyeWhiteShade.strength > 0) {
-    const lid = bakeEyeWhiteLid(root, { isScleraMaterial: (mat) => roleOf(mat) === 'sclera' });
+    const lid = bakeEyeWhiteLid(root, { isScleraMaterial: (mat) => roleOf(mat) === 'sclera', vertexTexels: evidence.vertexTexels });
     if (lid?.meshes) {
       report.add('info', 'eye-white-lid-baked', `Baked the lid shade on ${lid.eyes} eye white(s); the band under the upper lid takes the eye-white shade tint.`, lid);
     }
@@ -1246,7 +1324,10 @@ function runAutoDetails(root, settings, materialRoleOverrides, report) {
     }
   }
   if (settings.highlights.enabled && settings.highlights.sheer.auto) {
-    const sheer = bakeSheerFabric(root, { isEligibleMaterial: (mat) => ['default', 'costume'].includes(roleOf(mat)) });
+    const sheer = bakeSheerFabric(root, {
+      isEligibleMaterial: (mat) => ['default', 'costume'].includes(roleOf(mat)),
+      vertexTexels: evidence.vertexTexels,
+    });
     for (const name of sheer?.materials ?? []) {
       report.add('info', 'sheer-fabric-detected', `${name}: dark cloth down the legs read as stockings; it takes the stocking streak.`);
     }
@@ -1340,9 +1421,92 @@ const SETTINGS_GROUP_OPTIONS = Object.freeze([
  * `outline`, `maps`, `baseTexture`, `alpha`, `autoRoles`, `sticker`, `fur`),
  * `materialRoles`, `debugOutputMode`, `shaderMode` ('anime' | 'basic' |
  * 'toon' | 'normal'). Returns the conversion report and resolved settings.
+ *
+ * `autoRoles: { mode: 'precomputed', data }` applies a record made offline
+ * by exportAutoRoles (parsed with parseAutoRoles / loadAutoRoles) instead of
+ * analysing the textures: no texture pixel is read on the CPU, so base-colour
+ * maps may be GPU-compressed (KTX2/Basis `CompressedTexture`).
  */
 export function applyToonShader(root, options = {}) {
-  const { debugOutputMode = 'off', preset = null, settings = null, shaderMode = 'anime' } = options;
+  const { settingsInput, toonSettings } = resolveConversionSettings(options);
+  const meshes = listConvertibleMeshes(root);
+  if (toonSettings.autoRoles.mode !== AUTO_ROLE_MODES.precomputed) {
+    const evidence = createTextureEvidence({ measure: LIVE_TEXTURE_MEASUREMENTS, meshes });
+    return convertCharacter(root, options, { evidence, meshes, settingsInput, toonSettings });
+  }
+  // Precomputed: every piece of texture evidence comes from the record, and
+  // no texture is read on the CPU (the base colour may be compressed). A
+  // record that does not match the model supplies nothing.
+  const autoRolesData = options.autoRoles?.data ?? settingsInput.autoRoles?.data ?? null;
+  const mismatch = autoRolesData ? describeAutoRolesMismatch(autoRolesData, meshes) : null;
+  const evidence = createTextureEvidence({ meshes, precomputed: mismatch ? {} : autoRolesData?.evidence ?? {} });
+  const { blockedReads, result } = withoutTexturePixelReads(() => convertCharacter(root, options, {
+    autoRolesData,
+    evidence,
+    meshes,
+    settingsInput,
+    toonSettings,
+  }));
+  if (mismatch && !result.autoRoles) {
+    // A named face: automatic roles did not run, but the record's texture
+    // evidence was refused all the same.
+    result.report.push({
+      code: 'auto-roles-precomputed-mismatch',
+      detail: { mismatch },
+      level: 'warn',
+      message: `The precomputed record does not belong to this model (${mismatch}); its texture evidence was not used. Re-export it from the model you load.`,
+    });
+  }
+  if (blockedReads > 0) {
+    result.report.push({
+      code: 'texture-reads-skipped',
+      detail: { blockedReads },
+      level: 'info',
+      message: `Precomputed mode reads no texture pixels: ${blockedReads} texture look-up(s) with no recorded evidence were skipped, and those details keep their no-evidence defaults.`,
+    });
+  }
+  return result;
+}
+
+/**
+ * Runs the automatic-role analysis, and records every other piece of texture
+ * evidence conversion measures (alpha coverage, the skin check on materials
+ * named as skin, the colour checks of the face-map, eye-white and stocking
+ * bakes, MMD ramp tones), on `root` and returns it as a record for
+ * `applyToonShader(model, { autoRoles: { mode: 'precomputed', data } })`.
+ * Pass the options the runtime will convert with (`materialRoles`, `alpha`,
+ * `autoRoles.skinTolerance`, ...) and the model in the state the runtime
+ * converts it in (its `userData.toonForward`, rest pose). The model is
+ * converted in the process, as applyToonShader would; export from a copy you
+ * do not render. Returns `{ record, conversion }`: the record (raw role
+ * weights and mask texels; see serializeAutoRoles to save it) and
+ * applyToonShader's result for this live conversion.
+ */
+export function exportAutoRoles(root, options = {}) {
+  const exportOptions = { ...options, autoRoles: { ...(options.autoRoles ?? {}), data: undefined, mode: AUTO_ROLE_MODES.auto } };
+  const { settingsInput, toonSettings } = resolveConversionSettings(exportOptions);
+  const meshes = listConvertibleMeshes(root);
+  const inputs = autoRolesInputs(root, toonSettings);
+  const recorded = { alphaCoverage: {}, mmdRampTone: {}, noseDrawn: {}, skinEvidence: {}, vertexTexels: {} };
+  const evidence = createTextureEvidence({ measure: LIVE_TEXTURE_MEASUREMENTS, meshes, record: recorded });
+  const conversion = convertCharacter(root, exportOptions, { evidence, meshes, settingsInput, toonSettings });
+  const record = collectAutoRolesRecord(root, {
+    autoRoles: conversion.autoRoles,
+    evidence: recorded,
+    forwardInferred: Boolean(conversion.autoRoles?.forwardInferred),
+    inputs,
+    meshes,
+  });
+  return { conversion, record };
+}
+
+const LIVE_TEXTURE_MEASUREMENTS = Object.freeze({
+  alphaCoverage: (mesh, mat, slot) => measureAlphaCoverage(mat.map, mesh.geometry, { materialIndex: slot }),
+  skinEvidence: (mesh, mat, slot) => measureSkinEvidence(mat, mesh.geometry, { materialIndex: slot }),
+});
+
+function resolveConversionSettings(options) {
+  const { preset = null, settings = null } = options;
   const settingsInput = typeof settings === 'string' ? { preset: settings } : settings || {};
   const overrides = {};
   for (const key of SETTINGS_GROUP_OPTIONS) {
@@ -1353,13 +1517,21 @@ export function applyToonShader(root, options = {}) {
     ...overrides,
     ...(preset ? { preset } : {}),
   });
+  return { settingsInput, toonSettings };
+}
+
+// One conversion. `evidence` answers texture evidence (live, recorded or
+// precomputed), `meshes` is listConvertibleMeshes(root) taken before any
+// outline hull or fur shell was added.
+function convertCharacter(root, options, { autoRolesData = null, evidence, meshes, settingsInput, toonSettings }) {
+  const { debugOutputMode = 'off', shaderMode = 'anime' } = options;
   const normalizedShaderMode = ['anime', 'basic', 'toon', 'normal'].includes(shaderMode) ? shaderMode : 'anime';
   const resolvedDebugOutputMode = resolveToonDebugOutputMode(debugOutputMode);
   const normalizedMaterialRoleOverrides = normalizeMaterialRoleOverrides(toonSettings.materialRoles);
   const materialRoleOverrides = createInferredMaterialRoleOverrides(
     root,
     normalizedMaterialRoleOverrides,
-    { inferPackedTriplets: toonSettings.materialRoles?.inferPackedTriplets !== false },
+    { evidence, inferPackedTriplets: toonSettings.materialRoles?.inferPackedTriplets !== false },
   );
   let convertedMeshCount = 0;
   const materialRoleSummary = { counts: {}, materials: [], total: 0 };
@@ -1373,10 +1545,10 @@ export function applyToonShader(root, options = {}) {
     report.add('info', 'role-demoted-not-skin', `${demotion.material}: named as ${demotion.from} but only ${Math.round(demotion.skinFraction * 100)}% of its surface is skin-coloured; treated as default.`, demotion);
   }
   const modelFacts = collectModelFacts(root, materialRoleOverrides);
-  const autoRoleResult = runAutoRoles(root, toonSettings, materialRoleOverrides, modelFacts, report);
-  const faceBake = runAutoFaceShadow(root, toonSettings, materialRoleOverrides, report);
+  const autoRoleResult = runAutoRoles(root, toonSettings, materialRoleOverrides, modelFacts, report, { autoRolesData, meshes });
+  const faceBake = runAutoFaceShadow(root, toonSettings, materialRoleOverrides, report, evidence);
   runAutoOcclusion(root, toonSettings, report);
-  runAutoDetails(root, toonSettings, materialRoleOverrides, report);
+  runAutoDetails(root, toonSettings, materialRoleOverrides, report, evidence);
 
   const state = characterShadingStateFor(root);
   state.shadowSettings = { ...toonSettings.shadows.character };
@@ -1401,7 +1573,7 @@ export function applyToonShader(root, options = {}) {
 
     const isMultiMaterial = Array.isArray(obj.material);
     const convertedMaterials = originalMaterials.map((mat, index) => {
-      const slot = createMaterialSlot(obj, mat, isMultiMaterial ? index : null, toonSettings.alpha, modelFacts);
+      const slot = createMaterialSlot(obj, mat, isMultiMaterial ? index : null, toonSettings.alpha, modelFacts, evidence);
       if (normalizedShaderMode !== 'anime') {
         return createDebugMaterial(mat, normalizedShaderMode, {
           alphaSettings: toonSettings.alpha,

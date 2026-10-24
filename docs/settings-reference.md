@@ -348,7 +348,7 @@ Automatic face, skin and hair roles for models whose materials name none.
 
 | Field | Type | Default | Range / options | Portable | Description |
 |---|---|---|---|---|---|
-| `mode` | select | `'auto'` | `auto` \| `off` | Yes | `auto` infers face, skin and hair per vertex when no material is named as a face; `off` never does. |
+| `mode` | select | `'auto'` | `auto` \| `off` \| `precomputed` | Yes | `auto` infers face, skin and hair per vertex when no material is named as a face; `off` never does; `precomputed` applies the record passed as `autoRoles.data` (exportAutoRoles) and reads no texture pixels. |
 | `skinTolerance` | number | `0.07` | 0.01 – 0.3 | Yes | Chromaticity distance from the model's sampled skin tone that still counts as skin. |
 
 ### Character toon shading: Sticker
@@ -1009,7 +1009,7 @@ Tuning values used by the post-processing effects when their feature toggles are
 | `atmosphereNear` | number | `60` | 0 – 1000 | Yes | View distance in meters where atmosphere fog starts. |
 | `atmosphereStrength` | number | `0.55` | 0 – 1 | Yes | Maximum blend of the atmospheric mix fog. |
 | `contrast` | number | `1` | 0 – 2 | Yes | Scales contrast around mid gray in the color grade. |
-| `depthCueColor` | color | `[0.3371636150376657, 0.4735314961384573, 0.6866853124288864]` | — | Yes | Sets the color distant pixels fade toward. |
+| `depthCueColor` | color | `[0.3371636150376657, 0.47353149613845735, 0.6866853124288865]` | — | Yes | Sets the color distant pixels fade toward. |
 | `depthCueFar` | number | `24` | 0 – 200 | Yes | Sets the depth at which the depth cue reaches full strength. |
 | `depthCueNear` | number | `1` | 0 – 50 | Yes | Sets the depth at which the depth cue starts to appear. |
 | `depthCueStrength` | number | `0` | 0 – 1 | Yes | Controls how strongly distant pixels blend toward the depth cue color. |

@@ -19,7 +19,7 @@ Use ToonLab as a focused runtime library (`@call-me-sensei/toonlab` on npm), as
 an asset/preset authoring workspace, or as an asset-discovery service—not as a
 one-shot world generator.
 
-## Versioned expectation: 0.5.1
+## Versioned expectation: 0.5.2
 
 For a correctly constructed and semantically labeled scene, one strict Call Me
 Sensei bundle application is expected to establish the supported visual

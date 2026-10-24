@@ -7,6 +7,7 @@ import { SCENE_STYLE_OPERATION_NAMES, runSceneStyleOperation } from '../src/agen
 function usage() {
   return [
     'Usage: toonlab <inspect|audit|plan|apply|verify> --input <scene.json> [options]',
+    '       toonlab auto-roles <model.glb> [options]   (toonlab auto-roles --help)',
     '',
     'Options:',
     '  --bundle <id>       Style bundle id (default: call-me-sensei)',
@@ -35,8 +36,7 @@ function parse(argv) {
   return { operation, options };
 }
 
-try {
-  const argv = process.argv.slice(2);
+async function runSceneStyleCommand(argv) {
   const { operation, options } = parse(argv);
   const input = JSON.parse(await readFile(options.input, 'utf8'));
   const result = runSceneStyleOperation(operation, input, options);
@@ -47,6 +47,18 @@ try {
     await writeFile(options.input, `${JSON.stringify(result.manifest, null, 2)}\n`, 'utf8');
   }
   if (!result.ok) process.exitCode = 2;
+}
+
+try {
+  const argv = process.argv.slice(2);
+  if (argv[0] === 'auto-roles') {
+    // Loaded on demand: it imports three's GLTFLoader and sharp.
+    const { autoRolesUsage, runAutoRolesCommand } = await import('./autoRoles.mjs');
+    if (argv.includes('--help')) process.stdout.write(`${autoRolesUsage()}\n`);
+    else await runAutoRolesCommand(argv.slice(1));
+  } else {
+    await runSceneStyleCommand(argv);
+  }
 } catch (error) {
   process.stderr.write(`${error?.code ? `${error.code}: ` : ''}${error?.message ?? String(error)}\n`);
   process.exitCode = 1;

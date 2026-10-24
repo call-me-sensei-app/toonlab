@@ -1,6 +1,6 @@
 {
   "name": "@call-me-sensei/toonlab",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "description": "Anime-style game toolkit for Three.js with cel shading, vegetation, rocks, water, sky, clouds, procedural textures, and portable Lab artifacts",
   "license": "MIT",
   "author": "Hyperbond Studio PTE. LTD. (Call Me Sensei)",
@@ -85,6 +85,7 @@
     "types",
     "mcp",
     "cli/toonlab.mjs",
+    "cli/autoRoles.mjs",
     "database",
     "agents/references/anime-art-direction.md",
     "agents/references/asset-sourcing-policy.md",
@@ -340,7 +341,7 @@
     "verify:grass": "node scripts/verify-grass-palettes.mjs",
     "verify:grass-package": "node scripts/verify-packaged-grass.mjs",
     "verify:character-package": "node scripts/verify-packaged-character.mjs",
-    "verify:toon-shading": "node scripts/verify-toon-character-shading.mjs",
+    "verify:toon-shading": "node scripts/verify-toon-character-shading.mjs && node scripts/verify-precomputed-auto-roles.mjs",
     "verify:provenance": "node scripts/verify-provenance.mjs",
     "verify:ground-stabilizer": "node scripts/verify-ground-stabilizer.mjs",
     "verify:locomotion-state": "node scripts/verify-locomotion-state-machine.mjs",
@@ -409,9 +410,13 @@
     "react": "^19.0.0",
     "three": "^0.185.1",
     "three-mesh-bvh": "0.9.14",
+    "sharp": ">=0.33.0",
     "three-stdlib": "^2.36.1"
   },
   "peerDependenciesMeta": {
+    "sharp": {
+      "optional": true
+    },
     "@react-three/fiber": {
       "optional": true
     },
@@ -445,6 +450,7 @@
     "playwright": "^1.60.0",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
+    "sharp": "^0.35.4",
     "three": "^0.185.1",
     "three-mesh-bvh": "0.9.14",
     "three-stdlib": "^2.36.1",

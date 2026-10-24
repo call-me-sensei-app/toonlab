@@ -37,6 +37,15 @@ Developer guidance:
 - Use ToonLab's TSL/NodeMaterial path; do not advise raw GLSL or
   `ShaderMaterial` forks for ToonLab toon features.
 - Do not rely on `assets-local/` or lab-only model discovery.
+- Characters whose materials name no face (one atlased material from a
+  generator) get automatic face/skin/hair roles, which read the base-colour
+  texture on the CPU at load. For mobile, GPU-compressed (KTX2) textures or
+  many characters, precompute them: `npx toonlab auto-roles model.glb
+  --options toon-options.json` (needs `sharp`), then
+  `applyToonShader(model, { ...options, autoRoles: { mode: 'precomputed',
+  data: await loadAutoRoles(url) } })`. Pass the runtime's own conversion
+  options to the CLI, and treat an `auto-roles-precomputed-*` report warning
+  as a failed load of the roles.
 
 Verify:
 - Run the consumer app's normal build and inspect the character under at least

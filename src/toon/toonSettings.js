@@ -86,7 +86,7 @@ const ALPHA_FIELDS = Object.freeze({
 });
 
 const AUTO_ROLES_FIELDS = Object.freeze({
-  mode: selectField(DEFAULT_AUTO_ROLES_SETTINGS.mode, Object.values(AUTO_ROLE_MODES), '`auto` infers face, skin and hair per vertex when no material is named as a face; `off` never does.'),
+  mode: selectField(DEFAULT_AUTO_ROLES_SETTINGS.mode, Object.values(AUTO_ROLE_MODES), '`auto` infers face, skin and hair per vertex when no material is named as a face; `off` never does; `precomputed` applies the record passed as `autoRoles.data` (exportAutoRoles) and reads no texture pixels.'),
   skinTolerance: numberField(DEFAULT_AUTO_ROLES_SETTINGS.skinTolerance, 0.01, 0.3, 'Chromaticity distance from the model\'s sampled skin tone that still counts as skin.'),
 });
 

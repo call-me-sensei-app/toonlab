@@ -1,7 +1,7 @@
-# What ToonLab 0.5.1 can and cannot do
+# What ToonLab 0.5.2 can and cannot do
 
 This page is the public expectation contract for `@call-me-sensei/toonlab`
-0.5.1. It describes the result a developer should expect from the supported
+0.5.2. It describes the result a developer should expect from the supported
 workflow, regardless of whether they write the integration themselves or use a
 coding agent.
 
@@ -24,7 +24,7 @@ applies the supported runtime behavior consistently.
 ## The short version
 
 For a correctly constructed and semantically labeled Three.js scene, ToonLab
-0.5.1 can apply the Call Me Sensei bundle and establish the approved visual
+0.5.2 can apply the Call Me Sensei bundle and establish the approved visual
 baseline without scene-specific shader tuning. It coordinates the supported
 sky, clouds, sun, sky fill, shadows, character treatment, manufactured
 surfaces, rocks, ground, grass, trees, flowers, water, and post domains.
@@ -78,7 +78,7 @@ view, ground relationship, or water relationship is missing, the supported
 behavior is to report the specific problem and fail closed. A build completing
 or a scene rendering is not the same as passing this contract.
 
-In 0.5.1, the visible Sky System cloud bake is the authoritative cloud-shadow
+In 0.5.2, the visible Sky System cloud bake is the authoritative cloud-shadow
 source. Supported ground, vegetation, character, rock, manufactured, and water
 receivers consume that same transmittance map. Foam remains readable but cools
 and dims inside shadow; direct-sun caustics, specular, and sparkle cues are
@@ -91,9 +91,9 @@ another registered profile. All generated trunks cast and receive through the
 shared shadow pass by default, and exact consumer qualification requires every
 labeled tree target to appear in coverage telemetry.
 
-## What 0.5.1 does not automate
+## What 0.5.2 does not automate
 
-ToonLab 0.5.1 does not currently:
+ToonLab 0.5.2 does not currently:
 
 - design an attractive terrain, coastline, cliff, biome, or underwater habitat;
 - choose, transform, bury, overlap, or compose assets into a convincing level;

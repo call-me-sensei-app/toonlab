@@ -12,6 +12,8 @@ export function resolveCharacterParameters(settings: any, context?: {}): {
     sunTint: any;
     lightMaxTint: any;
     skyFloor: any;
+    lightMinKey: any;
+    keepSaturation: any;
     skyMax: any;
     shadeSkyTint: any;
     shadowSkyTint: any;
@@ -55,6 +57,8 @@ export function resolveCharacterParameters(settings: any, context?: {}): {
     rimTint: any;
     rimAlbedoMix: any;
     rimInShadow: any;
+    rimLowLightBoost: any;
+    rimLowSunBoost: any;
     rimFadeStart: any;
     rimFadeEnd: number;
     specularInShadow: any;
@@ -66,6 +70,7 @@ export function resolveCharacterParameters(settings: any, context?: {}): {
     hairRingStrands: any;
     hairRingJitter: any;
     hairRingLean: any;
+    hairRingRoundness: any;
     hairRingShadowFloor: any;
     sheerColor: any;
     sheerIntensity: any;

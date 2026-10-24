@@ -1,4 +1,55 @@
-# ToonLab 0.5.1 release notes
+# Unreleased: vibrant character defaults
+
+Characters now look good out of the box in any scene light, closer to modern
+anime games (Genshin Impact, Ananta): readable at night, a rim that lifts
+dark silhouettes, a real hair ring and clean hair ink. Defaults change, so
+every character renders differently; no API or settings field was removed
+and preset documents stay at schema version 2. Each change is a setting, so
+a project that wants the previous look can set the old values.
+
+- **Key floor** (`light.minKey`, new, default 0.6): the light a character is
+  shaded with never drops below 60 % of daylight (hue kept). Previously a
+  night scene left characters at its own level: on the Tokyo Story Map's
+  night preset three test chibis averaged 0.08–0.12 lightness with 47–67 % of
+  their pixels near-black; now 0.18–0.25 and 11–50 %. Set 0 for the old
+  behaviour.
+- **Saturation kept** (`light.keepSaturation`, new, default 0.7): coloured
+  light, the rim and the hair ring may tint a surface but not grey it out.
+- **Rim**: the view-angle rim (used whenever the character render passes are
+  not registered) now runs all round the silhouette, fainter on the shadow
+  side (`rim.inShadow` 0.35 → 0.5); the rim takes the surface's hue but not
+  its darkness (`rim.albedoMix` now means hue share, 0.35 → 0.5), so black
+  cloth gets a full rim; it strengthens in low light (`rim.lowLightBoost`,
+  new, 1) and low sun (`rim.lowSunBoost`, new, 0.5). Default intensities
+  rise (cloth 0.13 → 0.2, hair 0.23 → 0.28, skin 0.13 → 0.15; Call Me Sensei
+  cloth 0.16 → 0.22, hair 0.3 → 0.32, skin 0.15 → 0.17; Showcase likewise).
+- **Hair ring**: placed on a sphere around the head
+  (`highlights.hair.roundness`, new, 0.8) instead of each strand's normal,
+  which broke into glossy patches on spiky hair; coloured as a brighter
+  version of the hair (a cool grey on black hair) instead of a 62 % white
+  blend; its head centre now follows each object's transform when the render
+  passes are not tracking the head, so characters moved or cloned after
+  conversion keep their ring (it had drifted off generated chibis entirely).
+  Call Me Sensei ring intensity 0.45 → 0.5.
+- **Hair ink**: default hair ink [0.72, 0.78, 0.9] → [0.42, 0.4, 0.5] (Call Me
+  Sensei [0.75] → [0.38, 0.36, 0.46], hair ink saturation 0.47 → 0.2, ink hue
+  step 0.044 → 0.02, hair width 0.005 → 0.004): light, saturated, hue-stepped
+  lines made brown hair look fringed in orange. Hair hulls are pushed back
+  1.2 cm by default (`outline.depthPush.hair` 0 → 0.012), so thin strands no
+  longer ink a line as wide as themselves.
+- **Hair shadow tone** [0.74, 0.76, 0.92] → [0.66, 0.67, 0.88], so locks keep a
+  readable light and shadow side.
+
+Measured with the Tokyo Story Map's day, dusk and night presets and its
+phone-tier post pipeline (bloom, grade, AgX; headless Chromium 151 WebGPU on
+an Apple-silicon Mac, two generated chibis and Akira): daylight lightness and
+saturation are unchanged within 2 %; silhouette contrast against the
+background rises 10–25 % at dusk and about 2× at night. Saturation of
+non-ink pixels at dusk is within 4 % of before. Before/after renders are in
+the pull request. GPU cost was not measured: the additions are a few
+arithmetic operations and two sRGB conversions per character pixel.
+
+# Previous release: 0.5.1
 
 This patch fixes character toon shading found while shading generated and
 hand-built chibis in the Tokyo Story Map (2026-10-13). It adds one settings

@@ -11,6 +11,7 @@ export function limitSaturation(color: any, limit: any): any;
  */
 export function characterLight(u: any, normal: any): {
     light: import("three/webgpu").VarNode<"vec3", import("three/webgpu").Node<"vec3">>;
+    sceneLevel: import("three/webgpu").Node<"float">;
     sky: import("three/webgpu").VarNode<"vec3", import("three/webgpu").Node<"vec3">>;
 };
 /**

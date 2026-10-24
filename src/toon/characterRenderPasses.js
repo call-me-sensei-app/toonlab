@@ -197,6 +197,7 @@ export function createCharacterRenderPasses({
     for (const state of record.states) {
       state.depthReady.value = 0;
       state.shadowReady.value = 0;
+      state.headTracked.value = 0;
       state.depthMap.value = characterPassFallbackTexture();
       state.shadowMap.value = characterPassFallbackTexture();
     }
@@ -263,6 +264,7 @@ export function createCharacterRenderPasses({
         if (sphereInHead) state.headSphereCenter.value.copy(sphereInHead).applyMatrix4(tracker.headBone.matrixWorld);
         else state.headSphereCenter.value.copy(tracker.state.position).addScaledVector(tracker.state.up, 0.08);
         state.headReady.value = 1;
+        state.headTracked.value = 1;
       }
     }
   }

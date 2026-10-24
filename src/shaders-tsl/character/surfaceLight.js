@@ -6,7 +6,9 @@
 // lights) is capped at `skyMax` and floored at `skyFloor`, and only ever acts
 // as a floor under the sun: the light a pixel is shaded with is the
 // per-channel maximum of the two, so a neutral daylight sun leaves the albedo
-// untouched and night falls back to the sky's own colour and level.
+// untouched and night falls back to the sky's own colour and level. Finally
+// the level is floored at `minKey` (hue kept), so a character stays readable
+// however dark the scene gets.
 
 import {
   cameraWorldMatrix,
@@ -77,8 +79,13 @@ export function characterLight(u, normal) {
   // deep sunset or a blue night tints the character without turning it
   // orange or blue. The level (brightest channel) is kept.
   const limited = limitSaturation(max(sun, sky), u.lightMaxTint);
-  const light = mix(vec3(1), limited, u.lightEnabled).toVar('toonLight');
-  return { light, sky };
+  const sceneLevel = maxComponent(limited).toVar('toonSceneLightLevel');
+  const hue = select(sceneLevel.greaterThan(1e-4), limited.div(max(sceneLevel, 1e-4)), vec3(1));
+  const keyed = hue.mul(max(sceneLevel, u.lightMinKey));
+  const light = mix(vec3(1), keyed, u.lightEnabled).toVar('toonLight');
+  // `sceneLevel` is the light before the key floor (1 in daylight), for
+  // effects that should grow as the scene darkens.
+  return { light, sceneLevel: mix(float(1), sceneLevel, u.lightEnabled), sky };
 }
 
 /**

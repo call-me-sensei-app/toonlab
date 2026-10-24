@@ -45,6 +45,7 @@ export const HIGHLIGHTS_FIELDS = Object.freeze({
     strands: numberField(11, 0, 64, 'How many strands the ring breaks into around the head.', { step: 1 }),
     jitter: numberField(0.05, 0, 0.5, 'How far each strand\'s piece of the ring wanders up and down.'),
     lean: numberField(1, 0, 1, 'How much the strand direction follows the head\'s up axis (1) rather than world up (0).'),
+    roundness: numberField(0.8, 0, 1, 'Places the ring on a sphere around the head rather than on each strand\'s own normal (0): messy or spiky hair keeps one clean band instead of scattered glossy patches.'),
     shadowFloor: numberField(0.32, 0, 1, 'Ring visibility on the shadow side.'),
   }),
   eye: Object.freeze({

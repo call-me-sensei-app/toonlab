@@ -744,8 +744,20 @@ function materialParameters(settings, material) {
     ...resolveCharacterParameters(settings, context),
     ...inputs,
     ...sticker.params,
+    ...(data.toonHeadCenterLocal ? { headCenterLocal: data.toonHeadCenterLocal } : {}),
     ...(data.toonParameterOverrides ?? {}),
   };
+}
+
+// The head centre in the mesh's own space at conversion, so effects can
+// place the head from the object's current transform: a character moved,
+// rotated or cloned after conversion (materials are shared between clones)
+// keeps its head where its hair is, without the render passes' tracking.
+function headCenterLocal(state, mesh) {
+  if (!mesh?.matrixWorld) return null;
+  mesh.updateWorldMatrix(true, false);
+  const inverse = new THREE.Matrix4().copy(mesh.matrixWorld).invert();
+  return state.headSphereCenter.value.clone().applyMatrix4(inverse).toArray();
 }
 
 function createCharacterMaterialFromSource(mat, {
@@ -893,6 +905,7 @@ function createCharacterMaterialFromSource(mat, {
     toonParameterOverrides: source.parameterOverrides,
     toonShadeOverride: shadeOverride ? { color: shadeOverride.color } : null,
     toonSourceProxy: sourceProxy(mat),
+    toonHeadCenterLocal: headCenterLocal(state, slot?.mesh),
   };
   const probe = { userData };
   const params = materialParameters(settings, probe);

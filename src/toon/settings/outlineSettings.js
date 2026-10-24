@@ -35,7 +35,7 @@ export const OUTLINE_FIELDS = Object.freeze({
   fadeDistance: numberField(12, 0.1, 500, 'Past this camera distance lines stop growing in world space (they thin on screen).'),
   ink: Object.freeze({
     cloth: colorField([0.34, 0.33, 0.4], 'Ink on cloth: display-space multiplier on the lit colour under the line.'),
-    hair: colorField([0.72, 0.78, 0.9], 'Ink on hair.'),
+    hair: colorField([0.42, 0.4, 0.5], 'Ink on hair: a dark, slightly cool version of the hair colour, so strands read as clean ink rather than a light fringe.'),
     skin: colorField([0.62, 0.36, 0.34], 'Ink on body skin.'),
     face: colorField([0.62, 0.36, 0.34], 'Ink on the face.'),
     metal: colorField([0.34, 0.33, 0.4], 'Ink on metal.'),
@@ -61,7 +61,7 @@ export const OUTLINE_FIELDS = Object.freeze({
   // a part's hull only shows where the part stands clear of what is behind it (its silhouette).
   depthPush: Object.freeze({
     cloth: numberField(0, 0, 0.2, 'Push cloth hull lines back in depth (metres): inner edges of layered clothing stop inking across the body; silhouettes stay.'),
-    hair: numberField(0, 0, 0.2, 'Push hair hull lines back in depth (metres): edges of overlapping locks stop inking; the hair silhouette stays.'),
+    hair: numberField(0.012, 0, 0.2, 'Push hair hull lines back in depth (metres): edges of overlapping locks stop inking (thin strands otherwise ink a line as wide as themselves); the hair silhouette stays.'),
     skin: numberField(0, 0, 0.2, 'Push body-skin hull lines back in depth (metres).'),
     metal: numberField(0, 0, 0.2, 'Push metal hull lines back in depth (metres).'),
   }),

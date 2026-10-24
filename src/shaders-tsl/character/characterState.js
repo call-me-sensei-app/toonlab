@@ -49,6 +49,11 @@ export function createCharacterShadingState() {
     headSphereCenter: uniform(new THREE.Vector3(0, 1.55, 0)),
     headUp: uniform(new THREE.Vector3(0, 1, 0)),
     headReady: uniform(0),
+    // 1 while createCharacterRenderPasses tracks the head every frame; 0
+    // means the world-space head values above are the conversion pose's, and
+    // effects that must follow a moved or cloned character derive the head
+    // from their own object transform instead (headCenterLocal).
+    headTracked: uniform(0),
     // Depth prepass: r = window depth of the nearest surface, plus 2 where
     // that surface is a face (face pixels ignore face occluders).
     depthMap: texture(fallback),

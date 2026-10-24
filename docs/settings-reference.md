@@ -30,7 +30,7 @@ the **Portable** column makes that ownership explicit.
 
 ## Character toon shading
 
-Module: `@call-me-sensei/toonlab/toon` — 14 groups, 249 fields.
+Module: `@call-me-sensei/toonlab/toon` — 14 groups, 254 fields.
 
 Settings are nested per group; dotted keys are nested objects: `createToonSettings({ preset: 'call_me_sensei', rim: { intensity: { hair: 0.3 } } })`. Colours are `[r, g, b]` 0–1; shadow tones, band colours, tints and inks are display-space (sRGB) multipliers. Texture fields are runtime-only.
 
@@ -45,6 +45,8 @@ How the scene's sun, sky, probes and local lights reach the character.
 | `sunTint` | number | `1` | 0 – 1 | Yes | Share of the sun's hue the character takes (0 = a grey light of the same luminance). |
 | `maxTint` | number | `0.14` | 0 – 1 | Yes | Largest display saturation the light may carry, so a deep sunset or a blue night tints the character gently instead of turning it orange or blue. 1 = no limit. |
 | `skyFloor` | number | `0.04` | 0 – 1 | Yes | Minimum light level from the sky ambient; the character never goes fully black. |
+| `minKey` | number | `0.6` | 0 – 1 | Yes | Lowest level (brightest channel) of the light a character is shaded with, keeping its hue: at night or in a dim interior the character stays readable, as anime games keep their characters lit whatever the scene does. 0 = follow the scene. |
+| `keepSaturation` | number | `0.7` | 0 – 1 | Yes | How much of the base colour's saturation coloured light may not take away: a purple jacket under an orange dusk light stays purple. 0 = the light's colour multiplies freely. |
 | `skyMax` | number | `1` | 0 – 4 | Yes | Cap on the sky ambient's contribution (brightest channel). |
 | `shadeSkyTint` | number | `0.15` | 0 – 1 | Yes | In the scenery's cast shade the light takes this share of the sky's hue at the sun's level. |
 | `shadowSkyTint` | number | `0.35` | 0 – 1 | Yes | On the shadow side the light leans this far toward the sky's hue (at the light's level), so shadows stay cool and colourful under a warm sun. |
@@ -88,7 +90,7 @@ Shadow tones per kind of surface and the warm band just inside the terminator.
 |---|---|---|---|---|---|
 | `enabled` | boolean | `true` | — | Yes | Colour shadows with the per-surface tones. Off uses a neutral grey tone and no band. |
 | `tone.cloth` | color | `[0.77, 0.835, 0.91]` | — | Yes | Shadow tone for cloth and anything unclassified (display-space multiplier; Genshin white cloth: lit (239, 237, 238) → shadow (183, 198, 216)). |
-| `tone.hair` | color | `[0.74, 0.76, 0.92]` | — | Yes | Shadow tone for hair. |
+| `tone.hair` | color | `[0.66, 0.67, 0.88]` | — | Yes | Shadow tone for hair (deeper than cloth, so locks keep a readable light and shadow side). |
 | `tone.skin` | color | `[0.92, 0.79, 0.74]` | — | Yes | Shadow tone for body skin (Genshin Ganyu neck: (238, 208, 189) → (220, 164, 140)); body skin textures run pinker than face textures, so it is lighter than the face tone. |
 | `tone.face` | color | `[0.91, 0.71, 0.65]` | — | Yes | Shadow tone for the face. |
 | `tone.metal` | color | `[0.7, 0.7, 0.8]` | — | Yes | Shadow tone for metal. |
@@ -163,14 +165,16 @@ The depth rim on the lit side and the faint silhouette rim.
 | `softness` | number | `0.03` | 0.001 – 1 | Yes | Fade of the rim past the threshold, metres. |
 | `silhouette.body` | number | `0` | 0 – 2 | Yes | A second, fainter rim all around the silhouette regardless of the light side, relative to the role's rim. |
 | `silhouette.hair` | number | `0` | 0 – 2 | Yes | Silhouette rim on hair. |
-| `intensity.cloth` | number | `0.13` | 0 – 2 | Yes | Rim strength on cloth, metal and unclassified surfaces. |
-| `intensity.hair` | number | `0.23` | 0 – 2 | Yes | Rim strength on hair. |
-| `intensity.skin` | number | `0.13` | 0 – 2 | Yes | Rim strength on body skin. |
+| `intensity.cloth` | number | `0.2` | 0 – 2 | Yes | Rim strength on cloth, metal and unclassified surfaces. |
+| `intensity.hair` | number | `0.28` | 0 – 2 | Yes | Rim strength on hair. |
+| `intensity.skin` | number | `0.15` | 0 – 2 | Yes | Rim strength on body skin. |
 | `intensity.face` | number | `0.13` | 0 – 2 | Yes | Rim strength on the face. |
 | `intensity.eye` | number | `0.04` | 0 – 2 | Yes | Rim strength on eyes. |
 | `tint` | color | `[0.82, 0.9, 1]` | — | Yes | Rim colour (times the light). |
-| `albedoMix` | number | `0.35` | 0 – 1 | Yes | Share of the albedo in the rim colour. |
-| `inShadow` | number | `0.35` | 0 – 1 | Yes | Rim visibility on the shadow side. |
+| `albedoMix` | number | `0.5` | 0 – 1 | Yes | Share of the surface's hue in the rim colour. Only the hue: the rim is as bright on black cloth and dark hair as on light surfaces. |
+| `inShadow` | number | `0.5` | 0 – 1 | Yes | Rim visibility on the shadow side. |
+| `lowLightBoost` | number | `1` | 0 – 4 | Yes | Extra rim strength as the scene light dims (at night the rim is what separates a dark silhouette from a dark background): the rim is multiplied by 1 + this × (1 − scene light level). |
+| `lowSunBoost` | number | `0.5` | 0 – 4 | Yes | Extra rim strength as the sun nears the horizon (dusk, dawn): 1 + this × lowness. |
 | `fadeStart` | number | `20` | 0 – 500 | Yes | Distance (metres) at which the depth rim starts to fade. |
 | `fadeEnd` | number | `30` | 0 – 500 | Yes | Distance (metres) at which the depth rim is gone. |
 
@@ -218,6 +222,7 @@ Stylised specular, the hair ring, the eye glint and the stocking streak.
 | `hair.strands` | number | `11` | 0 – 64 | Yes | How many strands the ring breaks into around the head. |
 | `hair.jitter` | number | `0.05` | 0 – 0.5 | Yes | How far each strand's piece of the ring wanders up and down. |
 | `hair.lean` | number | `1` | 0 – 1 | Yes | How much the strand direction follows the head's up axis (1) rather than world up (0). |
+| `hair.roundness` | number | `0.8` | 0 – 1 | Yes | Places the ring on a sphere around the head rather than on each strand's own normal (0): messy or spiky hair keeps one clean band instead of scattered glossy patches. |
 | `hair.shadowFloor` | number | `0.32` | 0 – 1 | Yes | Ring visibility on the shadow side. |
 | `eye.enabled` | boolean | `false` | — | Yes | Dynamic eye glint (anime eyes usually paint their own). |
 | `eye.intensity` | number | `0.6` | 0 – 2 | Yes | Eye glint strength. |
@@ -246,7 +251,7 @@ Inverted-hull ink outlines: widths, ink colour and screen-space behaviour.
 | `referenceFov` | number | `40` | 1 – 120 | Yes | Vertical field of view the widths are authored at, degrees. |
 | `fadeDistance` | number | `12` | 0.1 – 500 | Yes | Past this camera distance lines stop growing in world space (they thin on screen). |
 | `ink.cloth` | color | `[0.34, 0.33, 0.4]` | — | Yes | Ink on cloth: display-space multiplier on the lit colour under the line. |
-| `ink.hair` | color | `[0.72, 0.78, 0.9]` | — | Yes | Ink on hair. |
+| `ink.hair` | color | `[0.42, 0.4, 0.5]` | — | Yes | Ink on hair: a dark, slightly cool version of the hair colour, so strands read as clean ink rather than a light fringe. |
 | `ink.skin` | color | `[0.62, 0.36, 0.34]` | — | Yes | Ink on body skin. |
 | `ink.face` | color | `[0.62, 0.36, 0.34]` | — | Yes | Ink on the face. |
 | `ink.metal` | color | `[0.34, 0.33, 0.4]` | — | Yes | Ink on metal. |
@@ -273,7 +278,7 @@ Inverted-hull ink outlines: widths, ink colour and screen-space behaviour.
 | `lighting.metal.max` | number | `1` | 0 – 1 | Yes | Maximum line brightness on metal. |
 | `faceDepthPush` | number | `0.02` | 0 – 0.2 | Yes | Push face hull lines back in depth (metres) so they show only on the silhouette, not across nose and eyelids. |
 | `depthPush.cloth` | number | `0` | 0 – 0.2 | Yes | Push cloth hull lines back in depth (metres): inner edges of layered clothing stop inking across the body; silhouettes stay. |
-| `depthPush.hair` | number | `0` | 0 – 0.2 | Yes | Push hair hull lines back in depth (metres): edges of overlapping locks stop inking; the hair silhouette stays. |
+| `depthPush.hair` | number | `0.012` | 0 – 0.2 | Yes | Push hair hull lines back in depth (metres): edges of overlapping locks stop inking (thin strands otherwise ink a line as wide as themselves); the hair silhouette stays. |
 | `depthPush.skin` | number | `0` | 0 – 0.2 | Yes | Push body-skin hull lines back in depth (metres). |
 | `depthPush.metal` | number | `0` | 0 – 0.2 | Yes | Push metal hull lines back in depth (metres). |
 | `honourSourceOff` | boolean | `true` | — | Yes | Respect a source material's "no outline" (MMD edge flag off). |
@@ -1009,7 +1014,7 @@ Tuning values used by the post-processing effects when their feature toggles are
 | `atmosphereNear` | number | `60` | 0 – 1000 | Yes | View distance in meters where atmosphere fog starts. |
 | `atmosphereStrength` | number | `0.55` | 0 – 1 | Yes | Maximum blend of the atmospheric mix fog. |
 | `contrast` | number | `1` | 0 – 2 | Yes | Scales contrast around mid gray in the color grade. |
-| `depthCueColor` | color | `[0.3371636150376657, 0.4735314961384573, 0.6866853124288864]` | — | Yes | Sets the color distant pixels fade toward. |
+| `depthCueColor` | color | `[0.3371636150376657, 0.47353149613845735, 0.6866853124288865]` | — | Yes | Sets the color distant pixels fade toward. |
 | `depthCueFar` | number | `24` | 0 – 200 | Yes | Sets the depth at which the depth cue reaches full strength. |
 | `depthCueNear` | number | `1` | 0 – 50 | Yes | Sets the depth at which the depth cue starts to appear. |
 | `depthCueStrength` | number | `0` | 0 – 1 | Yes | Controls how strongly distant pixels blend toward the depth cue color. |

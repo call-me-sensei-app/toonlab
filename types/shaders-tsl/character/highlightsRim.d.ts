@@ -12,7 +12,10 @@ export function stylizedSpecular({ intensity, normal, halfVector, size, softness
  * surface, and the ring sits where that strand direction is at a fixed angle
  * to the view — a band around the head that stays put as the light moves.
  * It breaks into strands by a vertical offset that varies smoothly around
- * the head (no steps between strands).
+ * the head (no steps between strands). `hairRingRoundness` places it on a
+ * sphere around the head instead of each strand's own normal, so messy or
+ * spiky hair keeps one band rather than scattered glossy patches; the
+ * strand's own normal still decides whether it faces the camera.
  */
 export function hairRing(u: any, { head, normal, viewDirection, worldPosition }: {
     head: any;

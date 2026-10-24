@@ -15,7 +15,7 @@ export const RAMP_FIELDS = Object.freeze({
   enabled: booleanField(true, 'Colour shadows with the per-surface tones. Off uses a neutral grey tone and no band.'),
   tone: Object.freeze({
     cloth: colorField([0.77, 0.835, 0.91], 'Shadow tone for cloth and anything unclassified (display-space multiplier; Genshin white cloth: lit (239, 237, 238) → shadow (183, 198, 216)).'),
-    hair: colorField([0.74, 0.76, 0.92], 'Shadow tone for hair.'),
+    hair: colorField([0.66, 0.67, 0.88], 'Shadow tone for hair (deeper than cloth, so locks keep a readable light and shadow side).'),
     skin: colorField([0.92, 0.79, 0.74], 'Shadow tone for body skin (Genshin Ganyu neck: (238, 208, 189) → (220, 164, 140)); body skin textures run pinker than face textures, so it is lighter than the face tone.'),
     face: colorField([0.91, 0.71, 0.65], 'Shadow tone for the face.'),
     metal: colorField([0.7, 0.7, 0.8], 'Shadow tone for metal.'),

@@ -60,6 +60,7 @@ export const HIGHLIGHTS_FIELDS: Readonly<{
         strands: import("./fieldSchema.js").SettingField;
         jitter: import("./fieldSchema.js").SettingField;
         lean: import("./fieldSchema.js").SettingField;
+        roundness: import("./fieldSchema.js").SettingField;
         shadowFloor: import("./fieldSchema.js").SettingField;
     }>;
     eye: Readonly<{

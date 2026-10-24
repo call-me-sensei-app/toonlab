@@ -887,7 +887,7 @@ check('outline hulls: back faces, role widths, face push, source edge flags', ()
   assert.equal(off.hull.material.visible, true, 'honourSourceOff can be turned off live');
 });
 
-check('outline depth push: per role, off by default, faces keep faceDepthPush', () => {
+check('outline depth push: per role, hair only by default, faces keep faceDepthPush', () => {
   const build = (outline) => {
     const root = new THREE.Group();
     // Skin-coloured, or the name-only face role is demoted to cloth.
@@ -900,8 +900,8 @@ check('outline depth push: per role, off by default, faces keep faceDepthPush', 
     return { root, face: hullOf(face), cloth: hullOf(cloth), hair: hullOf(hair) };
   };
   const plain = build(undefined);
-  assert.equal(uniformOf(plain.cloth.material, 'outlineDepthPush'), 0, 'off by default: existing looks are unchanged');
-  assert.equal(uniformOf(plain.hair.material, 'outlineDepthPush'), 0);
+  assert.equal(uniformOf(plain.cloth.material, 'outlineDepthPush'), 0, 'cloth is not pushed by default');
+  assert.ok(near(uniformOf(plain.hair.material, 'outlineDepthPush'), 0.012), 'hair is: strand edges stop inking (0.6)');
   const pushed = build({ depthPush: { cloth: 0.015, hair: 0.012 } });
   assert.ok(near(uniformOf(pushed.cloth.material, 'outlineDepthPush'), 0.015));
   assert.ok(near(uniformOf(pushed.hair.material, 'outlineDepthPush'), 0.012));
@@ -909,6 +909,33 @@ check('outline depth push: per role, off by default, faces keep faceDepthPush', 
   assert.ok(near(uniformOf(pushed.face.material, 'outlineFaceDepthPush'), 0.02));
   applyToonSettingsToMaterial(pushed.root, createToonSettings({ preset: 'call_me_sensei', outline: { depthPush: { cloth: 0.03 } } }));
   assert.ok(near(uniformOf(pushed.cloth.material, 'outlineDepthPush'), 0.03), 'retunes live');
+});
+
+check('vibrant defaults: key floor, kept saturation, rim boosts and hair ring reach the material', () => {
+  const root = new THREE.Group();
+  const hair = new THREE.Mesh(new THREE.SphereGeometry(0.1, 8, 6), new THREE.MeshStandardMaterial({ name: 'Hair' }));
+  hair.position.set(0, 1.5, 0);
+  root.add(hair);
+  root.updateMatrixWorld(true);
+  applyToonShader(root, { autoRoles: { mode: 'off' }, preset: 'call_me_sensei' });
+  const material = hair.material;
+  assert.ok(near(uniformOf(material, 'lightMinKey'), 0.6), 'characters keep 60 % of daylight');
+  assert.ok(near(uniformOf(material, 'keepSaturation'), 0.7));
+  assert.ok(near(uniformOf(material, 'rimLowLightBoost'), 1));
+  assert.ok(near(uniformOf(material, 'rimLowSunBoost'), 0.5));
+  assert.ok(near(uniformOf(material, 'hairRingRoundness'), 0.8));
+  // The head centre is stored in the mesh's own space, so a character moved
+  // (or cloned) after conversion keeps its hair ring without render passes.
+  const state = peekCharacterShadingState(root);
+  const local = uniformOf(material, 'headCenterLocal');
+  const world = local.clone().applyMatrix4(hair.matrixWorld);
+  assert.ok(world.distanceTo(state.headSphereCenter.value) < 1e-6, 'local centre maps back to the conversion-time head');
+  assert.equal(state.headTracked.value, 0, 'not tracked until render passes register the root');
+  const off = createToonSettings({ light: { minKey: 0 } });
+  assert.equal(off.light.minKey, 0, 'the key floor can be turned off');
+  applyToonSettingsToMaterial(root, createToonSettings({ preset: 'call_me_sensei', light: { minKey: 0.3 } }));
+  assert.ok(near(uniformOf(material, 'lightMinKey'), 0.3), 'retunes live');
+  assert.ok(uniformOf(material, 'headCenterLocal').equals(local), 'a retune keeps the head centre');
 });
 
 // ---------------------------------------------------------------- settings
@@ -942,8 +969,8 @@ check('presets: default, call_me_sensei and showcase', () => {
   assert.equal(sensei.light.sunTint, 0.35);
   assert.deepEqual(sensei.rim.silhouette, { body: 1, hair: 0.5 });
   assert.equal(sensei.highlights.specular.clothNeedsMask, true);
-  assert.equal(sensei.outline.inkSaturation.hair, 0.47);
-  assert.equal(sensei.outline.inkHueShift, 0.044);
+  assert.equal(sensei.outline.inkSaturation.hair, 0.2);
+  assert.equal(sensei.outline.inkHueShift, 0.02);
   assert.equal(sensei.shadows.hairOnFace.strength.face, 0.75);
   assert.deepEqual(sensei.ramp.tone.cloth, createToonSettings().ramp.tone.cloth, 'tones as default');
   const showcase = createToonSettings({ preset: 'showcase' });
@@ -951,7 +978,7 @@ check('presets: default, call_me_sensei and showcase', () => {
   assert.equal(createToonSettings({ preset: 'Call Me Sensei' }).preset, 'call_me_sensei');
   const overridden = createToonSettings({ preset: 'call_me_sensei', rim: { intensity: { hair: 0.1 } } });
   assert.equal(overridden.rim.intensity.hair, 0.1);
-  assert.equal(overridden.rim.intensity.cloth, 0.16, 'overrides merge onto the preset');
+  assert.equal(overridden.rim.intensity.cloth, 0.22, 'overrides merge onto the preset');
 });
 
 check('preset documents: version 2 round-trips, version 1 is rejected', () => {

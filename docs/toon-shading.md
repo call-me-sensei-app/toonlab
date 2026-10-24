@@ -67,6 +67,15 @@ convertedMeshCount, primarySkinnedMesh, … }`.
 - **Sky** — ambient lights, light probes (their L0 band) and hemisphere
   lights form the sky light. It is a floor under the sun (`light.skyFloor`,
   `light.skyMax`), never an additive wash.
+- **Key floor** — the light a character is shaded with never drops below
+  `light.minKey` (0.6, hue kept), the way anime games keep characters
+  readable whatever the scene does: at night or in a dim street the
+  character is lit at 0.6 of daylight with the night's cool tint, not left
+  in near-black. Set it to 0 to follow the scene exactly.
+- **Saturation kept** — coloured light, the rim and the hair ring may tint a
+  surface but not grey it out: `light.keepSaturation` (0.7) restores that
+  share of the base colour's (or its shadow tone's) saturation, keeping the
+  hue and brightness. It never adds saturation the texture does not have.
 - **Terminator** — one soft step in N·L at the surface's
   `shading.terminator`, anti-aliased to about a pixel. Where an atlased
   material blends skin, face and hair by per-pixel role weights, the
@@ -80,6 +89,29 @@ convertedMeshCount, primarySkinnedMesh, … }`.
   so shadows stay colourful under a warm sun.
 - **Cast shadows** move pixels into the shadow tone; they never darken the
   tone itself.
+- **Rim** — a thin lit edge (depth rim with the render passes, a view-angle
+  rim all round the silhouette without them, fainter on the shadow side). It
+  takes the surface's hue but not its darkness, so black jackets and dark
+  hair get a full rim, and it strengthens as the scene darkens
+  (`rim.lowLightBoost`) and as the sun nears the horizon
+  (`rim.lowSunBoost`): at dusk and night it is what separates a dark
+  silhouette from a dark background.
+- **Hair ring** — the angel ring sits on a sphere around the head
+  (`highlights.hair.roundness`), so messy or spiky hair shows one clean band
+  rather than scattered glossy patches, and is a brighter version of the
+  hair's own colour (a cool grey on black hair). Without the render passes
+  its head centre follows each object's own transform, so moved and cloned
+  characters keep it.
+- **Hair ink** — hair lines are a dark, slightly cool version of the hair
+  colour, and hair hulls are pushed back 1.2 cm (`outline.depthPush.hair`)
+  so only the hair's silhouette inks, not every thin strand.
+
+What ToonLab cannot control: a host's post-processing (tone mapping,
+contrast, saturation and warmth grades) runs on the whole frame after the
+character is drawn. Character materials are output-referred and opt out of
+renderer tone mapping when drawn directly; a host with its own grade can
+exclude characters with the character mask
+(`renderPasses.setCharacterMaskEnabled(true)`).
 
 ## Presets
 

@@ -8,6 +8,7 @@ export function createCharacterShadingState(): {
     headSphereCenter: import("three/webgpu").UniformNode<"vec3", THREE.Vector3>;
     headUp: import("three/webgpu").UniformNode<"vec3", THREE.Vector3>;
     headReady: import("three/webgpu").UniformNode<"float", number>;
+    headTracked: import("three/webgpu").UniformNode<"float", number>;
     depthMap: import("three/webgpu").TextureNode<"vec4">;
     depthReady: import("three/webgpu").UniformNode<"float", number>;
     shadowMap: import("three/webgpu").TextureNode<"vec4">;

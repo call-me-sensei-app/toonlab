@@ -5,6 +5,7 @@ export function createAutoRolesSettings(options?: any): {
 export const AUTO_ROLE_MODES: Readonly<{
     auto: "auto";
     off: "off";
+    precomputed: "precomputed";
 }>;
 export const DEFAULT_AUTO_ROLES_SETTINGS: Readonly<{
     mode: "auto";

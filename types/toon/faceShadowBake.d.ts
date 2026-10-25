@@ -1,13 +1,15 @@
-export function bakeFaceShadowMap(root: any, { isFaceMaterial, isWeightEligible, ...options }?: {}): {
+export function bakeFaceShadowMap(root: any, { isFaceMaterial, isWeightEligible, noseDrawn, ...options }?: {
+    noseDrawn?: (measure: any) => any;
+}): {
     coveredTexels: number;
     noseMark: {
         center: any;
         drawn: boolean;
         evidence: {
-            regionDarkest: number;
-            regionDark: number;
+            regionDarkest: any;
+            regionDark: any;
             samples: number[];
-            surroundMedian: number;
+            surroundMedian: any;
         };
         size: number[];
     };

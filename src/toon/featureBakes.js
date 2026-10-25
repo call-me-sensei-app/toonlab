@@ -51,22 +51,40 @@ function sRGBColorOf(material) {
   return [color.r, color.g, color.b];
 }
 
-// Visible colour of a vertex (sRGB, 0–1): base texture at its UV × material
-// colour; target[3] is the texel's alpha. VRoid cuts shorts and sleeves out
-// of full-length template meshes with texture alpha, so callers skip
-// transparent texels.
-function createColorSampler(material, geometry) {
-  const factor = sRGBColorOf(material);
+/**
+ * Base-colour texels (RGBA, 0–255) at the UV of each vertex in `vertices`,
+ * indexed by vertex (others zero), or null when the texture's pixels cannot
+ * be read. The colour evidence these bakes use; a precomputed conversion
+ * (autoRolesData.js) supplies recorded texels instead of reading pixels.
+ */
+export function sampleVertexTexels(material, geometry, vertices) {
   const texture = material?.map?.isTexture ? material.map : null;
   const pixels = texture ? readTexturePixels(texture, { maxSize: 1024 }) : null;
   const uv = geometry.attributes.uv;
-  if (texture?.matrixAutoUpdate) texture.updateMatrix();
+  if (!pixels || !uv) return null;
+  if (texture.matrixAutoUpdate) texture.updateMatrix();
+  const texels = new Uint8Array(geometry.attributes.position.count * 4);
   const texel = [0, 0, 0, 255];
+  for (const vertex of vertices) {
+    sampleTexturePixel(pixels, texture, uv.getX(vertex), uv.getY(vertex), texel);
+    texels.set(texel, vertex * 4);
+  }
+  return texels;
+}
+
+const measureVertexTexels = (mesh, material, slot, measure) => measure();
+
+// Visible colour of a vertex (sRGB, 0–1): base texture at its UV × material
+// colour; target[3] is the texel's alpha. VRoid cuts shorts and sleeves out
+// of full-length template meshes with texture alpha, so callers skip
+// transparent texels. `texels` is sampleVertexTexels' result (null: no
+// texture evidence, the material colour alone).
+function createColorSampler(material, texels) {
+  const factor = sRGBColorOf(material);
   return (vertex, target) => {
-    if (pixels && uv) {
-      sampleTexturePixel(pixels, texture, uv.getX(vertex), uv.getY(vertex), texel);
-      for (let k = 0; k < 3; k += 1) target[k] = (texel[k] / 255) * factor[k];
-      target[3] = texel[3] / 255;
+    if (texels) {
+      for (let k = 0; k < 3; k += 1) target[k] = (texels[vertex * 4 + k] / 255) * factor[k];
+      target[3] = texels[vertex * 4 + 3] / 255;
     } else {
       for (let k = 0; k < 3; k += 1) target[k] = factor[k];
       target[3] = 1;
@@ -157,9 +175,11 @@ function lidEdges(eye, points) {
 
 /**
  * Bakes the lid coordinate onto every eye-white material's vertices.
+ * `vertexTexels(mesh, material, slot, measure)` supplies the colour evidence
+ * (default: `measure()`, sampleVertexTexels).
  * @returns {{ meshes: number, eyes: number, painted: string[] } | null}
  */
-export function bakeEyeWhiteLid(root, { isScleraMaterial }) {
+export function bakeEyeWhiteLid(root, { isScleraMaterial, vertexTexels = measureVertexTexels }) {
   let meshes = 0;
   let eyes = 0;
   const painted = [];
@@ -187,7 +207,7 @@ export function bakeEyeWhiteLid(root, { isScleraMaterial }) {
         }
       }
       // A texture that already shades the top of the eye white keeps its own.
-      const sample = createColorSampler(mat, geometry);
+      const sample = createColorSampler(mat, vertexTexels(mesh, mat, slot, () => sampleVertexTexels(mat, geometry, vertexSets[slot])));
       const color = [0, 0, 0, 1];
       let topLuma = 0;
       let topCount = 0;
@@ -272,9 +292,10 @@ const smoothstep = (edge0, edge1, x) => {
 
 /**
  * Bakes a sheer-fabric weight onto stockings and tights.
+ * `vertexTexels` as for bakeEyeWhiteLid.
  * @returns {{ materials: string[] } | null}
  */
-export function bakeSheerFabric(root, { isEligibleMaterial }) {
+export function bakeSheerFabric(root, { isEligibleMaterial, vertexTexels = measureVertexTexels }) {
   const found = [];
   root.traverse((mesh) => {
     if (!mesh.isSkinnedMesh || mesh.userData?.isToonOutline || !mesh.skeleton) return;
@@ -296,7 +317,7 @@ export function bakeSheerFabric(root, { isEligibleMaterial }) {
     materials.forEach((mat, slot) => {
       if (!mat || (mat.isMToonMaterial && mat.isOutline) || !isEligibleMaterial(mat) || TROUSERS_NAME.test(mat.name ?? '')) return;
       const namedStockings = STOCKINGS_NAME.test(mat.name ?? '');
-      const sample = createColorSampler(mat, geometry);
+      const sample = createColorSampler(mat, vertexTexels(mesh, mat, slot, () => sampleVertexTexels(mat, geometry, vertexSets[slot])));
       const color = [0, 0, 0, 1];
       const weights = new Map();
       const covered = new Map();

@@ -2,7 +2,7 @@ import * as THREE from 'three';
 
 import { writeBakedFaceUv } from './bakeAttribute.js';
 import { characterFrameInverse } from './headBone.js';
-import { rasterizeTriangle as rasterize, readTexturePixels, sampleTexturePixel } from './texturePixels.js';
+import { isCompressedTexture, rasterizeTriangle as rasterize, readTexturePixels, sampleTexturePixel } from './texturePixels.js';
 
 // Automatic face shadow map ("SDF" face map) for faces that ship without one.
 //
@@ -62,6 +62,14 @@ function toArray(material) {
 // indices of its face triangles.
 const ROLE_WEIGHTS_ATTRIBUTE = 'toonRoleWeights';
 
+// RGBA texels of a role mask held in CPU memory, or null.
+function roleMaskTexels(mask) {
+  if (!mask || isCompressedTexture(mask)) return null;
+  const { data, height, width } = mask.image ?? {};
+  if (!(data instanceof Uint8Array || data instanceof Uint8ClampedArray) || data.length !== width * height * 4) return null;
+  return { data, height, width };
+}
+
 function collectFaceSurfaces(root, isFaceMaterial, isWeightEligible) {
   // Character frame (facing +Z): a VRM 0.x root is turned 180° by its importer.
   const rootInverse = characterFrameInverse(root);
@@ -97,11 +105,14 @@ function collectFaceSurfaces(root, isFaceMaterial, isWeightEligible) {
       ? geometry.groups
       : [{ count: triangleCount * 3, materialIndex: 0, start: 0 }];
     // A per-texel automatic role mask (low-poly heads) decides at the
-    // triangle's UV centroid; otherwise all three vertices must be face.
-    const roleMask = geometry.userData?.toonAutoRoleMask;
+    // triangle's UV centroid; otherwise all three vertices must be face. Only
+    // a mask whose texels are on the CPU (the DataTexture the bake makes) is
+    // read: a precomputed mask loaded as an image or a compressed texture is
+    // never read back, and the vertex weights decide instead.
+    const roleMask = roleMaskTexels(geometry.userData?.toonAutoRoleMask);
     const uv = geometry.attributes.uv;
     const maskFace = (a, b, c) => {
-      const { data, width, height } = roleMask.image;
+      const { data, width, height } = roleMask;
       const u = (uv.getX(a) + uv.getX(b) + uv.getX(c)) / 3;
       const v = (uv.getY(a) + uv.getY(b) + uv.getY(c)) / 3;
       const x = Math.min(width - 1, Math.max(0, Math.floor(u * width)));
@@ -438,14 +449,20 @@ function textureLumaSamples(surfaces, frame, noseTip, [inner, outer]) {
   return values.sort((x, y) => x - y);
 }
 
-function measureNoseMark(surfaces, frame, noseTip) {
+// `noseDrawn(measure)` returns the texture evidence: `measure()` reads the
+// face texture; a precomputed conversion answers from its record instead.
+function measureNoseMark(surfaces, frame, noseTip, noseDrawn) {
   if (!noseTip) return null;
   const center = planarUv(frame, noseTip.x, noseTip.y - frame.halfWidth * NOSE_MARK_DROP, [0, 0]);
   const toUv = frame.halfWidth / (2 * frame.extent);
-  const region = textureLumaSamples(surfaces, frame, noseTip, [0, NOSE_REGION]);
-  const surround = textureLumaSamples(surfaces, frame, noseTip, NOSE_SURROUND);
-  const drawn = region.length > 8 && surround.length > 8 &&
-    region[Math.floor(region.length * NOSE_DRAWN_PERCENTILE)] < surround[Math.floor(surround.length / 2)] * NOSE_DRAWN_RATIO;
+  let region = [];
+  let surround = [];
+  const drawn = Boolean(noseDrawn(() => {
+    region = textureLumaSamples(surfaces, frame, noseTip, [0, NOSE_REGION]);
+    surround = textureLumaSamples(surfaces, frame, noseTip, NOSE_SURROUND);
+    return region.length > 8 && surround.length > 8 &&
+      region[Math.floor(region.length * NOSE_DRAWN_PERCENTILE)] < surround[Math.floor(surround.length / 2)] * NOSE_DRAWN_RATIO;
+  }));
   return {
     center,
     drawn,
@@ -459,7 +476,7 @@ function measureNoseMark(surfaces, frame, noseTip) {
   };
 }
 
-export function bakeFaceShadowMap(root, { isFaceMaterial, isWeightEligible, ...options } = {}) {
+export function bakeFaceShadowMap(root, { isFaceMaterial, isWeightEligible, noseDrawn = (measure) => measure(), ...options } = {}) {
   const config = { ...DEFAULT_FACE_SHADOW_BAKE, ...options };
   const surfaces = collectFaceSurfaces(root, isFaceMaterial ?? (() => false), isWeightEligible ?? (() => true));
   if (!surfaces.length) return null;
@@ -484,7 +501,7 @@ export function bakeFaceShadowMap(root, { isFaceMaterial, isWeightEligible, ...o
   const bias = frame.halfWidth * 0.02;
   const noseTip = findNoseTip(surfaces, frame);
   const casters = noseTip ? noseSurfaces(surfaces, noseTip, frame.halfWidth * config.noseRadius) : [];
-  const noseMark = measureNoseMark(surfaces, frame, noseTip);
+  const noseMark = measureNoseMark(surfaces, frame, noseTip, noseDrawn);
   for (const { geometry } of surfaces) geometry.userData.toonNoseMark = noseMark;
   for (let k = 1; k < config.angles; k += 1) {
     const theta = (k / (config.angles - 1)) * Math.PI;

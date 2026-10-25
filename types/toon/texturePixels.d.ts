@@ -1,4 +1,15 @@
 /**
+ * Runs `fn` with texture pixel reads disabled: readTexturePixels returns null
+ * without looking at the image. Returns `{ result, blockedReads }`, where
+ * `blockedReads` counts the reads that were refused.
+ */
+export function withoutTexturePixelReads(fn: any): {
+    blockedReads: number;
+    result: any;
+};
+/** True for a texture whose pixels exist only on the GPU (KTX2/Basis, DDS, ...). */
+export function isCompressedTexture(texture: any): boolean;
+/**
  * Reads a texture's pixels once (cached per image), downscaled to at most
  * `maxSize` on the long edge. Returns `{ data, width, height, channels }` with
  * 8-bit channels, or `null` when the pixels cannot be read.

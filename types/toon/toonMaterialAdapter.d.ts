@@ -15,71 +15,63 @@ export function findPrimarySkinnedMesh(root: any): any;
  * `outline`, `maps`, `baseTexture`, `alpha`, `autoRoles`, `sticker`, `fur`),
  * `materialRoles`, `debugOutputMode`, `shaderMode` ('anime' | 'basic' |
  * 'toon' | 'normal'). Returns the conversion report and resolved settings.
+ *
+ * `autoRoles: { mode: 'precomputed', data }` applies a record made offline
+ * by exportAutoRoles (parsed with parseAutoRoles / loadAutoRoles) instead of
+ * analysing the textures: no texture pixel is read on the CPU, so base-colour
+ * maps may be GPU-compressed (KTX2/Basis `CompressedTexture`).
  */
-export function applyToonShader(root: any, options?: {}): {
-    autoRoles: {
-        applied: boolean;
-        counts: {
-            face: number;
-            hair: number;
-            skin: number;
+export function applyToonShader(root: any, options?: {}): any;
+/**
+ * Runs the automatic-role analysis, and records every other piece of texture
+ * evidence conversion measures (alpha coverage, the skin check on materials
+ * named as skin, the colour checks of the face-map, eye-white and stocking
+ * bakes, MMD ramp tones), on `root` and returns it as a record for
+ * `applyToonShader(model, { autoRoles: { mode: 'precomputed', data } })`.
+ * Pass the options the runtime will convert with (`materialRoles`, `alpha`,
+ * `autoRoles.skinTolerance`, ...) and the model in the state the runtime
+ * converts it in (its `userData.toonForward`, rest pose). The model is
+ * converted in the process, as applyToonShader would; export from a copy you
+ * do not render. Returns `{ record, conversion }`: the record (raw role
+ * weights and mask texels; see serializeAutoRoles to save it) and
+ * applyToonShader's result for this live conversion.
+ */
+export function exportAutoRoles(root: any, options?: {}): {
+    conversion: {
+        autoRoles: any;
+        convertedMeshCount: number;
+        debugOutputMode: {
+            label: any;
+            name: string;
+            value: number;
         };
-        headVertexCount: number;
-        meshes: number;
-        faceFrame: {
-            rx: number;
-            ry: number;
-            x: number;
-            y: number;
+        materialRoleSummary: {
+            counts: {};
+            materials: any[];
+            total: number;
         };
-        forwardInferred: {
-            forward: number[];
-            samples: number;
-            strength: number;
-        };
-        head: {
-            center: THREE.Vector3Tuple;
-            radiusX: number;
-            radiusY: number;
-        };
-        maskedMeshes: number;
-        maskDegenerateTriangles: number;
-        maskRepartitionedTexels: number;
-        method: string;
-        referenceSkinFraction: number;
-        skinReference: any[];
-        skinSplit: {
-            boundary: number;
-            groups: any[];
-            hair: string;
-        };
-        skinTolerance: number;
-        reason?: undefined;
-        medianRgb?: undefined;
-    } | {
-        applied: boolean;
-        reason: string;
+        primarySkinnedMesh: any;
+        report: any[];
+        settings: any;
+        shaderMode: any;
+        toonPreset: any;
     };
-    convertedMeshCount: number;
-    debugOutputMode: {
-        label: any;
-        name: string;
-        value: number;
+    record: {
+        autoRoles: any;
+        evidence: any;
+        format: string;
+        forward: any[];
+        forwardInferred: boolean;
+        headEstimate: any;
+        inputs: any;
+        meshes: any[];
+        model: {
+            meshes: any;
+            vertices: number;
+        };
+        toonlab: string;
+        version: number;
     };
-    materialRoleSummary: {
-        counts: {};
-        materials: any[];
-        total: number;
-    };
-    primarySkinnedMesh: any;
-    report: any[];
-    settings: {
-        preset: string;
-        presetDescription: string;
-        presetLabel: string;
-    };
-    shaderMode: any;
-    toonPreset: string;
 };
 /**
  * Live retune: writes new settings into converted materials without
@@ -108,10 +100,10 @@ export const TOON_DEBUG_OUTPUT_MODES: Readonly<{
 }>;
 /** Debug view name → label. */
 export const TOON_DEBUG_OUTPUT_LABELS: any;
-import * as THREE from 'three';
 export { alphaTestForMaterial, createAlphaSettings, DEFAULT_ALPHA_SETTINGS, resolveAlphaForMaterial, sourceOpacity, usesAlphaBlend, usesAlphaCutout } from "./settings/alphaSettings.js";
 export { BASE_TEXTURE_MATERIAL_COLOR_MODES, BASE_TEXTURE_SATURATION_MODES, createBaseTextureSettings, DEFAULT_BASE_TEXTURE_SETTINGS } from "./settings/baseTextureSettings.js";
 export { createFurSettings, DEFAULT_FUR_SETTINGS, materialUsesFur } from "./settings/furSettings.js";
+export { AUTO_ROLES_DATA_FORMAT, AUTO_ROLES_DATA_VERSION, downsampleRoleMask, loadAutoRoles, parseAutoRoles, serializeAutoRoles } from "./autoRolesData.js";
 export { createStickerSettings, DEFAULT_STICKER_SETTINGS, resolveStickerForMaterial, STICKER_BLEND_MODES } from "./settings/stickerSettings.js";
 export { createLightSettings, DEFAULT_LIGHT_SETTINGS } from "./settings/lightSettings.js";
 export { createShadingSettings, DEFAULT_SHADING_SETTINGS } from "./settings/shadingSettings.js";

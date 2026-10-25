@@ -197,6 +197,71 @@ get per-vertex face, skin and hair weights from `autoRoles`:
   UVs) and `maskRepartitionedTexels` (a few texels on shared triangle edges
   unless UVs overlap); view the weights with the `roles` debug output.
 
+### Precomputed automatic roles (compressed textures, fast loads)
+
+The analysis reads every base-colour texture back on the CPU. That is a long
+main-thread task per model, and a GPU-compressed texture (KTX2/Basis
+`CompressedTexture`) cannot be read at all, so the live analysis finds no
+skin on one. Precompute it once instead:
+
+```bash
+npx toonlab auto-roles npc.glb --options toon-options.json --mask-size 512
+```
+
+This writes `npc.toonroles.json` and `npc.toonroles.0.png` (one role mask
+per masked mesh) next to the model. Run it in Node on the GLB with its source
+JPEG/PNG/WebP images; it needs `sharp` (`npm install --save-dev sharp`).
+`--options` is a JSON file with the `applyToonShader` options the runtime
+converts with (`materialRoles`, `alpha`, `autoRoles.skinTolerance`, ...;
+role overrides for materials a model does not have are ignored, so one file
+can serve a roster), `--forward x,y,z` the rest-pose facing the runtime
+declares, and `--mask-size` caps the mask (box filter; 512 is plenty on a
+phone). The base colour can then be compressed: UVs do not change.
+
+At runtime:
+
+```js
+import { applyToonShader, loadAutoRoles } from '@call-me-sensei/toonlab/toon';
+
+const data = await loadAutoRoles('/npc/npc.toonroles.json', {
+  // Optional: masks shipped as KTX2.
+  // loadTexture: (url) => ktx2Loader.loadAsync(url),
+});
+applyToonShader(model, { ...toonOptions, autoRoles: { mode: 'precomputed', data } });
+```
+
+- In `precomputed` mode no texture pixel is read on the CPU: the base colour
+  may be a `CompressedTexture`, and every piece of texture evidence comes
+  from the record — the role weights and mask, the inferred rest forward and
+  head frame, the alpha coverage that decides cutouts, the skin check on
+  materials named as skin, the face map's nose-line check, the eye-white
+  lid and stocking colours and an imported MMD toon ramp. The conversion is otherwise the live one, so the
+  result is identical (`verify:toon-shading` checks weights, mask, head frame,
+  materials and report, and a KTX2-style compressed base colour).
+- The record belongs to one model. Meshes are matched in traversal order and
+  checked against their vertex counts; a mismatch is refused with an
+  `auto-roles-precomputed-mismatch` warning and nothing is applied. Clones
+  keep the order. Different inputs than the export used (role overrides,
+  skin tolerance, alpha coverage mode, declared forward) give an
+  `auto-roles-precomputed-inputs-differ` warning.
+- The mask is linear data with row 0 at v = 0: ToonLab sets the supplied
+  texture's `colorSpace` to `NoColorSpace` and (if it is not compressed)
+  `flipY` to false. Its alpha is unused, so the PNG is RGB. A mask loaded as
+  an image or compressed is never read back; the face-map bake then picks
+  face triangles from the vertex weights.
+- `exportAutoRoles(model, options)` is the same export in code (it converts
+  the model it is given; use a copy). `serializeAutoRoles` and
+  `parseAutoRoles` turn its record into the JSON document and mask images and
+  back; `downsampleRoleMask` is the box filter.
+- Measured on two Tokyo Story Map NPCs (Tripo, 23–27k vertices, 2048 px JPEG,
+  the map's conversion options; headless Chromium 151 on an Apple-silicon
+  Mac, median of 5, 2026-10-25): `applyToonShader` took 124–130 ms live and
+  3–4 ms precomputed, plus 2 ms to load the record; with 4× CPU throttling
+  473–520 ms and 13–15 ms. Weights and masks from the CLI matched the
+  browser's live analysis exactly: sharp decodes the JPEG as Chrome does, and
+  the CLI downscales to 1024 px picking the same texels as Chrome's
+  unsmoothed `drawImage`. Other browsers' downscaling was not compared.
+
 ## Cast shadows and render passes
 
 `createCharacterRenderPasses({ renderer, scene, camera })` returns
@@ -268,8 +333,12 @@ fades a whole character with a screen-door pattern (no sorting needed).
 `texture-unavailable`, `alpha-data-channel`, `alpha-soft-blend`,
 `alpha-cutout-skipped`, `vertex-buffer-budget`, `mtoon-imported`,
 `mmd-toon-imported`, `importer-outline-slots-removed`,
-`painted-eye-highlights`, `no-head-frame` and `retired-settings-group`
-(settings passed under a group name that no longer exists).
+`painted-eye-highlights`, `no-head-frame`, `retired-settings-group`
+(settings passed under a group name that no longer exists), and for
+precomputed automatic roles `auto-roles-precomputed-missing`,
+`auto-roles-precomputed-mismatch`, `auto-roles-precomputed-inputs-differ` and
+`texture-reads-skipped` (a texture look-up with no recorded evidence found no
+pixels; nothing in ToonLab itself should cause it).
 
 ## Engineering notes
 

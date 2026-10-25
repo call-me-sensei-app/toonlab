@@ -1,9 +1,13 @@
 // Automatic per-vertex roles (autoRoles.js) for characters whose material
 // names identify no face — typically one atlased material from a generator.
-// 'auto' runs the inference only in that case; 'off' never runs it.
+// 'auto' runs the inference only in that case; 'off' never runs it;
+// 'precomputed' applies a record made offline by exportAutoRoles (passed as
+// `autoRoles.data` to applyToonShader, not kept in the settings) and reads no
+// texture pixels at all (autoRolesData.js).
 export const AUTO_ROLE_MODES = Object.freeze({
   auto: 'auto',
   off: 'off',
+  precomputed: 'precomputed',
 });
 
 export const DEFAULT_AUTO_ROLES_SETTINGS = Object.freeze({

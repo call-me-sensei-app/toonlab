@@ -172,7 +172,7 @@ function Overview() {
       <DocsLanguageBanner />
 
       <p>
-        ToonLab 0.5.1 is an open-source anime rendering and content-integration runtime for
+        ToonLab 0.5.2 is an open-source anime rendering and content-integration runtime for
         Three.js, plus browser Labs for focused shader and asset authoring. For a compliant,
         semantically labeled scene, the Call Me Sensei bundle owns the supported visual baseline.
         It does not invent a polished world, layout, or unambiguous material contract from one prompt.
@@ -250,7 +250,7 @@ function Overview() {
         <a className="docs-card" href="#/capability-status">
           <BookOpenText size={18} aria-hidden />
           <strong>Current capability status</strong>
-          <span>The 0.5.1 first-pass contract, host responsibilities, measured limits, and verification gates.</span>
+          <span>The 0.5.2 first-pass contract, host responsibilities, measured limits, and verification gates.</span>
         </a>
         <a className="docs-card" href="#/library">
           <BookOpenText size={18} aria-hidden />

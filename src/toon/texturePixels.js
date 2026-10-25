@@ -11,6 +11,35 @@ const pixelCache = new WeakMap();
 const surfaceCache = new WeakMap();
 const uvScratch = new THREE.Vector2();
 
+// Conversions that must not touch pixels (precomputed automatic roles: the
+// base colour may be GPU-compressed, and reading an image back is a long
+// main-thread task) run inside withoutTexturePixelReads. Every pixel read in
+// the toon path goes through readTexturePixels, which then answers null — the
+// same "no evidence" every caller already handles for compressed textures.
+let pixelReadsBlocked = 0;
+let blockedReadCount = 0;
+
+/**
+ * Runs `fn` with texture pixel reads disabled: readTexturePixels returns null
+ * without looking at the image. Returns `{ result, blockedReads }`, where
+ * `blockedReads` counts the reads that were refused.
+ */
+export function withoutTexturePixelReads(fn) {
+  pixelReadsBlocked += 1;
+  const before = blockedReadCount;
+  try {
+    const result = fn();
+    return { blockedReads: blockedReadCount - before, result };
+  } finally {
+    pixelReadsBlocked -= 1;
+  }
+}
+
+/** True for a texture whose pixels exist only on the GPU (KTX2/Basis, DDS, ...). */
+export function isCompressedTexture(texture) {
+  return Boolean(texture?.isCompressedTexture || texture?.isCompressedArrayTexture || texture?.isCompressedCubeTexture);
+}
+
 function createCanvas(width, height) {
   if (typeof OffscreenCanvas !== 'undefined') return new OffscreenCanvas(width, height);
   if (typeof document !== 'undefined') {
@@ -57,8 +86,13 @@ function readDrawableImage(image, maxSize) {
  * 8-bit channels, or `null` when the pixels cannot be read.
  */
 export function readTexturePixels(texture, { maxSize = 1024 } = {}) {
+  if (pixelReadsBlocked > 0) {
+    if (texture) blockedReadCount += 1;
+    return null;
+  }
+  if (isCompressedTexture(texture)) return null;
   const image = texture?.image;
-  if (!image || typeof image !== 'object' || texture.isCompressedTexture) return null;
+  if (!image || typeof image !== 'object') return null;
   if (pixelCache.has(image)) return pixelCache.get(image);
   const pixels = image.data ? readDataImage(image) : readDrawableImage(image, maxSize);
   pixelCache.set(image, pixels);

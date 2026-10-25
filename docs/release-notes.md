@@ -1,4 +1,49 @@
-# ToonLab 0.5.1 release notes
+# ToonLab 0.5.2 release notes
+
+This patch lets character conversion run without reading a single texture
+pixel on the CPU, so characters can ship GPU-compressed (KTX2/Basis) base
+colours and load without the per-model texture analysis. It adds one
+automatic-roles mode, one CLI command and five functions; nothing was
+removed, existing modes behave as in 0.5.1, and preset documents stay at
+schema version 2.
+
+- **Precomputed automatic roles.** `npx toonlab auto-roles model.glb`
+  (Node; needs `sharp`) runs the automatic face/skin/hair analysis offline and
+  writes `model.toonroles.json` plus one PNG role mask per masked mesh.
+  `applyToonShader(model, { autoRoles: { mode: 'precomputed', data } })`,
+  with `data` from `loadAutoRoles(url)` or `parseAutoRoles(json, { masks })`,
+  applies it. In that mode no texture is read back: the base colour may be a
+  `CompressedTexture`, and every piece of texture evidence (role weights and
+  mask, inferred rest forward and head frame, alpha coverage, the skin check
+  on materials named as skin, the face map's nose-line check, eye-white lid
+  and stocking colours, MMD ramp tones) comes from the record, so the result
+  is the live one. `exportAutoRoles(model, options)`, `serializeAutoRoles`
+  and `downsampleRoleMask` are the same steps in code. A record for another
+  model is refused (`auto-roles-precomputed-mismatch`), and different
+  conversion inputs are reported (`auto-roles-precomputed-inputs-differ`).
+  Measured on two Tokyo Story Map NPCs with the map's options (headless
+  Chromium 151, Apple-silicon Mac, median of 5): conversion 124–130 ms live,
+  3–4 ms precomputed plus 2 ms to load the record; 473–520 ms and 13–15 ms
+  with 4× CPU throttling. CLI weights and masks matched Chrome's live
+  analysis exactly. Phones were not measured.
+- **Compressed-texture safety.** The face-map bake no longer reads
+  `image.data` of the automatic role mask unless it is a CPU-side
+  DataTexture; with an image or compressed mask it picks face triangles from
+  the vertex weights. Every other CPU pixel read in the toon path already
+  answered "no evidence" for compressed textures and still does.
+- **Role mask partition where UVs overlap (TSM-SHADE-12).** Generated models
+  can carry UV-degenerate triangles that map a few square millimetres over
+  much of the atlas. The per-texel mask merged overlapping triangles by
+  per-role maximum, so face texels under them became skin + face, the shader
+  summed both roles' tones and shadowed faces showed pale angular patches
+  (Yuxi and Hikari in the Tokyo Story Map). Overlapped texels now keep the
+  face weight and split the rest between skin and hair, and triangles above
+  8× the mesh's median UV density are baked last into uncovered texels only.
+  The auto-roles result adds `maskDegenerateTriangles` and
+  `maskRepartitionedTexels`. Seven other masked NPCs changed 0 % of their
+  face pixels.
+
+# Previous release: 0.5.1
 
 This patch fixes character toon shading found while shading generated and
 hand-built chibis in the Tokyo Story Map (2026-10-13). It adds one settings

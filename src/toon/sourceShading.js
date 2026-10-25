@@ -134,11 +134,13 @@ function readMmdToonRamp(mat) {
  * Resolves the authored shading inputs of one source material against the
  * resolved toon settings.
  */
-export function resolveSourceShading(mat, { settings = null } = {}) {
+// `mmdRampTone(measure)` supplies the MMD ramp's tone: `measure()` reads the
+// ramp texture; a precomputed conversion answers from its record instead.
+export function resolveSourceShading(mat, { mmdRampTone = (measure) => measure(), settings = null } = {}) {
   const userData = mat?.userData ?? {};
   const ramp = settings?.ramp;
   const mtoon = mat?.isMToonMaterial && ramp?.importMToon !== false ? readMToon(mat) : null;
-  const mmdTone = !mtoon && ramp?.importMmdRamp === true ? readMmdToonRamp(mat) : null;
+  const mmdTone = !mtoon && ramp?.importMmdRamp === true ? mmdRampTone(() => readMmdToonRamp(mat)) : null;
 
   const userShadeColor = colorFrom(userData.toonShadeColor);
   const userShadeMap = textureOrNull(userData.toonShadeMap);

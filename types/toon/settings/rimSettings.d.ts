@@ -28,6 +28,8 @@ export const RIM_FIELDS: Readonly<{
     tint: import("./fieldSchema.js").SettingField;
     albedoMix: import("./fieldSchema.js").SettingField;
     inShadow: import("./fieldSchema.js").SettingField;
+    lowLightBoost: import("./fieldSchema.js").SettingField;
+    lowSunBoost: import("./fieldSchema.js").SettingField;
     fadeStart: import("./fieldSchema.js").SettingField;
     fadeEnd: import("./fieldSchema.js").SettingField;
 }>;

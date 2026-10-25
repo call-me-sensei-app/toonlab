@@ -19,6 +19,8 @@ export const LIGHT_FIELDS = Object.freeze({
   sunTint: numberField(1, 0, 1, 'Share of the sun\'s hue the character takes (0 = a grey light of the same luminance).'),
   maxTint: numberField(0.14, 0, 1, 'Largest display saturation the light may carry, so a deep sunset or a blue night tints the character gently instead of turning it orange or blue. 1 = no limit.'),
   skyFloor: numberField(0.04, 0, 1, 'Minimum light level from the sky ambient; the character never goes fully black.'),
+  minKey: numberField(0.6, 0, 1, 'Lowest level (brightest channel) of the light a character is shaded with, keeping its hue: at night or in a dim interior the character stays readable, as anime games keep their characters lit whatever the scene does. 0 = follow the scene.'),
+  keepSaturation: numberField(0.7, 0, 1, 'How much of the base colour\'s saturation coloured light may not take away: a purple jacket under an orange dusk light stays purple. 0 = the light\'s colour multiplies freely.'),
   skyMax: numberField(1, 0, 4, 'Cap on the sky ambient\'s contribution (brightest channel).'),
   shadeSkyTint: numberField(0.15, 0, 1, 'In the scenery\'s cast shade the light takes this share of the sky\'s hue at the sun\'s level.'),
   shadowSkyTint: numberField(0.35, 0, 1, 'On the shadow side the light leans this far toward the sky\'s hue (at the light\'s level), so shadows stay cool and colourful under a warm sun.'),

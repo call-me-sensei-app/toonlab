@@ -49,6 +49,26 @@ export function displayMultiply(linear, multiplier) {
   return toLinear(toDisplay(linear).mul(multiplier));
 }
 
+/**
+ * Raises the display saturation of a linear colour toward that of
+ * `reference` (the same surface before the light's colour), keeping its hue
+ * and brightest channel: `amount` 1 restores the reference's saturation
+ * where the light took some away, 0 leaves the colour as it is. Never lowers
+ * saturation, and leaves near-grey colours alone (no hue to restore).
+ */
+export function keepSaturation(linear, reference, amount) {
+  const display = toDisplay(linear);
+  const value = maxComponent(display);
+  const saturation = value.sub(minComponent(display)).div(max(value, 1e-4));
+  const ref = toDisplay(reference);
+  const refSaturation = maxComponent(ref).sub(minComponent(ref)).div(max(maxComponent(ref), 1e-4));
+  const target = mix(saturation, max(saturation, refSaturation), amount);
+  const scale = min(target.div(max(saturation, 1e-4)), 3);
+  const kept = vec3(value).sub(vec3(value).sub(display).mul(scale));
+  const restored = mix(display, max(kept, vec3(0)), saturation.greaterThan(0.02).select(1, 0));
+  return toLinear(restored);
+}
+
 /** Display chroma (max − min channel) of a linear colour. */
 export function displayChroma(linear) {
   const display = toDisplay(linear);

@@ -34,6 +34,7 @@ import {
   max,
   min,
   mix,
+  modelWorldMatrix,
   normalize,
   normalViewGeometry,
   normalWorldGeometry,
@@ -68,7 +69,7 @@ import { sampleEnvironmentCloudShadow } from '../../sky/cloudShadow.js';
 import { characterShadowVisibility, decodeStoredDepth, FACE_DEPTH_OFFSET, prepassDistance, screenSpaceShadowVisibility } from './castShadows.js';
 import { bindMaterialToCharacterState } from './characterState.js';
 import { CHARACTER_DEBUG_VIEW_IDS } from './debugViews.js';
-import { displayChroma, displayMultiply, hsvToRgb, luma, maxComponent, minComponent, rgbToHsv, toDisplay, toLinear } from './displayColor.js';
+import { displayChroma, displayMultiply, hsvToRgb, keepSaturation, luma, maxComponent, minComponent, rgbToHsv, toDisplay, toLinear } from './displayColor.js';
 import { hairRing, matcapUV, rimAmount, stylizedSpecular } from './highlightsRim.js';
 import { eyeWhiteShade, noseShadow, sheerStreak } from './paintedDetails.js';
 import { characterLight, limitSaturation, localLightBands, shadingDirection } from './surfaceLight.js';
@@ -147,6 +148,7 @@ export function applyCharacterParameters(material, params) {
 // Inputs every graph may read; conversion supplies real values.
 const MATERIAL_INPUT_DEFAULTS = Object.freeze({
   baseAlphaStrength: 1,
+  headCenterLocal: [0, 1.55, 0],
   baseColor: [1, 1, 1],
   baseSaturation: 1,
   emissiveColor: [0, 0, 0],
@@ -342,7 +344,7 @@ function surfaceColorNode(u, features, state) {
       lightingNormal.assign(normalize(mix(lightingNormal, faceNormal, u.faceNormalAmount.mul(faceWeight).mul(state.headReady))));
     }
 
-    const { light: baseLight, sky } = characterLight(u, normal);
+    const { light: baseLight, sceneLevel, sky } = characterLight(u, normal);
 
     // Terminator: one soft step at the blended terminator.
     const bias = float(0).toVar('toonLightingBias');
@@ -438,6 +440,8 @@ function surfaceColorNode(u, features, state) {
     const shadowSideLight = limitSaturation(shadowSideRaw, u.lightMaxTint.mul(2))
       .div(max(maxComponent(shadowSideRaw), 1e-5)).mul(maxComponent(light));
     const color = mix(shadowColor.mul(shadowSideLight), albedo.mul(light), litAmount).toVar('toonColor');
+    // The surface before the light's colour: what keepSaturation restores to.
+    const unlitReference = mix(shadowColor, albedo, litAmount).toVar('toonUnlitReference');
 
     // Local lights: their own cel bands, additive.
     const local = localLightBands(u, worldPosition, lightingNormal);
@@ -471,10 +475,18 @@ function surfaceColorNode(u, features, state) {
 
     const ring = float(0).toVar('toonHairRing');
     if (mayBeHair) {
-      ring.assign(hairRing(u, { head, normal: lightingNormal, viewDirection, worldPosition })
+      // Tracked by the render passes, or from this object's own transform.
+      const ownHeadCenter = modelWorldMatrix.mul(vec4(u.headCenterLocal, 1)).xyz;
+      const ringHead = { ...head, center: mix(ownHeadCenter, head.center, state.headTracked) };
+      ring.assign(hairRing(u, { head: ringHead, normal: lightingNormal, viewDirection, worldPosition })
         .mul(u.hairRingIntensity).mul(hairWeight).mul(state.headReady)
         .mul(mix(u.hairRingShadowFloor, float(1), litAmount)));
-      const ringColor = light.mul(toLinear(mix(toDisplay(albedo), vec3(1), 0.62)));
+      // A brighter version of the hair's own colour (a cool grey on black
+      // hair), not white: the ring reads as light on that hair.
+      const hairDisplay = toDisplay(albedo);
+      const hairValue = maxComponent(hairDisplay);
+      const hairBright = mix(vec3(0.6, 0.64, 0.78), hairDisplay.div(max(hairValue, 1e-3)).mul(0.88), smoothstep(0.04, 0.15, hairValue));
+      const ringColor = light.mul(toLinear(mix(hairDisplay, hairBright, 0.75)));
       color.assign(mix(color, ringColor, clamp(ring, 0, 1)));
     }
 
@@ -499,10 +511,25 @@ function surfaceColorNode(u, features, state) {
       viewDirection,
       viewPosition,
     });
-    const rimColor = light.mul(u.rimTint).mul(mix(vec3(1), albedo, u.rimAlbedoMix))
-      .mul(blend('rimIntensity')).mul(mix(u.rimInShadow, float(1), litAmount));
+    // Stronger as the scene darkens and as the sun nears the horizon: the rim
+    // is what keeps a dark silhouette off a dark background at night.
+    const lowSun = float(1).sub(smoothstep(0.1, 0.5, lightDirection.y));
+    const rimBoost = float(1)
+      .add(u.rimLowLightBoost.mul(float(1).sub(clamp(sceneLevel, 0, 1))))
+      .add(u.rimLowSunBoost.mul(lowSun));
+    // The rim takes the surface's hue but not its darkness, so black cloth
+    // and dark hair still get a full-strength rim.
+    const albedoPeak = maxComponent(albedo);
+    const surfaceHue = mix(vec3(1), albedo.div(max(albedoPeak, 1e-3)), smoothstep(0.03, 0.15, albedoPeak));
+    const rimColor = light.mul(u.rimTint).mul(mix(vec3(1), surfaceHue, u.rimAlbedoMix))
+      .mul(blend('rimIntensity')).mul(rimBoost).mul(mix(u.rimInShadow, float(1), litAmount));
     const rim = rimColor.mul(rimNodes.rim).toVar('toonRim');
     color.addAssign(rim);
+
+    // Coloured light, a cool rim or a pale hair ring may tint the surface but
+    // not grey it out: the base colour's (or its shadow tone's) saturation is
+    // kept, so a rim reads as a brighter edge of the same colour.
+    color.assign(keepSaturation(color, unlitReference, u.keepSaturation));
 
     const emission = vec3(0).toVar('toonEmission');
     if (features.emissive) {

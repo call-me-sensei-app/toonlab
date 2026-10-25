@@ -37,15 +37,19 @@ export function stylizedSpecular({ intensity, normal, halfVector, size, softness
  * surface, and the ring sits where that strand direction is at a fixed angle
  * to the view — a band around the head that stays put as the light moves.
  * It breaks into strands by a vertical offset that varies smoothly around
- * the head (no steps between strands).
+ * the head (no steps between strands). `hairRingRoundness` places it on a
+ * sphere around the head instead of each strand's own normal, so messy or
+ * spiky hair keeps one band rather than scattered glossy patches; the
+ * strand's own normal still decides whether it faces the camera.
  */
 export function hairRing(u, { head, normal, viewDirection, worldPosition }) {
   const axis = normalize(mix(vec3(0, 1, 0), head.up, u.hairRingLean));
-  const strandRaw = axis.sub(normal.mul(dot(normal, axis)));
+  const relative = worldPosition.sub(head.center);
+  const ringNormal = normalize(mix(normal, normalize(relative), u.hairRingRoundness));
+  const strandRaw = axis.sub(ringNormal.mul(dot(ringNormal, axis)));
   const strandLength = length(strandRaw);
   const strand = strandRaw.div(max(strandLength, 1e-3));
   const coordinate = dot(strand, viewDirection).negate();
-  const relative = worldPosition.sub(head.center);
   const around = atan(dot(relative, head.right), dot(relative, head.forward));
   const phase = around.mul(u.hairRingStrands);
   const wobble = sin(phase).mul(0.6).add(sin(phase.mul(1.73).add(1.3)).mul(0.4)).mul(u.hairRingJitter);
@@ -117,7 +121,11 @@ export function rimAmount(u, state, { lightDirection, normal, normalView, silhou
     const fade = float(1).sub(smoothstep(u.rimFadeStart, u.rimFadeEnd, ownDistance));
     depthRim.assign(max(lightRim, silhouetteRim).mul(fade).mul(grazing));
   });
+  // The view-angle rim (and the fallback without a prepass) runs all round
+  // the silhouette: hosts that never register the render passes still get a
+  // rim on both sides, fainter on the shadow side (rim.inShadow, applied by
+  // the caller through the lit amount).
   const facingAway = float(1).sub(clamp(dot(normal, viewDirection), 0, 1));
-  const viewRim = smoothstep(0.62, 0.86, facingAway).mul(clamp(dot(normal, lightDirection).add(0.35), 0, 1));
+  const viewRim = smoothstep(0.7, 0.9, facingAway);
   return { depthRim, rim: mix(viewRim, depthRim, useDepth) };
 }

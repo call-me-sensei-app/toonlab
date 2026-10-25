@@ -190,7 +190,7 @@ export const TOON_PRESET_IDS = Object.freeze([PRESET_DEFAULT, PRESET_CALL_ME_SEN
 // cloth highlights and deeper, more saturated ink.
 const CALL_ME_SENSEI_SETTINGS = Object.freeze({
   highlights: {
-    hair: { intensity: 0.45, shadowFloor: 0.32 },
+    hair: { intensity: 0.5, shadowFloor: 0.32 },
     specular: {
       cloth: { intensity: 0.09, size: 48, threshold: 0.74 },
       clothNeedsMask: true,
@@ -204,16 +204,16 @@ const CALL_ME_SENSEI_SETTINGS = Object.freeze({
     ink: {
       cloth: [0.22, 0.21, 0.28],
       face: [0.55, 0.3, 0.3],
-      hair: [0.75, 0.75, 0.75],
+      hair: [0.38, 0.36, 0.46],
       skin: [0.55, 0.3, 0.3],
     },
-    inkHueShift: 0.044,
-    inkSaturation: { hair: 0.47 },
+    inkHueShift: 0.02,
+    inkSaturation: { hair: 0.2 },
     lighting: { cloth: { mix: 0.22 }, hair: { mix: 0.1 } },
-    width: { cloth: 0.0055, face: 0.003, hair: 0.005, metal: 0.005, skin: 0.0035 },
+    width: { cloth: 0.0055, face: 0.003, hair: 0.004, metal: 0.005, skin: 0.0035 },
   },
   rim: {
-    intensity: { cloth: 0.16, hair: 0.3, skin: 0.15 },
+    intensity: { cloth: 0.22, hair: 0.32, skin: 0.17 },
     silhouette: { body: 1, hair: 0.5 },
     tint: [0.79, 0.88, 1],
   },
@@ -223,8 +223,8 @@ const CALL_ME_SENSEI_SETTINGS = Object.freeze({
 // The product look for captures that go through the showcase post preset:
 // a little more rim and hair ring for the bloom to pick up.
 const SHOWCASE_SETTINGS = Object.freeze(mergeSettings(CALL_ME_SENSEI_SETTINGS, {
-  highlights: { hair: { intensity: 0.52 } },
-  rim: { intensity: { cloth: 0.19, face: 0.15, hair: 0.34, skin: 0.17 } },
+  highlights: { hair: { intensity: 0.56 } },
+  rim: { intensity: { cloth: 0.25, face: 0.15, hair: 0.36, skin: 0.19 } },
 }));
 
 const presetRegistry = new Map([

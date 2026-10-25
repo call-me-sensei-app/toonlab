@@ -10,6 +10,8 @@ export const LIGHT_FIELDS: Readonly<{
     sunTint: import("./fieldSchema.js").SettingField;
     maxTint: import("./fieldSchema.js").SettingField;
     skyFloor: import("./fieldSchema.js").SettingField;
+    minKey: import("./fieldSchema.js").SettingField;
+    keepSaturation: import("./fieldSchema.js").SettingField;
     skyMax: import("./fieldSchema.js").SettingField;
     shadeSkyTint: import("./fieldSchema.js").SettingField;
     shadowSkyTint: import("./fieldSchema.js").SettingField;

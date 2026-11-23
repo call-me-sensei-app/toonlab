@@ -4,6 +4,7 @@ import { fileURLToPath } from 'node:url';
 
 import * as THREE from 'three';
 
+import { createEnvironmentSunShadowPass } from '../src/environment/environmentSunShadowPass.js';
 import {
   clearEnvironmentCloudShadowPass,
   environmentCloudShadow,
@@ -99,5 +100,48 @@ assert.equal(environmentCloudShadow.intensity.value, 0.72);
 assert.equal(clearEnvironmentCloudShadowPass(pass), true);
 assert.equal(environmentCloudShadow.ready.value, false);
 assert.notEqual(environmentCloudShadow.map.value, texture);
+
+for (const [isWebGPUBackend, supportsFloat32, expectedType] of [
+  [true, false, THREE.HalfFloatType],
+  [true, true, THREE.FloatType],
+  [false, false, THREE.FloatType],
+]) {
+  const scene = new THREE.Scene();
+  const sun = new THREE.DirectionalLight();
+  sun.castShadow = true;
+  scene.add(sun, sun.target);
+  const targets = [];
+  const renderer = {
+    isWebGPURenderer: true,
+    backend: { isWebGPUBackend },
+    coordinateSystem: isWebGPUBackend ? THREE.WebGPUCoordinateSystem : THREE.WebGLCoordinateSystem,
+    shadowMap: { enabled: false },
+    hasFeature(name) {
+      assert.equal(name, 'float32-filterable');
+      assert.equal(isWebGPUBackend, true);
+      return supportsFloat32;
+    },
+    getRenderTarget: () => null,
+    setRenderTarget(target) {
+      if (target) targets.push(target);
+    },
+    getClearColor: (color) => color,
+    getClearAlpha: () => 1,
+    setClearColor() {},
+    clear() {},
+    render() {},
+  };
+  const sunPass = createEnvironmentSunShadowPass({ renderer, scene });
+  try {
+    sunPass.update();
+    assert.deepEqual(targets.map((target) => target.texture.name), [
+      'EnvironmentSunShadow.Depth',
+      'EnvironmentSunShadow.FarDepth',
+    ]);
+    assert.deepEqual(targets.map((target) => target.texture.type), [expectedType, expectedType]);
+  } finally {
+    sunPass.dispose();
+  }
+}
 
 console.log(`Shared shadow receiver contract verified across ${receiverSources.length} material paths.`);

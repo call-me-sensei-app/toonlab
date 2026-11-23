@@ -382,6 +382,12 @@ export function createEnvironmentSunShadowPass({ renderer, scene } = {}) {
 
     const shadow = sun.shadow;
     const mapSize = Math.max(shadow.mapSize?.x ?? 2048, 1);
+    // The receivers compile against a filterable fallback texture. Keep that
+    // binding valid when the WebGPU device cannot filter 32-bit floats.
+    const shadowTextureType = renderer.backend?.isWebGPUBackend === true
+      && !renderer.hasFeature('float32-filterable')
+      ? THREE.HalfFloatType
+      : THREE.FloatType;
     if (!shadowTarget || shadowTarget.width !== mapSize) {
       shadowTarget?.dispose();
       shadowTarget = new THREE.WebGLRenderTarget(mapSize, mapSize, {
@@ -389,7 +395,7 @@ export function createEnvironmentSunShadowPass({ renderer, scene } = {}) {
         stencilBuffer: false,
       });
       shadowTarget.texture.name = 'EnvironmentSunShadow.Depth';
-      shadowTarget.texture.type = THREE.FloatType;
+      shadowTarget.texture.type = shadowTextureType;
       shadowTarget.texture.minFilter = THREE.NearestFilter;
       shadowTarget.texture.magFilter = THREE.NearestFilter;
     }
@@ -408,7 +414,7 @@ export function createEnvironmentSunShadowPass({ renderer, scene } = {}) {
         stencilBuffer: false,
       });
       farShadowTarget.texture.name = 'EnvironmentSunShadow.FarDepth';
-      farShadowTarget.texture.type = THREE.FloatType;
+      farShadowTarget.texture.type = shadowTextureType;
       farShadowTarget.texture.minFilter = THREE.NearestFilter;
       farShadowTarget.texture.magFilter = THREE.NearestFilter;
       environmentSunShadow.farReady.value = false;
